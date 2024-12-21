@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block second_navbar %}
-    <nav id="second_nav_wide" class="navbar navbar-expand-md navbar-light fixed-top d-none d-lg-block second-nav-bar">
+    <nav id="second_nav_wide" class="navbar navbar-expand-md navbar-light d-none d-lg-block second-nav-bar">
         <div class="container">
             <form class="d-flex" style="width:100%;padding-top:4.1rem">
                 <label class="pe-2 pt-2" for="select_show_wide">Show</label>
@@ -25,7 +25,7 @@
             </form>
         </div>
     </nav>
-    <nav id="second_nav" class="navbar navbar-expand-md navbar-light fixed-top d-block d-lg-none second-nav-bar">
+    <nav id="second_nav" class="navbar navbar-expand-md navbar-light d-block d-lg-none second-nav-bar">
         <div class="container">
             <form class="d-flex" style="width:100%;padding-top:4.1rem">
                 <label class="pe-2 pt-2" for="select_show">Show</label>
@@ -38,7 +38,7 @@
         </div>
     </nav>
     {% if viewMode == 'condensed' %}
-        <nav class="navbar fixed-top d-none d-lg-block third-nav-bar">
+        <nav class="navbar d-none d-lg-block third-nav-bar">
             <div class="container">
                 <div class="row d-flex border-bottom" style="width:100%;">
                     <div class="col-12 text-end">
