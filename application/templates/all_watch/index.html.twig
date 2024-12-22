@@ -17,7 +17,7 @@
         <div class="container">
             <form class="d-flex" style="width:100%;padding-top:4.1rem">
                 <label class="pe-2 pt-2" for="select_show_wide">Show</label>
-                <select id="select_show_wide" class="form-control me-2">
+                <select id="select_show_wide" class="form-select me-2">
                     {% for key, row in data %}
                         <option value="show_target_wide_{{ row.show.id }}">{{ row.show.shortTitle }}</option>
                     {% endfor %}
@@ -29,7 +29,7 @@
         <div class="container">
             <form class="d-flex" style="width:100%;padding-top:4.1rem">
                 <label class="pe-2 pt-2" for="select_show">Show</label>
-                <select id="select_show" class="form-control me-2">
+                <select id="select_show" class="form-select me-2">
                     {% for key, row in data %}
                         <option value="show_target_{{ row.show.id }}">{{ row.show.shortTitle }}</option>
                     {% endfor %}

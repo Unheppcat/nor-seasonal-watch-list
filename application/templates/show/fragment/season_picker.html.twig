@@ -1,6 +1,6 @@
 <form class="d-flex float-end me-3">
     <label class="nav-item d-none" for="season_picker">Season</label>
-    <select class="form-control" id="season_picker" name="season_picker">
+    <select class="form-select" id="season_picker" name="season_picker">
         <option value=""{% if selectedSeason == '' %} selected="selected"{% endif %}>Any season</option>
         {% for season in seasons %}
             <option value="{{ season.getId }}"{% if selectedSeason == season.getId %} selected="selected"{% endif %}>{{ season.getName }}</option>
