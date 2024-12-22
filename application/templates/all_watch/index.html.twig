@@ -13,9 +13,9 @@
 {% endblock %}
 
 {% block second_navbar %}
-    <nav id="second_nav_wide" class="navbar navbar-expand-md navbar-light d-none d-lg-block second-nav-bar">
+    <nav id="second_nav" class="navbar navbar-expand-md navbar-light second-nav-bar">
         <div class="container">
-            <form class="d-flex w-100">
+            <form class="d-none d-lg-flex w-100">
                 <label class="pe-2 pt-2" for="select_show_wide">Show</label>
                 <select id="select_show_wide" class="form-select me-2">
                     {% for key, row in data %}
@@ -23,11 +23,7 @@
                     {% endfor %}
                 </select>
             </form>
-        </div>
-    </nav>
-    <nav id="second_nav" class="navbar navbar-expand-md navbar-light d-block d-lg-none second-nav-bar">
-        <div class="container">
-            <form class="d-flex w-100">
+            <form class="d-flex d-lg-none w-100">
                 <label class="pe-2 pt-2" for="select_show">Show</label>
                 <select id="select_show" class="form-select me-2">
                     {% for key, row in data %}
