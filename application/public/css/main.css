@@ -194,8 +194,21 @@ a.back-to-top-button {
     z-index:100;
 }
 
-span.mood-emoji-container {
-    position: relative;
+.activity-emoji-container, .mood-emoji-container {
+    font-size: calc(1.375rem + 1.5vw); /* .fs-1 */
+    position:relative;
+}
+
+@media (min-width: 992px) {
+    .activity-emoji-container, .mood-emoji-container {
+        font-size: calc(1.3rem + .6vw); /* .fs-3 */
+    }
+}
+
+@media (min-width: 1200px) {
+    .activity-emoji-container, .mood-emoji-container {
+        font-size: 1.75rem; /* .fs-3 */
+    }
 }
 
 .mood-emoji-favorable-color {
