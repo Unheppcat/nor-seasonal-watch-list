@@ -159,9 +159,7 @@ a.nor-red:hover {
 }
 
 .third-nav-bar {
-    top:7.4rem;
     z-index:1000;
-    height: 3rem;
     background-color: #fff;
 }
 
