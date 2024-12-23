@@ -1,0 +1,91 @@
+/* Stylesheet for theme-agnostic layout rules */
+
+/* Show it is fixed to the top */
+body {
+    min-height: 30rem;
+    padding-top: 5rem;
+}
+
+.navbar {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.recommendation-row {
+    margin-bottom: 0;
+    padding-left: 28px;
+}
+
+.watching-legend-pip {
+    width: 16px;
+    height: 16px;
+}
+
+.second-nav-bar {
+    z-index: 1000;
+}
+
+.second-nav-clearance-padding {
+    margin-top: 3rem;
+}
+
+.third-nav-bar {
+    z-index: 1000;
+}
+
+.third-nav-clearance-padding {
+    margin-top: 3rem;
+}
+
+a.show-anchor {
+    position: relative;
+    top: -8rem;
+    z-index: -100;
+}
+
+a.show-anchor-condensed {
+    position: relative;
+    top: -11rem;
+    z-index: -100;
+}
+
+a.back-to-top-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 100;
+}
+
+.activity-emoji-container, .mood-emoji-container {
+    font-size: calc(1.375rem + 1.5vw); /* .fs-1 */
+    position:relative;
+}
+
+@media (min-width: 992px) {
+    .activity-emoji-container, .mood-emoji-container {
+        font-size: calc(1.3rem + .6vw); /* .fs-3 */
+    }
+}
+
+@media (min-width: 1200px) {
+    .activity-emoji-container, .mood-emoji-container {
+        font-size: 1.75rem; /* .fs-3 */
+    }
+}
+
+.bi-x-upper-half::before {
+    clip-path: polygon(20% 10%, 80% 10%, 98% 50%, 2% 50%);
+}
+.bi-x-lower-half::before {
+    clip-path: polygon(2% 50%, 98% 50%, 80% 90%, 20% 90%);
+}
+.bi-x-shrunk-circle::before {
+    clip-path: circle(48%);
+}
+
+.has-markdown th {
+    padding-right: 1em;
+}
+.has-markdown td {
+    padding-right: 1em;
+}

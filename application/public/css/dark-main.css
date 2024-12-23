@@ -1,13 +1,5 @@
-/* Show it is fixed to the top */
-body {
-    min-height: 30rem;
-    padding-top: 5rem;
-}
+/* This file gets loaded when colors mode is 'dark'. */
 
-.navbar {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-}
 
 .bg-royal {
     background-color: #6f42c1;
@@ -19,8 +11,6 @@ body {
 
 .recommendation-row {
     background-color: #00000022;
-    margin-bottom: 0;
-    padding-left: 28px;
 }
 .recommendation-row-danger {
     background-color: #dc354522;
@@ -41,10 +31,6 @@ body {
     background-color: #6f42c122;
 }
 
-.watching-legend-pip {
-    width: 16px;
-    height: 16px;
-}
 .activity-watching {
     background-color: #007eb9;
 }
@@ -105,7 +91,6 @@ body {
     color: #c90d0d;
 }
 
-
 .table-field-score-th8a {
     --bs-table-bg: #c90d0d;
     color: #fff;
@@ -153,44 +138,11 @@ a.nor-red:hover {
 }
 
 .second-nav-bar {
-    z-index:1000;
     background-color: #4a4a4a !important;
 }
 
-.second-nav-clearance-padding {
-    margin-top: 3rem;
-}
-
 .third-nav-bar {
-    z-index:1000;
     background-color: #222;
-}
-
-.third-nav-clearance-padding {
-    margin-top: 3rem;
-}
-
-a.show-anchor {
-    position:relative;
-    top:-8rem;
-    z-index:-100;
-}
-
-a.show-anchor-condensed {
-    position:relative;
-    top:-11rem;
-    z-index:-100;
-}
-
-a.back-to-top-button {
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    z-index:100;
-}
-
-span.mood-emoji-container {
-    position: relative;
 }
 
 .mood-emoji-favorable-color {
@@ -210,16 +162,6 @@ span.mood-emoji-container {
 }
 .mood-emoji-unfavorable-color {
     color: #555555;
-}
-
-.bi-x-upper-half::before {
-    clip-path: polygon(20% 10%, 80% 10%, 98% 50%, 2% 50%);
-}
-.bi-x-lower-half::before {
-    clip-path: polygon(2% 50%, 98% 50%, 80% 90%, 20% 90%);
-}
-.bi-x-shrunk-circle::before {
-    clip-path: circle(48%);
 }
 
 .d-light-inline { display: inline !important; }
@@ -248,13 +190,6 @@ body.color-scheme-dark .third-nav-bar { background-color: #222 !important; }
 
 .form-control {
     background-color: #3b3b3b;
-}
-
-.has-markdown th {
-    padding-right: 1em;
-}
-.has-markdown td {
-    padding-right: 1em;
 }
 
 .cover-image-large {
