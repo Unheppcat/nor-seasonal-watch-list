@@ -1,5 +1,19 @@
 /* This file gets loaded when colors mode is 'light' or 'os'. */
 
+.user-colors-mode-light .d-light-none {
+    display: none !important;
+}
+@media (prefers-color-scheme: light) {
+    .user-colors-mode-os .d-light-none {
+        display: none !important;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    .user-colors-mode-os .d-dark-none {
+        display: none !important;
+    }
+}
+
 .activity-watching {
     background-color: #007eb9;
 }

@@ -1,5 +1,8 @@
 /* This file gets loaded when colors mode is 'dark'. */
 
+.d-dark-none {
+    display: none !important;
+}
 
 .activity-watching {
     background-color: #007eb9;
