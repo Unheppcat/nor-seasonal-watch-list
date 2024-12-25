@@ -22,7 +22,7 @@ body {
 }
 
 .second-nav-bar {
-    z-index: 1000;
+    z-index: 900;
 }
 
 .second-nav-clearance-padding {
@@ -30,7 +30,7 @@ body {
 }
 
 .third-nav-bar {
-    z-index: 1000;
+    z-index: 900;
 }
 
 .third-nav-clearance-padding {
