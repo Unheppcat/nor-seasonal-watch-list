@@ -1,9 +1,7 @@
 /* Stylesheet for theme-agnostic layout rules */
 
-/* Show it is fixed to the top */
 body {
     min-height: 30rem;
-    padding-top: 5rem;
 }
 
 .navbar {
@@ -25,16 +23,8 @@ body {
     z-index: 900;
 }
 
-.second-nav-clearance-padding {
-    margin-top: 3rem;
-}
-
 .third-nav-bar {
     z-index: 900;
-}
-
-.third-nav-clearance-padding {
-    margin-top: 3rem;
 }
 
 a.show-anchor {
