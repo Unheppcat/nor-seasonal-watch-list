@@ -59,7 +59,7 @@ a.nor-red:hover {
 
 @media (prefers-color-scheme: dark) {
 
-    .second-nav-bar {
+    .user-colors-mode-os .second-nav-bar {
         background-color: #444 !important;
     }
 
@@ -71,7 +71,7 @@ a.nor-red:hover {
 
 @media (prefers-color-scheme: dark) {
 
-    .third-nav-bar {
+    .user-colors-mode-os .third-nav-bar {
         background-color: #222;
     }
 

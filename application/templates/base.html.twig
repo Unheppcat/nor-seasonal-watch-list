@@ -52,7 +52,7 @@
 
         {% block javascripts %}{% endblock %}
     </head>
-    <body>
+    <body class="user-colors-mode-{% if colorsMode in ['os', 'dark', 'light'] %}{{ colorsMode }}{% else %}os{% endif %}">
     <div class="sticky-top mb-3 mb-lg-4">
         <nav id="main_nav" class="navbar navbar-expand-md navbar-dark bg-dark">
             <div class="container-fluid">
