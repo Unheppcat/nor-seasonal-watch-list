@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
 {% if user is defined and user is not null %}
     {% set colorsMode = user.getPreferences.getColorsMode %}
 {% else %}
     {% set colorsMode = 'os' %}
 {% endif %}
+<html lang="en" {% if colorsMode in ['dark', 'light'] %}data-bs-theme="{{ colorsMode }}"{% endif %}>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,13 +12,10 @@
 
         {% if colorsMode == 'os' %}
             {# Let the browser pick the color mode #}
-            <link href="/css/bootstrap-dark.min.css?v={{ asset_version }}" rel="stylesheet">
-        {% elseif colorsMode == 'light' %}
-            {# Use a light mode stylesheet #}
-            <link href="/bootstrap/css/bootstrap.min.css?v={{ asset_version }}" rel="stylesheet">
+            <link href="/bootstrap/css/bootstrap-color-mode-media-query.min.css?v={{ asset_version }}" rel="stylesheet">
         {% else  %}
-            {# User a dark mode stylesheet #}
-            <link href="/css/bootstrap-dark-only.min.css?v={{ asset_version }}" rel="stylesheet">
+            {# Let Bootstrap choose the right color mode based on data-bs-theme #}
+            <link href="/bootstrap/css/bootstrap-color-mode-data.min.css?v={{ asset_version }}" rel="stylesheet">
         {% endif %}
         <link href="/bootstrap-icons/font/bootstrap-icons.css?v={{ asset_version }}" rel="stylesheet">
         <link href="/css/layout.css?v={{ asset_version }}" rel="stylesheet">
@@ -54,7 +51,7 @@
     </head>
     <body class="user-colors-mode-{% if colorsMode in ['os', 'dark', 'light'] %}{{ colorsMode }}{% else %}os{% endif %}">
     <div class="sticky-top mb-3 mb-lg-4">
-        <nav id="main_nav" class="navbar navbar-expand-md navbar-dark bg-dark">
+        <nav id="main_nav" class="navbar navbar-expand-md navbar-dark bg-body-tertiary">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
                     <!--suppress CheckImageSize -->
