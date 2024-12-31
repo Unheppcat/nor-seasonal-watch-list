@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row {% if viewMode != 'expanded' %}align-items-center{% endif %}">
                 {% if viewMode == 'expanded' %}
                     <div class="col-md-2">
                         <img class="img-fluid rounded-3 cover-image-large" src="{{ row.show.coverImage|raw }}" alt="cover image" />
@@ -139,17 +139,17 @@
                 {% endif %}
 
                 <div class="col-md-8">
-                    <div class="row">
+                    <div class="row {% if viewMode != 'expanded' %}align-items-center{% endif %}">
                         <div class="col-xs-12 col-md-6">
                             {% if row.consolidatedActivities %}
                                 <div class="row">
-                                    <div class="col-1 col-lg-2 col-xl-1 mt-1">
+                                    <div class="d-flex align-items-center col-1 col-lg-2 col-xl-1 pe-2">
                                         {% include 'all_watch/fragment/activity_icon.html.twig' %}
                                     </div>
-                                    <div class="col-11 col-lg-10 col-xl-11 pt-1 pt-lg-2 pt-xl-1">
+                                    <div class="col-11 col-lg-10 col-xl-11">
                                         <div class="chart-container position-relative">
                                             <canvas id="bar_activities_{{ row.show.id }}"
-                                                    class="all_watch_bar_activity_chart mb-2"
+                                                    class="all_watch_bar_activity_chart"
                                                     data-scores="{{ row.consolidatedActivities.activities_array }}"
                                                     data-maxactivitycount="{{ row.maxActivityCount }}"
                                                     height=40
@@ -183,14 +183,14 @@
                         </div>
                         <div class="col-xs-12 col-md-6">
                             {% if row.consolidatedScores.all_count > 0 %}
-                                <div class="row">
-                                    <div class="col-1 col-lg-2 col-xl-1 mt-2">
+                                <div class="row align-items-center">
+                                    <div class="col-1 col-lg-2 col-xl-1">
                                         {% include 'all_watch/fragment/mood_icon.html.twig' %}
                                     </div>
-                                    <div class="col-11 col-lg-10 col-xl-11 pt-1 pt-lg-2 pt-xl-1">
+                                    <div class="col-11 col-lg-10 col-xl-11">
                                         <div class="chart-container">
                                             <canvas id="bar_scores_{{ row.show.id }}"
-                                                    class="all_watch_bar_score_chart mb-2"
+                                                    class="all_watch_bar_score_chart"
                                                     data-scores="{{ row.consolidatedScores.scores_array }}"
                                                     data-maxscorecount="{{ row.maxScoreCount }}"
                                                     data-minscorecount="{{ row.minScoreCount }}"
@@ -299,12 +299,12 @@
                 {% if row.consolidatedActivities %}
                     <div class="mt-2">Activity</div>
                     <div class="row">
-                        <div class="col-1 pt-0 pt-md-2">
+                        <div class="d-flex align-items-center col-1">
                             {% include 'all_watch/fragment/activity_icon.html.twig' %}
                         </div>
                         <div class="col-11">
                             <canvas id="bar_activities_{{ row.show.id }}_narrow"
-                                    class="all_watch_bar_activity_chart mb-2"
+                                    class="all_watch_bar_activity_chart"
                                     data-scores="{{ row.consolidatedActivities.activities_array }}"
                                     data-maxactivitycount="{{ row.maxActivityCount }}"
                                     height=40
@@ -316,13 +316,13 @@
                 {% endif %}
                 {% if row.consolidatedScores.all_count > 0 %}
                     <div class="mt-2">Recommendations</div>
-                    <div class="row">
-                        <div class="col-1 pt-0 pt-md-2">
+                    <div class="row align-items-center">
+                        <div class="col-1">
                             {% include 'all_watch/fragment/mood_icon.html.twig' %}
                        </div>
                         <div class="col-11">
                             <canvas id="bar_scores_{{ row.show.id }}_narrow"
-                                    class="all_watch_bar_score_chart mb-2"
+                                    class="all_watch_bar_score_chart"
                                     data-scores="{{ row.consolidatedScores.scores_array }}"
                                     data-maxscorecount="{{ row.maxScoreCount }}"
                                     data-minscorecount="{{ row.minScoreCount }}"
