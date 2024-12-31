@@ -1,8 +1,8 @@
 {% if row.consolidatedScores is not null %}
     <span
-            class="mood-emoji-container d-block fw-bold pe-2"
+            class="mood-emoji-container d-grid fw-bold pe-2"
             data-mood-value="{{ row.consolidatedScores.mood_array.mood_average_value }}"
     >{{ row.consolidatedScores.mood_array.mood_emoji|raw }}</span>
 {% else %}
-    <span class="mood-emoji-container d-block fw-bold pe-2">&nbsp;</span>
+    <span class="mood-emoji-container d-grid fw-bold pe-2">&nbsp;</span>
 {% endif %}

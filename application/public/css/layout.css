@@ -63,6 +63,14 @@ a.back-to-top-button {
     }
 }
 
+.mood-emoji-container .bi {
+    grid-area: 1 / 1;
+}
+
+.mood-emoji-container .bi-circle-fill {
+    z-index: -1;
+}
+
 .bi-x-upper-half::before {
     clip-path: polygon(20% 10%, 80% 10%, 98% 50%, 2% 50%);
 }

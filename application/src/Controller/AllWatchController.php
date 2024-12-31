@@ -339,27 +339,27 @@ class AllWatchController extends AbstractController
                 if ($moodAverageValue > 5) {
 //                    $moodEmoji = 'emoji-heart-eyes-fill';
                     $moodEmoji = <<<EOF
-<i class="bi bi-circle-fill bi-x-upper-half position-absolute mood-emoji-heart-eyes-color"></i>
-<i class="bi bi-circle-fill bi-x-lower-half position-absolute mood-emoji-dark-mouth-color"></i>
-<i class="bi bi-emoji-heart-eyes-fill position-absolute mood-emoji-favorable-color"></i>
+<i class="bi bi-circle-fill bi-x-upper-half d-flex align-items-center mood-emoji-heart-eyes-color"></i>
+<i class="bi bi-circle-fill bi-x-lower-half d-flex align-items-center mood-emoji-dark-mouth-color"></i>
+<i class="bi bi-emoji-heart-eyes-fill d-flex align-items-center mood-emoji-favorable-color"></i>
 EOF;
                 } elseif ($moodAverageValue > 1) {
                     // $moodEmoji = 'emoji-smile-fill';
                     $moodEmoji = <<<EOF
-<i class="bi bi-circle-fill bi-x-shrunk-circle position-absolute mood-emoji-dark-mouth-color"></i>
-<i class="bi bi-emoji-smile-fill position-absolute mood-emoji-favorable-color"></i>
+<i class="bi bi-circle-fill bi-x-shrunk-circle d-flex align-items-center mood-emoji-dark-mouth-color"></i>
+<i class="bi bi-emoji-smile-fill d-flex align-items-center mood-emoji-favorable-color"></i>
 EOF;
                 } elseif ($moodAverageValue > -1) {
                     // $moodEmoji = 'emoji-neutral-fill';
                     $moodEmoji = <<<EOF
-<i class="bi bi-circle-fill bi-x-shrunk-circle position-absolute mood-emoji-dark-mouth-color"></i>
-<i class="bi bi-emoji-neutral-fill position-absolute mood-emoji-neutral-color"></i>
+<i class="bi bi-circle-fill bi-x-shrunk-circle d-flex align-items-center mood-emoji-dark-mouth-color"></i>
+<i class="bi bi-emoji-neutral-fill d-flex align-items-center mood-emoji-neutral-color"></i>
 EOF;
                 } else {
                     // $moodEmoji = 'emoji-frown-fill';
                     $moodEmoji = <<<EOF
-<i class="bi bi-circle-fill bi-x-shrunk-circle position-absolute mood-emoji-light-mouth-color"></i>
-<i class="bi bi-emoji-frown-fill position-absolute mood-emoji-unfavorable-color"></i>
+<i class="bi bi-circle-fill bi-x-shrunk-circle d-flex align-items-center mood-emoji-light-mouth-color"></i>
+<i class="bi bi-emoji-frown-fill d-flex align-items-center mood-emoji-unfavorable-color"></i>
 EOF;
                 }
                 $maxScoreCount = max([
