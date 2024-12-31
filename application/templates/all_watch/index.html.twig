@@ -34,23 +34,17 @@
         </div>
     </nav>
     {% if viewMode == 'condensed' %}
-        <nav class="navbar d-none d-lg-block third-nav-bar">
-            <div class="container">
-                <div class="row d-flex border-bottom" style="width:100%;">
-                    <div class="col-12 text-end">
-                        <p class="mb-1">
-                            <span class="activity-ptw watching-legend-pip d-inline-block ms-3 me-1"></span> PTW
-                            <span class="activity-watching watching-legend-pip d-inline-block ms-3 me-1"></span> Watching
-                            <span class="score-unfavorable watching-legend-pip d-inline-block ms-5 me-1"></span> Unfavorable
-                            <span class="score-neutral watching-legend-pip d-inline-block ms-3 me-1"></span> Neutral
-                            <span class="score-favorable watching-legend-pip d-inline-block ms-3 me-1"></span> Favorable
-                            <span class="score-highly-favorable watching-legend-pip d-inline-block ms-3 me-1"></span> H. Favorable
-                            <span class="score-th8a watching-legend-pip d-inline-block ms-3 me-1"></span> Th8a should
-                        </p>
-                    </div>
-                </div>
+        <div class="container d-none d-lg-block pb-2 third-nav-bar">
+            <div class="d-flex align-items-center justify-content-end py-2 border-bottom">
+                <span class="activity-ptw watching-legend-pip d-inline-block ms-3 me-1"></span> PTW
+                <span class="activity-watching watching-legend-pip d-inline-block ms-3 me-1"></span> Watching
+                <span class="score-unfavorable watching-legend-pip d-inline-block ms-5 me-1"></span> Unfavorable
+                <span class="score-neutral watching-legend-pip d-inline-block ms-3 me-1"></span> Neutral
+                <span class="score-favorable watching-legend-pip d-inline-block ms-3 me-1"></span> Favorable
+                <span class="score-highly-favorable watching-legend-pip d-inline-block ms-3 me-1"></span> H. Favorable
+                <span class="score-th8a watching-legend-pip d-inline-block ms-3 me-1"></span> Th8a should
             </div>
-        </nav>
+        </div>
     {% endif %}
 
 {% endblock %}
