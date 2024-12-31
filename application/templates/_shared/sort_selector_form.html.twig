@@ -1,5 +1,5 @@
-<form class="d-flex d-lg-none">
-    <label class="pe-2 pt-2 d-none" for="select_sort">Sort</label>
+<form class="d-flex d-lg-none align-items-center">
+    <label class="pe-2 d-none" for="select_sort">Sort</label>
     <select id="select_sort" class="form-select me-3">
         {% for key, value in sortOptions %}
             <option value="{{ key }}"{% if selectedSortName == key %} selected{% endif %}>{{ value|raw }}</option>
