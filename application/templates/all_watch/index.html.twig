@@ -15,9 +15,9 @@
 {% block second_navbar %}
     <nav id="second_nav" class="navbar navbar-expand-md navbar-light second-nav-bar">
         <div class="container">
-            <form class="d-none d-lg-flex w-100">
+            <form class="d-none d-lg-flex w-100 me-2">
                 <label class="pe-2 pt-2" for="select_show_wide">Show</label>
-                <select id="select_show_wide" class="form-select me-2">
+                <select id="select_show_wide" class="form-select">
                     {% for key, row in data %}
                         <option value="show_target_wide_{{ row.show.id }}">{{ row.show.shortTitle }}</option>
                     {% endfor %}
@@ -25,7 +25,7 @@
             </form>
             <form class="d-flex d-lg-none w-100">
                 <label class="pe-2 pt-2" for="select_show">Show</label>
-                <select id="select_show" class="form-select me-2">
+                <select id="select_show" class="form-select">
                     {% for key, row in data %}
                         <option value="show_target_{{ row.show.id }}">{{ row.show.shortTitle }}</option>
                     {% endfor %}
@@ -35,7 +35,7 @@
     </nav>
     {% if viewMode == 'condensed' %}
         <div class="container d-none d-lg-block pb-2 third-nav-bar">
-            <div class="d-flex align-items-center justify-content-end py-2 border-bottom">
+            <div class="d-flex align-items-center justify-content-end me-2 py-2 border-bottom">
                 <span class="activity-ptw watching-legend-pip d-inline-block ms-3 me-1"></span> PTW
                 <span class="activity-watching watching-legend-pip d-inline-block ms-3 me-1"></span> Watching
                 <span class="score-unfavorable watching-legend-pip d-inline-block ms-5 me-1"></span> Unfavorable
