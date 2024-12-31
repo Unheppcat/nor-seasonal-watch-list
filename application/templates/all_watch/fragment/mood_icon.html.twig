@@ -1,13 +1,8 @@
 {% if row.consolidatedScores is not null %}
-    <span class="mood-emoji-container d-none d-lg-block fs-3 fw-bold pe-2" data-mood-value="{{ row.consolidatedScores.mood_array.mood_average_value }}">{{ row.consolidatedScores.mood_array.mood_emoji|raw }}</span>
-{% else %}
-    <span class="mood-emoji-container d-none d-lg-block fs-3 fw-bold pe-2">&nbsp;</span>
-{% endif %}
-{% if row.consolidatedScores is not null %}
     <span
-            class="mood-emoji-container d-block d-lg-none fs-1 fw-bold pe-2"
+            class="mood-emoji-container d-block fw-bold pe-2"
             data-mood-value="{{ row.consolidatedScores.mood_array.mood_average_value }}"
     >{{ row.consolidatedScores.mood_array.mood_emoji|raw }}</span>
 {% else %}
-    <span class="mood-emoji-container d-block d-lg-none fs-1 fw-bold pe-2">&nbsp;</span>
+    <span class="mood-emoji-container d-block fw-bold pe-2">&nbsp;</span>
 {% endif %}

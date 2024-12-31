@@ -13,23 +13,19 @@
 {% endblock %}
 
 {% block second_navbar %}
-    <nav id="second_nav_wide" class="navbar navbar-expand-md navbar-light fixed-top d-none d-lg-block second-nav-bar">
+    <nav id="second_nav" class="navbar navbar-expand-md navbar-light second-nav-bar">
         <div class="container">
-            <form class="d-flex" style="width:100%;padding-top:4.1rem">
+            <form class="d-none d-lg-flex w-100">
                 <label class="pe-2 pt-2" for="select_show_wide">Show</label>
-                <select id="select_show_wide" class="form-control me-2">
+                <select id="select_show_wide" class="form-select me-2">
                     {% for key, row in data %}
                         <option value="show_target_wide_{{ row.show.id }}">{{ row.show.shortTitle }}</option>
                     {% endfor %}
                 </select>
             </form>
-        </div>
-    </nav>
-    <nav id="second_nav" class="navbar navbar-expand-md navbar-light fixed-top d-block d-lg-none second-nav-bar">
-        <div class="container">
-            <form class="d-flex" style="width:100%;padding-top:4.1rem">
+            <form class="d-flex d-lg-none w-100">
                 <label class="pe-2 pt-2" for="select_show">Show</label>
-                <select id="select_show" class="form-control me-2">
+                <select id="select_show" class="form-select me-2">
                     {% for key, row in data %}
                         <option value="show_target_{{ row.show.id }}">{{ row.show.shortTitle }}</option>
                     {% endfor %}
@@ -38,7 +34,7 @@
         </div>
     </nav>
     {% if viewMode == 'condensed' %}
-        <nav class="navbar fixed-top d-none d-lg-block third-nav-bar">
+        <nav class="navbar d-none d-lg-block third-nav-bar">
             <div class="container">
                 <div class="row d-flex border-bottom" style="width:100%;">
                     <div class="col-12 text-end">
@@ -60,22 +56,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="d-block">
-        <div class="row">
-            <div class="col">
-                <a class="show-anchor" id="show_target_top"></a>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-md-10 second-nav-clearance-padding"></div>
-        </div>
-        {% if viewMode == 'condensed' %}
-            <div class="row mb-2">
-                <div class="col-md-10 third-nav-clearance-padding"></div>
-            </div>
-        {% endif %}
-    </div>
-
+    <div><a class="show-anchor" id="show_target_top"></a></div>
     <div class="row mb-2">
         <div class="col-md-12">
             <div class="float-end pb-2 ps-1">
