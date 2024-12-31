@@ -59,7 +59,7 @@ a.back-to-top-button {
 
 @media (min-width: 1200px) {
     .activity-emoji-container, .mood-emoji-container {
-        font-size: 1.75rem; /* .fs-3 */
+        font-size: 1.6rem;
     }
 }
 
