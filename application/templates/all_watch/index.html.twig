@@ -109,7 +109,7 @@
         </div>
     </div>
     {% for key, row in data %}
-        <div  id="show_container_wide_{{ row.show.id }}" data-anchorid="{{ row.show.id }}" class="show_container_wide row mb-2 pb-2 border-bottom d-none d-lg-flex">
+        <div  id="show_container_wide_{{ row.show.id }}" data-anchorid="{{ row.show.id }}" class="show_container_wide row mb-2 py-2 border-bottom d-none d-lg-flex">
             <div class="row">
                 <div class="col">
                     <a class="{% if viewMode == 'expanded' %}show-anchor{% else %}show-anchor-condensed{% endif %}" id="show_target_wide_{{ row.show.id }}"></a>
@@ -121,15 +121,15 @@
                     <div class="col-md-2">
                         <img class="img-fluid rounded-3 cover-image-large" src="{{ row.show.coverImage|raw }}" alt="cover image" />
                     </div>
-                    <div class="col-md-2">
-                        {{ row.show.title|raw }}
-                        <br>
-                        {% include 'all_watch/fragment/jump_link_buttons.html.twig' %}
+                    <div class="col-md-2 d-flex flex-column">
+                        <h2 class="fs-6">{{ row.show.title|raw }}</h2>
+                        <div class="my-2">
+                          {% include 'all_watch/fragment/jump_link_buttons.html.twig' %}
+                        </div>
                     </div>
                 {% else %}
-                    <div class="col-md-4">
-                        {{ row.show.shortTitle|raw }}
-                        <br>
+                    <div class="col-md-4 d-flex flex-column justify-content-between">
+                        <h2 class="fs-6">{{ row.show.shortTitle|raw }}</h2>
                         {% include 'all_watch/fragment/jump_link_buttons_horizontal.html.twig' %}
                     </div>
 
@@ -137,7 +137,7 @@
 
                 <div class="col-md-8">
                     <div class="row {% if viewMode != 'expanded' %}align-items-center{% endif %}">
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-md-6 d-flex flex-column">
                             {% if row.consolidatedActivities %}
                                 <div class="row">
                                     <div class="d-flex align-items-center col-1 col-lg-2 col-xl-1 pe-2">
@@ -166,9 +166,9 @@
                                 </div>
                             {% endif %}
                             {% if viewMode == 'expanded' and row.scores and row.scoreCount > 0 %}
-                                <div class="">
+                                <div class="mt-auto mb-3">
                                     <a
-                                            class="btn btn-sm btn-info mt-3"
+                                            class="btn btn-outline-inverse px-2 py-0"
                                             data-bs-toggle="collapse"
                                             href="#collapseRow{{ key }}"
                                             aria-expanded="false"
@@ -287,9 +287,8 @@
                     <div class="col-4">
                         <img class="img-fluid rounded-3 cover-image-large" src="{{ row.show.coverImage|raw }}" alt="cover image" />
                     </div>
-                    <div class="col-8 position-relative">
-                        {{ row.show.title|raw }}
-                        <br>
+                    <div class="col-8">
+                        <h2 class="fs-6">{{ row.show.title|raw }}</h2>
                         {% include 'all_watch/fragment/jump_link_buttons.html.twig' %}
                     </div>
                 </div>
@@ -331,10 +330,10 @@
                     <div>(no recommendations)</div>
                 {% endif %}
 
-                <div class="row">
+                <div class="row text-center my-3">
                     <div class="col">
                         <a
-                                class="btn btn-sm btn-info mt-2 mb-3"
+                                class="btn btn-outline-inverse px-2 py-1"
                                 data-bs-toggle="collapse"
                                 href="#collapseRowSmall{{ key }}"
                                 aria-expanded="false"
