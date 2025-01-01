@@ -1,0 +1,12 @@
+$custom-colors: (
+    "nor-red": #c90d0d,
+    /* nor-red with lightness adjusted using Okhsl so that
+     * contrast against --bs-gray-800 (#main_nav's background color)
+     * is at least 3.0.
+     * Ref:
+     * - https://bottosson.github.io/misc/colorpicker/
+     * - https://www.w3.org/WAI/WCAG21/Techniques/general/G207
+     */
+    "nor-red-light": #fc2c23,
+);
+$theme-colors: map-merge($theme-colors, $custom-colors);
