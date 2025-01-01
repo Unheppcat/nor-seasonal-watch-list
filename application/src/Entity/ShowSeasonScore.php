@@ -171,7 +171,7 @@ class ShowSeasonScore
         ];
     }
 
-    public function jsonSerializeForWatch(): array
+    public function jsonSerializeForWatchApi(): array
     {
         return [
             'id' => $this->getId(),
