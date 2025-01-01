@@ -1,5 +1,9 @@
 /* This file gets loaded when colors mode is 'light' or 'os'. */
 
+#main_nav {
+    background-color: var(--bs-gray-800);
+}
+
 .user-colors-mode-light .d-light-none {
     display: none !important;
 }

@@ -1,5 +1,9 @@
 /* This file gets loaded when colors mode is 'dark'. */
 
+#main_nav {
+    background-color: var(--bs-gray-800);
+}
+
 .d-dark-none {
     display: none !important;
 }
