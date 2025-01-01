@@ -55,7 +55,10 @@
       <h1 class="text-nor-red mb-0">Community Watch List</h1>
       <div class="d-flex flex-column-reverse flex-lg-row align-items-lg-center gap-2 gap-lg-3">
         <div class="align-self-end align-self-lg-center">
-          <a class="btn btn-light" target="_blank" href="{{ path('all_watch_export') }}">Download</a>
+          <a class="link-secondary d-inline-flex align-items-center text-decoration-none" target="_blank" href="{{ path('all_watch_export') }}">
+              <span class="bi bi-download d-inline-flex align-items-center text-decoration-none"></span>
+              <span class="ps-1 text-decoration-underline">Download</span>
+          </a>
         </div>
         {% include 'all_watch/fragment/mode_selector_form.html.twig' %}
         {% include '_shared/sort_selector_form.html.twig' %}
