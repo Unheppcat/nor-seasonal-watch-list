@@ -135,9 +135,20 @@
 {#    <script src="/js/dataTables.bootstrap5.min.js"></script>#}
     <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}?v={{ asset_version }}"></script>
     <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}&v={{ asset_version }}"></script>
-    <!--suppress BadExpressionStatementJS -->
     <script type="application/javascript">
-        const isDarkMode ={% if colorsMode == 'dark' %} true {% else %} false {% endif %}
+        function detectDarkMode() {
+            const htmlElement = document.getElementsByTagName("html").item(0);
+            if (htmlElement && htmlElement.dataset.bsTheme) {
+                return htmlElement.dataset.bsTheme === 'dark';
+            }
+            if (window.matchMedia) {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+            return false;
+        }
+        const bootstrapTheme = document.getElementByTag
+
+        const isDarkMode = detectDarkMode();
     </script>
     {% block body_javascripts %}{% endblock %}
     </body>
