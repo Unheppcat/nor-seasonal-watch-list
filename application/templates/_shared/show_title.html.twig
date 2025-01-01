@@ -1,0 +1,25 @@
+{# Variables accepted:
+- primaryTitle (required) - string to show as the heading
+- alternativeTitles (optional) - list of strings to show below the primary
+- truncateLines (optional) - maximum number of lines to render; see layout.css for the number of lines supported
+- expandable (optional) - whether to include a link to let the user expand titles when they're truncated
+#}
+<div class="show-titles">
+    <h2 class="show-title show-title-primary" {% if truncateLines|default(false) %}data-line-clamp="{{ truncateLines }}"{% endif %}>
+        {{ primaryTitle|raw }}
+    </h2>
+  {% if alternativeTitles|default([]) %}
+    <ul class="list-unstyled lh-sm">
+      {% for title in alternativeTitles|default([]) %}
+        <li class="show-title mt-2" {% if truncateLines|default(false) %}data-line-clamp="{{ truncateLines }}"{% endif %}>
+            {{ title|raw }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+    <div class="text-end">
+      {% if expandable|default(false) %}
+        <a class="expand-link link-body-emphasis" role="button" aria-label="Expand titles" tabindex="0"><span class="bi bi-chevron-expand"></span>Expand</a>
+      {% endif %}
+    </div>
+</div>

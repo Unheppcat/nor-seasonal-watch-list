@@ -19,7 +19,7 @@
                 <label class="pe-2" for="select_show_wide">Show</label>
                 <select id="select_show_wide" class="form-select">
                     {% for key, row in data %}
-                        <option value="show_target_wide_{{ row.show.id }}">{{ row.show.shortTitle }}</option>
+                        <option value="show_target_wide_{{ row.show.id }}">{{ row.show.primaryTitle }}</option>
                     {% endfor %}
                 </select>
             </form>
@@ -27,7 +27,7 @@
                 <label class="pe-2" for="select_show">Show</label>
                 <select id="select_show" class="form-select">
                     {% for key, row in data %}
-                        <option value="show_target_{{ row.show.id }}">{{ row.show.shortTitle }}</option>
+                        <option value="show_target_{{ row.show.id }}">{{ row.show.primaryTitle }}</option>
                     {% endfor %}
                 </select>
             </form>
@@ -122,14 +122,12 @@
                         <img class="img-fluid rounded-3 cover-image-large" src="{{ row.show.coverImage|raw }}" alt="cover image" />
                     </div>
                     <div class="col-md-2 d-flex flex-column">
-                        <h2 class="fs-6">{{ row.show.title|raw }}</h2>
-                        <div class="my-2">
-                          {% include 'all_watch/fragment/jump_link_buttons.html.twig' %}
-                        </div>
+                        {% include '_shared/show_title.html.twig' with {'primaryTitle': row.show.primaryTitle, 'alternativeTitles': row.show.alternativeTitles, 'truncateLines': 4, 'expandable': true} only %}
+                        {% include 'all_watch/fragment/jump_link_buttons.html.twig' %}
                     </div>
                 {% else %}
                     <div class="col-md-4 d-flex flex-column justify-content-between">
-                        <h2 class="fs-6">{{ row.show.shortTitle|raw }}</h2>
+                        {% include '_shared/show_title.html.twig' with {'primaryTitle': row.show.primaryTitle, 'truncateLines': 2} only %}
                         {% include 'all_watch/fragment/jump_link_buttons_horizontal.html.twig' %}
                     </div>
 
@@ -237,7 +235,7 @@
                             <img class="img-fluid rounded-3 cover-image-large" src="{{ row.show.coverImage|raw }}" alt="cover image" />
                         </div>
                         <div class="col-md-2 mt-3">
-                            {{ row.show.title|raw }}
+                          {% include '_shared/show_title.html.twig' with {'primaryTitle': row.show.primaryTitle, 'alternativeTitles': row.show.alternativeTitles} only %}
                         </div>
                         <div class="col-md-8">
                             {% if row.scores and row.scoreCount > 0 %}
@@ -288,7 +286,7 @@
                         <img class="img-fluid rounded-3 cover-image-large" src="{{ row.show.coverImage|raw }}" alt="cover image" />
                     </div>
                     <div class="col-8">
-                        <h2 class="fs-6">{{ row.show.title|raw }}</h2>
+                        {% include '_shared/show_title.html.twig' with {'primaryTitle': row.show.primaryTitle, 'alternativeTitles': row.show.alternativeTitles} only %}
                         {% include 'all_watch/fragment/jump_link_buttons.html.twig' %}
                     </div>
                 </div>
@@ -387,6 +385,7 @@
 {% endblock %}
 
 {% block body_javascripts %}
+    <script src="/js/ClampShowTitles.js?v={{ asset_version }}"></script>
     <script src="/chart_js/Chart.min.js"></script>
     <script src="https://d3js.org/d3-color.v2.min.js"></script>
     <script src="https://d3js.org/d3-interpolate.v2.min.js"></script>

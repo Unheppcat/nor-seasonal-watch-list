@@ -242,6 +242,44 @@ class Show
         return $this;
     }
 
+    /**
+     * Returns the first non-empty title.
+     *
+     * Order of preference: Japanese title > Full Japanese title > English title
+     */
+    public function getPrimaryTitle(): ?string
+    {
+        if (!empty($this->japaneseTitle)) {
+            return $this->japaneseTitle;
+        }
+        if (!empty($this->fullJapaneseTitle)) {
+            return $this->fullJapaneseTitle;
+        }
+        if (!empty($this->englishTitle)) {
+            return $this->englishTitle;
+        }
+        return null;
+    }
+
+    /**
+     * Returns all non-empty titles, excluding the primary title.
+     */
+    public function getAlternativeTitles(): array
+    {
+        $primaryTitle = $this->getPrimaryTitle();
+        $result = [];
+        if (!empty($this->japaneseTitle) && $this->japaneseTitle !== $primaryTitle) {
+            $result[] = $this->japaneseTitle;
+        }
+        if (!empty($this->fullJapaneseTitle) && $this->fullJapaneseTitle !== $primaryTitle) {
+            $result[] = $this->fullJapaneseTitle;
+        }
+        if (!empty($this->englishTitle) && $this->englishTitle !== $primaryTitle) {
+            $result[] = $this->englishTitle;
+        }
+        return $result;
+    }
+
     public function getAllTitles(): ?string
     {
         $result = [];

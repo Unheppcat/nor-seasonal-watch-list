@@ -9,7 +9,7 @@
                 <label class="pe-2" for="select_show">Show</label>
                 <select id="select_show" class="form-select">
                     {% for key, row in data %}
-                        <option value="show_target_{{ row.score.show.getId }}">{{ row.score.show.getJapaneseTitle }}</option>
+                        <option value="show_target_{{ row.score.show.getId }}">{{ row.score.show.getPrimaryTitle }}</option>
                     {% endfor %}
                 </select>
             </form>
@@ -85,7 +85,7 @@
                             <div class="col-xs-12 col-md-2 col-lg-4 col-xl-6">
                                 <div class="d-flex d-md-none mt-3">
                                 </div>
-                                {{ row.score.show.getAllTitles|raw }}<br>
+                                {% include '_shared/show_title.html.twig' with {'primaryTitle': row.score.show.primaryTitle, 'alternativeTitles': row.score.show.alternativeTitles} only %}
                                 {{ include("my_watch/fragment/jump_link_buttons.html.twig") }}
                             </div>
                             <div class="col-xs-12 col-md-4 col-lg-3 col-xl-2">

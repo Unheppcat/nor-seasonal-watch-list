@@ -390,8 +390,8 @@ EOF;
             foreach ($shows as $show) {
                 $showInfo = [
                     'id' => $show->getId(),
-                    'title' => u($show->getAllTitles())->truncate(240, '...', false),
-                    'shortTitle' => u($show->getJapaneseTitle())->truncate(100, '...', false),
+                    'primaryTitle' => $show->getPrimaryTitle(),
+                    'alternativeTitles' => $show->getAlternativeTitles(),
                     'coverImage' => $show->getCoverImageLarge(),
                     'coverImageMedium' => $show->getCoverImageMedium(),
                     'anilistId' => $show->getAnilistId(),

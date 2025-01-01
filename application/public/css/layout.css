@@ -46,6 +46,51 @@ a.back-to-top-button {
     z-index: 100;
 }
 
+/**
+ * CSS rules that go with the _shared/show_title.html.twig template.
+ *
+ * The template renders a primary title and zero or more alternative titles.
+ * Each title can be truncated based on the number of lines on screen, and an
+ * optional 'expand' link is shown to reveal the full titles without truncation.
+ * Thus, there are three possible states, which are controlled by CSS classes:
+ *
+ * .show-titles (initial state)
+ *   enable line clamping if requested, hide expand link
+ * .show-titles.truncated (browser decides to truncate lines)
+ *   enable line clamping if requested, show expand link
+ * .show-titles.truncated.show-titles-no-clamp (user clicks 'expand')
+ *   disable line clamping, hide expand link
+ *
+ * ClampShowTitles.js handles adding and removing the .truncated class and
+ * adds the .show-titles-no-clamp class when the expand link is clicked.
+ */
+.show-titles .show-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.show-titles:not(.show-titles-no-clamp) [data-line-clamp="2"] {
+    /* As of Feb 2025, line-clamp is supported by major browsers with the -webkit prefix: https://caniuse.com/css-line-clamp */
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+.show-titles:not(.show-titles-no-clamp) [data-line-clamp="4"] {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+}
+.show-titles .expand-link {
+    cursor: pointer;
+    visibility: hidden;
+}
+.show-titles.truncated:not(.show-titles-no-clamp) .expand-link {
+    visibility: visible;
+    font-size: 0.9em;
+}
+.show-title-primary {
+    font-size: 1.15rem;
+}
+
 .activity-emoji-container, .mood-emoji-container {
     font-size: calc(1.375rem + 1.5vw); /* .fs-1 */
     position:relative;
