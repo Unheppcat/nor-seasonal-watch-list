@@ -51,22 +51,16 @@
 
 {% block body %}
     <div><a class="show-anchor" id="show_target_top"></a></div>
-    <div class="row mb-2">
-        <div class="col-md-12">
-            <div class="float-end pb-2 ps-1">
-                {% include '_shared/season_selector_form.html.twig' %}
-            </div>
-            <div class="float-end pb-2 ps-1">
-                {% include '_shared/sort_selector_form.html.twig' %}
-            </div>
-            <div class="float-end pb-2 ps-1">
-                {% include 'all_watch/fragment/mode_selector_form.html.twig' %}
-            </div>
-            <div class="float-end pb-2 ps-1 pe-3">
-                <a class="btn btn-light" target="_blank" href="{{ path('all_watch_export') }}">Download</a>
-            </div>
-            <h1 class="text-nor-red">Community Watch List</h1>
+    <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-lg-between gap-2 mb-3">
+      <h1 class="text-nor-red mb-0">Community Watch List</h1>
+      <div class="d-flex flex-column-reverse flex-lg-row align-items-lg-center gap-2 gap-lg-3">
+        <div class="align-self-end align-self-lg-center">
+          <a class="btn btn-light" target="_blank" href="{{ path('all_watch_export') }}">Download</a>
         </div>
+        {% include 'all_watch/fragment/mode_selector_form.html.twig' %}
+        {% include '_shared/sort_selector_form.html.twig' %}
+        {% include '_shared/season_selector_form.html.twig' %}
+      </div>
     </div>
 
     <div class="row">
