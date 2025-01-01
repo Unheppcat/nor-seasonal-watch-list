@@ -388,16 +388,7 @@ EOF;
             }
             unset($consolidatedShowScores);
             foreach ($shows as $show) {
-                $showInfo = [
-                    'id' => $show->getId(),
-                    'primaryTitle' => $show->getPrimaryTitle(),
-                    'alternativeTitles' => $show->getAlternativeTitles(),
-                    'coverImage' => $show->getCoverImageLarge(),
-                    'coverImageMedium' => $show->getCoverImageMedium(),
-                    'anilistId' => $show->getAnilistId(),
-                    'anilistShowUrl' => $show->getSiteUrl() ?: "https://anilist.co/anime/" . $show->getAnilistId(),
-                    'malShowUrl' => $show->getMalId() ? "https://myanimelist.net/anime/" . $show->getMalId() : '',
-                ];
+                $showInfo = $show->jsonSerializeForWatchView();
                 $scoreValues = $showSeasonScoreRepository->findAllForSeasonAndShow($season, $show, 'displayname');
                 $filteredScores = [];
                 foreach ($scoreValues as $scoreValue) {

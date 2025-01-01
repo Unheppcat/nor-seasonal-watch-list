@@ -620,6 +620,20 @@ class Show
         ];
     }
 
+    public function jsonSerializeForWatchView(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'primaryTitle' => $this->getPrimaryTitle(),
+            'alternativeTitles' => $this->getAlternativeTitles(),
+            'coverImage' => $this->getCoverImageLarge(),
+            'coverImageMedium' => $this->getCoverImageMedium(),
+            'anilistId' => $this->getAnilistId(),
+            'anilistShowUrl' => $this->getSiteUrl() ?: "https://anilist.co/anime/" . $this->getAnilistId(),
+            'malShowUrl' => $this->getMalId() ? "https://myanimelist.net/anime/" . $this->getMalId() : '',
+        ];
+    }
+
     /**
      * @return Show[]|Collection
      */

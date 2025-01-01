@@ -180,4 +180,11 @@ class ShowSeasonScore
             'user' => $this->getUser() ? $this->getUser()->jsonSerialize() : [],
         ];
     }
+
+    public function jsonSerializeForWatchView(): array
+    {
+        return [
+            'show' => $this->getShow() ? $this->getShow()->jsonSerializeForWatchView() : [],
+        ];
+    }
 }

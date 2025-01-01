@@ -140,7 +140,7 @@ class MyWatchController extends AbstractController
                         )
                     ]
                 );
-                $data[] = ['score' => $score, 'form' => $form->createView()];
+                $data[] = ['score' => $score->jsonSerializeForWatchView(), 'form' => $form->createView()];
             }
         }
         $em->flush();

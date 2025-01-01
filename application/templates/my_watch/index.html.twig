@@ -9,7 +9,7 @@
                 <label class="pe-2" for="select_show">Show</label>
                 <select id="select_show" class="form-select">
                     {% for key, row in data %}
-                        <option value="show_target_{{ row.score.show.getId }}">{{ row.score.show.getPrimaryTitle }}</option>
+                        <option value="show_target_{{ row.score.show.id }}">{{ row.score.show.primaryTitle }}</option>
                     {% endfor %}
                 </select>
             </form>
@@ -67,20 +67,20 @@
             </div>
             {% if data is not empty %}
                 {% for key, row in data %}
-                    <div id="show_container_{{ row.score.show.getId }}" class="show_container" data-anchorid="{{ row.score.show.getId }}">
+                    <div id="show_container_{{ row.score.show.id }}" class="show_container" data-anchorid="{{ row.score.show.id }}">
                         {% if row.form %}
                             {{ form_start(row.form) }}
                         {% endif %}
                         <div class="row">
                             <div class="col">
-                                <a class="show-anchor" id="show_target_{{ row.score.show.getId }}"></a>
+                                <a class="show-anchor" id="show_target_{{ row.score.show.id }}"></a>
                             </div>
                         </div>
                         <div class="row border-bottom mb-2 pb-md-2 pb-4">
                             <div class="col-xs-12 col-md-2">
                                 <div class="d-flex d-md-none mt-3">
                                 </div>
-                                <img class="img-fluid rounded-3 cover-image-large" src="{{ row.score.show.getCoverImageLarge|raw }}" alt="cover image" />
+                                <img class="img-fluid rounded-3 cover-image-large" src="{{ row.score.show.coverImage|raw }}" alt="cover image" />
                             </div>
                             <div class="col-xs-12 col-md-2 col-lg-4 col-xl-6">
                                 <div class="d-flex d-md-none mt-3">
@@ -96,7 +96,7 @@
                                     {{ form_widget(
                                         row.form.activity,
                                         {
-                                            'id': "show_season_score_activity_" ~ row.score.show.getId,
+                                            'id': "show_season_score_activity_" ~ row.score.show.id,
                                             'attr': {
                                             'class': 'show_season_score_activity'
                                         }
@@ -112,7 +112,7 @@
                                     {{ form_widget(
                                         row.form.score,
                                         {
-                                            'id': "show_season_score_score_" ~ row.score.show.getId,
+                                            'id': "show_season_score_score_" ~ row.score.show.id,
                                             'attr': {
                                                 'class': 'show_season_score_score'
                                             }
