@@ -2,6 +2,10 @@
 // Option B: Include parts of Bootstrap
 
 // 6. Optionally include any other parts as needed
+// Note: This actually includes all of the rest of what gets imported in Bootstrap's
+// bootstrap.scss file. Having unused CSS rules around seems worth it compared to
+// spending time puzzling over when something doesn't work when you want to use
+// a Bootstrap feature that got left out of our custom build.
 @import "../../vendor/twbs/bootstrap/scss/utilities";
 @import "../../vendor/twbs/bootstrap/scss/reboot";
 @import "../../vendor/twbs/bootstrap/scss/type";
@@ -9,16 +13,30 @@
 @import "../../vendor/twbs/bootstrap/scss/containers";
 @import "../../vendor/twbs/bootstrap/scss/grid";
 @import "../../vendor/twbs/bootstrap/scss/tables";
+@import "../../vendor/twbs/bootstrap/scss/forms";
 @import "../../vendor/twbs/bootstrap/scss/buttons";
 @import "../../vendor/twbs/bootstrap/scss/transitions";
 @import "../../vendor/twbs/bootstrap/scss/dropdown";
-@import "../../vendor/twbs/bootstrap/scss/forms";
+@import "../../vendor/twbs/bootstrap/scss/button-group";
 @import "../../vendor/twbs/bootstrap/scss/nav";
 @import "../../vendor/twbs/bootstrap/scss/navbar";
 @import "../../vendor/twbs/bootstrap/scss/card";
 @import "../../vendor/twbs/bootstrap/scss/accordion";
+@import "../../vendor/twbs/bootstrap/scss/breadcrumb";
+@import "../../vendor/twbs/bootstrap/scss/pagination";
+@import "../../vendor/twbs/bootstrap/scss/badge";
 @import "../../vendor/twbs/bootstrap/scss/alert";
+@import "../../vendor/twbs/bootstrap/scss/progress";
+@import "../../vendor/twbs/bootstrap/scss/list-group";
 @import "../../vendor/twbs/bootstrap/scss/close";
+@import "../../vendor/twbs/bootstrap/scss/toasts";
+@import "../../vendor/twbs/bootstrap/scss/modal";
+@import "../../vendor/twbs/bootstrap/scss/tooltip";
+@import "../../vendor/twbs/bootstrap/scss/popover";
+@import "../../vendor/twbs/bootstrap/scss/carousel";
+@import "../../vendor/twbs/bootstrap/scss/spinners";
+@import "../../vendor/twbs/bootstrap/scss/offcanvas";
+@import "../../vendor/twbs/bootstrap/scss/placeholders";
 @import "../../vendor/twbs/bootstrap/scss/helpers";
 
 // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
