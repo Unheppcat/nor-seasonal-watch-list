@@ -73,7 +73,7 @@
                             <li class="nav-item">
                                 <a class="nav-link {% if app.request.pathinfo == '/vote' %}active{% endif %}" href="{{ path('my_vote') }}">
                                     {% if electionIsActive is defined and electionIsActive %}
-                                        Voting <span class="text-nor-red">Open</span>
+                                        Voting <span class="text-nor-red-light">Open</span>
                                     {% else %}
                                         Vote
                                     {% endif %}

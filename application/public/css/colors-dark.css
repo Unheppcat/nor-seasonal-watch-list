@@ -42,26 +42,8 @@
     color: #c90d0d;
 }
 
-.text-nor-red {
-    color: #c90d0d;
-    text-decoration: none;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-}
-a:hover span.text-nor-red, a.active span.text-nor-red {
-    color: rgb(214, 74, 74);
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-}
-
 a {
     color: #4591df;
-}
-a.nor-red {
-    color: #c90d0d;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-}
-a.nor-red:hover {
-    color: rgb(217, 74, 74);
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
 
 .second-nav-bar {
@@ -70,6 +52,10 @@ a.nor-red:hover {
 
 .third-nav-bar {
     background-color: #222;
+}
+
+.home-nav-card .card-header {
+    background-color: rgba(var(--bs-body-color-rgb), 0.08); /* lighter .card-header */
 }
 
 .mood-emoji-favorable-color {

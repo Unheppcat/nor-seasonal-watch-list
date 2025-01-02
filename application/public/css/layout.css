@@ -8,6 +8,19 @@ body {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 }
+.navbar-dark .nav-link .text-nor-red-light {
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out
+}
+.navbar-dark .nav-link:hover .text-nor-red-light, .navbar-dark .nav-link:active .text-nor-red-light {
+    color: hsl(from var(--bs-nor-red-light) h s calc(l + 10)) !important;
+}
+
+.home-nav-card .card-header .link-nor-red {
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out
+}
+.home-nav-card .card-header .link-nor-red:hover, .home-nav-card .card-header .link-nor-red:active {
+    color: hsl(from var(--bs-nor-red) h s calc(l + 10)) !important;
+}
 
 .recommendation-row {
     margin-bottom: 0;
