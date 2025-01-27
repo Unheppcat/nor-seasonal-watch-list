@@ -11,16 +11,20 @@
             </td>
             {% if scoreField.activity and scoreField.activity.getSlug != 'none' %}
                 <td class="col-4">
-                    <span class="{{ scoreField.activity.getColorValue }} watching-legend-pip d-inline-block"></span>
-                    {{ scoreField.activity.getNickname }}
+                    <div class="d-flex align-items-center gap-1">
+                        <span class="{{ scoreField.activity.getColorValue }} watching-legend-pip"></span>
+                        {{ scoreField.activity.getNickname }}
+                    </div>
                 </td>
             {% else %}
                 <td class="col-4">&nbsp;</td>
             {% endif %}
             {% if scoreField.score and scoreField.score.getSlug != 'none' %}
                 <td class="col-4">
-                    <span class="{{ scoreField.score.getColorValue }} watching-legend-pip d-inline-block"></span>
-                    {{ scoreField.score.getNickname }}
+                    <div class="d-flex align-items-center gap-1">
+                        <span class="{{ scoreField.score.getColorValue }} watching-legend-pip"></span>
+                        {{ scoreField.score.getNickname }}
+                    </div>
                 </td>
             {% else %}
                 <td class="col-4">&nbsp;</td>
