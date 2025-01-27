@@ -287,7 +287,7 @@
                     </div>
                 </div>
                 {% if row.consolidatedActivities %}
-                    <div class="mt-2">Activity</div>
+                    <h3 class="mt-2 fs-6 fw-bold">Activity</h3>
                     <div class="all-watch-bar-chart-container d-grid gap-2 align-items-center">
                         <div>
                             {% include 'all_watch/fragment/activity_icon.html.twig' %}
@@ -305,7 +305,7 @@
                     <div>(no activity)</div>
                 {% endif %}
                 {% if row.consolidatedScores.all_count > 0 %}
-                    <div class="mt-2">Recommendations</div>
+                    <h3 class="mt-2 fs-6 fw-bold">Recommendations</h3>
                     <div class="all-watch-bar-chart-container d-grid gap-2 align-items-center">
                         <div>
                             {% include 'all_watch/fragment/mood_icon.html.twig' %}
