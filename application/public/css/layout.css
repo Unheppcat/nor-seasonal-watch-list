@@ -139,6 +139,11 @@ a.back-to-top-button {
     clip-path: circle(48%);
 }
 
+.all-watch-bar-chart-container {
+    /* Shrink the left-most column to fit mood/activity emoji icon, let the rest expand to fill the remaining space */
+    grid-template-columns: min-content auto;
+}
+
 .has-markdown th {
     padding-right: 1em;
 }

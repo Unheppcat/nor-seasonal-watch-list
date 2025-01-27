@@ -137,19 +137,17 @@
                     <div class="row {% if viewMode != 'expanded' %}align-items-center{% endif %}">
                         <div class="col-xs-12 col-md-6 d-flex flex-column">
                             {% if row.consolidatedActivities %}
-                                <div class="row">
-                                    <div class="d-flex align-items-center col-1 col-lg-2 col-xl-1 pe-2">
+                                <div class="all-watch-bar-chart-container d-grid gap-2 align-items-center">
+                                    <div>
                                         {% include 'all_watch/fragment/activity_icon.html.twig' %}
                                     </div>
-                                    <div class="col-11 col-lg-10 col-xl-11">
-                                        <div class="chart-container position-relative">
-                                            <canvas id="bar_activities_{{ row.show.id }}"
-                                                    class="all_watch_bar_activity_chart"
-                                                    data-scores="{{ row.consolidatedActivities.activities_array }}"
-                                                    data-maxactivitycount="{{ row.maxActivityCount }}"
-                                                    height=40
-                                            ></canvas>
-                                        </div>
+                                    <div class="chart-container position-relative">
+                                        <canvas id="bar_activities_{{ row.show.id }}"
+                                                class="all_watch_bar_activity_chart"
+                                                data-scores="{{ row.consolidatedActivities.activities_array }}"
+                                                data-maxactivitycount="{{ row.maxActivityCount }}"
+                                                height=40
+                                        ></canvas>
                                     </div>
                                 </div>
 
@@ -178,20 +176,18 @@
                         </div>
                         <div class="col-xs-12 col-md-6">
                             {% if row.consolidatedScores.all_count > 0 %}
-                                <div class="row align-items-center">
-                                    <div class="col-1 col-lg-2 col-xl-1">
+                                <div class="all-watch-bar-chart-container d-grid gap-2 align-items-center">
+                                    <div>
                                         {% include 'all_watch/fragment/mood_icon.html.twig' %}
                                     </div>
-                                    <div class="col-11 col-lg-10 col-xl-11">
-                                        <div class="chart-container">
-                                            <canvas id="bar_scores_{{ row.show.id }}"
-                                                    class="all_watch_bar_score_chart"
-                                                    data-scores="{{ row.consolidatedScores.scores_array }}"
-                                                    data-maxscorecount="{{ row.maxScoreCount }}"
-                                                    data-minscorecount="{{ row.minScoreCount }}"
-                                                    height=20
-                                            ></canvas>
-                                        </div>
+                                    <div class="chart-container position-relative">
+                                        <canvas id="bar_scores_{{ row.show.id }}"
+                                                class="all_watch_bar_score_chart"
+                                                data-scores="{{ row.consolidatedScores.scores_array }}"
+                                                data-maxscorecount="{{ row.maxScoreCount }}"
+                                                data-minscorecount="{{ row.minScoreCount }}"
+                                                height=20
+                                        ></canvas>
                                     </div>
                                 </div>
                                 {% if viewMode == 'expanded' %}
@@ -292,13 +288,13 @@
                 </div>
                 {% if row.consolidatedActivities %}
                     <div class="mt-2">Activity</div>
-                    <div class="row">
-                        <div class="d-flex align-items-center col-1">
+                    <div class="all-watch-bar-chart-container d-grid gap-2 align-items-center">
+                        <div>
                             {% include 'all_watch/fragment/activity_icon.html.twig' %}
                         </div>
-                        <div class="col-11">
+                        <div class="chart-container position-relative">
                             <canvas id="bar_activities_{{ row.show.id }}_narrow"
-                                    class="all_watch_bar_activity_chart"
+                                    class="all_watch_bar_activity_chart mw-100"
                                     data-scores="{{ row.consolidatedActivities.activities_array }}"
                                     data-maxactivitycount="{{ row.maxActivityCount }}"
                                     height=40
@@ -310,11 +306,11 @@
                 {% endif %}
                 {% if row.consolidatedScores.all_count > 0 %}
                     <div class="mt-2">Recommendations</div>
-                    <div class="row align-items-center">
-                        <div class="col-1">
+                    <div class="all-watch-bar-chart-container d-grid gap-2 align-items-center">
+                        <div>
                             {% include 'all_watch/fragment/mood_icon.html.twig' %}
-                       </div>
-                        <div class="col-11">
+                        </div>
+                        <div class="chart-container position-relative">
                             <canvas id="bar_scores_{{ row.show.id }}_narrow"
                                     class="all_watch_bar_score_chart"
                                     data-scores="{{ row.consolidatedScores.scores_array }}"
