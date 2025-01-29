@@ -108,8 +108,10 @@
             </div>
         </div>
     </div>
-    {% for key, row in data %}
-        <div  id="show_container_wide_{{ row.show.id }}" data-anchorid="{{ row.show.id }}" class="show_container_wide row mb-2 py-2 border-bottom d-none d-lg-flex">
+
+    <ol class="watch-list d-none d-lg-block list-unstyled">
+      {% for key, row in data %}
+        <li id="show_container_wide_{{ row.show.id }}" data-anchorid="{{ row.show.id }}" class="show_container_wide row mb-2 py-2 border-bottom d-flex">
             <div class="row">
                 <div class="col">
                     <a class="{% if viewMode == 'expanded' %}show-anchor{% else %}show-anchor-condensed{% endif %}" id="show_target_wide_{{ row.show.id }}"></a>
@@ -259,8 +261,9 @@
                 </div>
             {% endif %}
 
-        </div>
+        </li>
     {% endfor %}
+    </ol>
 
     {% if data is empty %}
         <div class="row">
@@ -269,9 +272,9 @@
         </div>
     {% endif %}
 
-    <div class="d-block d-lg-none">
+    <ol class="watch-list d-block d-lg-none list-unstyled">
         {% for key, row in data %}
-            <div id="show_container_{{ row.show.id }}" class="show_container" data-anchorid="{{ row.show.id }}">
+            <li id="show_container_{{ row.show.id }}" class="show_container" data-anchorid="{{ row.show.id }}">
                 <div class="row">
                     <div class="col">
                         <a class="show-anchor" id="show_target_{{ row.show.id }}"></a>
@@ -366,10 +369,10 @@
                     ></a>
                 </div>
                 <div class="mw-100 my-2 border-bottom" role="separator"></div>
-            </div>
+            </li>
         {% endfor %}
 
-    </div>
+    </ol>
 
     {% if data is not empty %}
         <a class="btn btn-primary rounded-pill d-block back-to-top-button" href="{{ path('all_watch_index') }}#show_target_top">Top</a>

@@ -105,6 +105,10 @@ a.back-to-top-button {
     font-size: 1.15rem;
 }
 
+.watch-list .btn-outline-inverse {
+    filter: brightness(85%);
+}
+
 .activity-emoji-container, .mood-emoji-container {
     font-size: calc(1.375rem + 1.5vw); /* .fs-1 */
     position:relative;
