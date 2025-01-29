@@ -66,8 +66,9 @@
                 </div>
             </div>
             {% if data is not empty %}
-                {% for key, row in data %}
-                    <div id="show_container_{{ row.score.show.id }}" class="show_container" data-anchorid="{{ row.score.show.id }}">
+                <ol class="watch-list list-unstyled">
+                  {% for key, row in data %}
+                    <li id="show_container_{{ row.score.show.id }}" class="show_container" data-anchorid="{{ row.score.show.id }}">
                         {% if row.form %}
                             {{ form_start(row.form) }}
                         {% endif %}
@@ -124,8 +125,9 @@
                         {% if row.form %}
                             {{ form_end(row.form) }}
                         {% endif %}
-                    </div>
-                {% endfor %}
+                    </li>
+                  {% endfor %}
+                </ol>
             {% else %}
                 <div class="row">
                     <div class="col-xs-12 d-none d-md-block text-center mb-3 mt-3">No shows found</div>
