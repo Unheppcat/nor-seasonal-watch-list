@@ -80,7 +80,7 @@
                                 {% endif %}
                             </a>
                         </li>
-                        {% if is_granted('ROLE_SWL_ADMIN') %}
+                        {% if is_granted('ROLE_SWL_ADMIN') or is_granted('ROLE_SWL_STAFF') %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle {% if app.request.pathinfo starts with '/admin/' %}active{% endif %}" href="#" id="navbarDropdown" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
@@ -93,9 +93,11 @@
                                     <li>
                                         <a class="dropdown-item {% if app.request.pathinfo == '/admin/show/' %}active{% endif %}" href="{{ path('admin_show_index') }}">Shows</a>
                                     </li>
-                                    <li>
-                                        <a class="dropdown-item {% if app.request.pathinfo == '/admin/election/' %}active{% endif %}" href="{{ path('admin_election_index') }}">Elections</a>
-                                    </li>
+                                    {% if is_granted('ROLE_SWL_ADMIN') %}
+                                        <li>
+                                            <a class="dropdown-item {% if app.request.pathinfo == '/admin/election/' %}active{% endif %}" href="{{ path('admin_election_index') }}">Elections</a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </li>
                         {% endif %}

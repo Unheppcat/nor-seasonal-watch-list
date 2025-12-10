@@ -258,6 +258,15 @@ class AppDiscordAuthenticator extends SocialAuthenticator // AbstractGuardAuthen
         } else {
             $rolesToRemove[] = 'ROLE_SWL_ADMIN';
         }
+
+        if (
+            isset($userDiscordRoles['881961735488172093'])      // NOR Staff
+        ) {
+            $rolesToAdd[] = 'ROLE_SWL_STAFF';
+        } else {
+            $rolesToRemove[] = 'ROLE_SWL_STAFF';
+        }
+
         if (
             isset($userDiscordRoles['807642761338945546'])      // Unheppcat server SWL_USER
             || isset($userDiscordRoles['596496447386419213'])   // NOR New User
