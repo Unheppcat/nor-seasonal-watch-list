@@ -40,7 +40,8 @@ security:
 
     role_hierarchy:
         ROLE_SWL_USER: ROLE_USER
-        ROLE_SWL_ADMIN: ROLE_SWL_USER
+        ROLE_SWL_STAFF: ROLE_SWL_USER
+        ROLE_SWL_ADMIN: ROLE_SWL_STAFF
         ROLE_ADMIN: ROLE_SWL_ADMIN
         ROLE_SUPER_USER: ROLE_ADMIN
 
@@ -50,6 +51,8 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/account, roles: ROLE_SWL_USER }
+        - { path: ^/admin/season, roles: ROLE_SWL_STAFF }
+        - { path: ^/admin/show, roles: ROLE_SWL_STAFF }
         - { path: ^/admin, roles: ROLE_SWL_ADMIN }
         - { path: ^/api, roles: ROLE_SWL_USER }
         - { path: ^/show, roles: ROLE_SWL_USER }
