@@ -14,139 +14,118 @@ use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Entity(repositoryClass=ShowRepository::class)
- * @ORM\Table(name="anime_show")
- * @UniqueEntity(fields="anilistId", message="That Anilist ID is already taken")
- */
+#[ORM\Entity(repositoryClass: ShowRepository::class)]
+#[ORM\Table(name: 'anime_show')]
+#[UniqueEntity(fields: 'anilistId', message: 'That Anilist ID is already taken')]
 class Show
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $japaneseTitle = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $englishTitle = null;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $fullJapaneseTitle = null;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $fullEnglishTitle = null;
 
     /**
      * @var Collection|Season[]
-     *
-     * @ORM\ManyToMany(targetEntity=Season::class, inversedBy="shows")
-     * @OrderBy({"rankOrder" = "ASC"})
      */
+    #[ORM\ManyToMany(targetEntity: Season::class, inversedBy: 'shows')]
+    #[OrderBy(['rankOrder' => 'ASC'])]
     private Collection $seasons;
 
     /**
      * @var Collection|ShowSeasonScore[]
-     *
-     * @ORM\OneToMany(targetEntity=ShowSeasonScore::class, mappedBy="show", cascade={"persist","remove"})
      */
+    #[ORM\OneToMany(targetEntity: ShowSeasonScore::class, mappedBy: 'show', cascade: ['persist', 'remove'])]
     private Collection $scores;
 
     /**
      * @var Collection|ElectionVote[]
-     *
-     * @ORM\OneToMany(targetEntity=ElectionVote::class, mappedBy="animeShow", cascade={"persist","remove"})
      */
+    #[ORM\OneToMany(targetEntity: ElectionVote::class, mappedBy: 'animeShow', cascade: ['persist', 'remove'])]
     private Collection $votes;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $anilistId = null;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", nullable=true)
      */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
     /**
      * @var string|null
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $hashtag = null;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", nullable=true)
      */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $coverImageMedium = null;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", nullable=true)
      */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $coverImageLarge = null;
 
     /**
      * @var string|null
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $siteUrl = null;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", nullable=true)
      */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $synonyms = null;
 
     /**
      * @var bool|null
-     * @ORM\Column(name="exclude_from_elections", type="boolean", nullable=true)
      */
+    #[ORM\Column(name: 'exclude_from_elections', type: 'boolean', nullable: true)]
     private ?bool $excludeFromElections = null;
 
     /**
      * @var DiscordChannel|null
-     * @ORM\OneToOne(targetEntity=DiscordChannel::class, mappedBy="animeShow", cascade={"persist", "remove"})
-     * @JoinColumn(nullable=true)
      */
+    #[ORM\OneToOne(targetEntity: DiscordChannel::class, mappedBy: 'animeShow', cascade: ['persist', 'remove'])]
+    #[JoinColumn(nullable: true)]
     private ?DiscordChannel $discordChannel = null;
 
     /**
      * @var Collection|Show[]
-     *
-     * @ORM\OneToMany(targetEntity=Show::class, mappedBy="firstShow", cascade={"persist","detach"})
      */
+    #[ORM\OneToMany(targetEntity: Show::class, mappedBy: 'firstShow', cascade: ['persist', 'detach'])]
     private Collection $relatedShows;
 
     /**
      * @var Show|null
-     *
-     * @ORM\ManyToOne(targetEntity=Show::class, inversedBy="relatedShows", cascade={"persist"})
      */
+    #[ORM\ManyToOne(targetEntity: Show::class, inversedBy: 'relatedShows', cascade: ['persist'])]
     private ?Show $firstShow = null;
 
     /**
      * @var int|null
-     * @ORM\Column(type="integer", nullable=true)
      */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $malId = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ElectionShowBuff::class, mappedBy="animeShow", cascade={"persist","remove"})
-     */
+    #[ORM\OneToMany(targetEntity: ElectionShowBuff::class, mappedBy: 'animeShow', cascade: ['persist', 'remove'])]
     private Collection $electionShowBuffs;
 
     public function __construct()

@@ -10,65 +10,63 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
-/**
- * @ORM\Entity(repositoryClass=ScoreRepository::class)
- */
+#[ORM\Entity(repositoryClass: ScoreRepository::class)]
 class Score
 {
     /**
      * @var int|null
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255)
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name = '';
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=50)
      */
+    #[ORM\Column(type: 'string', length: 50)]
     private string $nickname = '';
 
     /**
      * @var int
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Column(type: 'integer')]
     private int $rankOrder = 0;
 
     /**
      * @var float|null
-     * @ORM\Column(type="decimal", precision=10, scale=3, nullable=true)
      */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 3, nullable: true)]
     private ?float $value = null;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=50)
      */
+    #[ORM\Column(type: 'string', length: 50)]
     private string $colorValue = '';
 
     /**
      * @var string
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private string $icon = '';
 
     /**
      * @var string
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private string $slug = '';
 
     /**
      * @var Collection|ShowSeasonScore[]
-     * @ORM\OneToMany(targetEntity=ShowSeasonScore::class, mappedBy="score", cascade={"persist","remove"})
      */
+    #[ORM\OneToMany(targetEntity: ShowSeasonScore::class, mappedBy: 'score', cascade: ['persist', 'remove'])]
     private Collection $showSeasonScores;
 
     public function __construct()

@@ -15,12 +15,11 @@ use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class MyVoteController extends AbstractController
 {
     /**
-     * @Route("/vote", name="my_vote")
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param ShowRepository $showRepository
@@ -29,6 +28,7 @@ class MyVoteController extends AbstractController
      * @return Response
      * @throws NonUniqueResultException
      */
+    #[Route('/vote', name: 'my_vote')]
     public function index(
         Request $request,
         EntityManagerInterface $em,

@@ -6,22 +6,21 @@ use App\Entity\Score;
 use App\Form\ScoreType;
 use App\Repository\ElectionRepository;
 use App\Repository\ScoreRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/admin/score")
- */
+#[Route('/admin/score')]
 class AdminScoreController extends AbstractController
 {
     /**
-     * @Route("/", name="admin_score_index", methods={"GET"})
      * @param ScoreRepository $scoreRepository
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/', name: 'admin_score_index', methods: ['GET'])]
     public function index(
         ScoreRepository $scoreRepository,
         ElectionRepository $electionRepository
@@ -35,14 +34,15 @@ class AdminScoreController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_score_new", methods={"GET","POST"})
      * @param Request $request
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/new', name: 'admin_score_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
-        ElectionRepository $electionRepository
+        ElectionRepository $electionRepository,
+        EntityManagerInterface $em
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
         $score = new Score();
@@ -51,9 +51,8 @@ class AdminScoreController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $score->setIcon($score->getIcon());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($score);
-            $entityManager->flush();
+            $em->persist($score);
+            $em->flush();
 
             return $this->redirectToRoute('admin_score_index');
         }
@@ -67,11 +66,11 @@ class AdminScoreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_score_show", methods={"GET"})
      * @param Score $score
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/{id}', name: 'admin_score_show', methods: ['GET'])]
     public function show(
         Score $score,
         ElectionRepository $electionRepository
@@ -85,16 +84,17 @@ class AdminScoreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_score_edit", methods={"GET","POST"})
      * @param Request $request
      * @param Score $score
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/{id}/edit', name: 'admin_score_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Score $score,
-        ElectionRepository $electionRepository
+        ElectionRepository $electionRepository,
+        EntityManagerInterface $em
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
         $form = $this->createForm(ScoreType::class, $score);
@@ -102,7 +102,7 @@ class AdminScoreController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $score->setIcon($score->getIcon());
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
             return $this->redirectToRoute('admin_score_index');
         }
@@ -116,17 +116,16 @@ class AdminScoreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_score_delete", methods={"DELETE"})
      * @param Request $request
      * @param Score $score
      * @return Response
      */
-    public function delete(Request $request, Score $score): Response
+    #[Route('/{id}', name: 'admin_score_delete', methods: ['DELETE'])]
+    public function delete(Request $request, Score $score, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$score->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($score);
-            $entityManager->flush();
+            $em->remove($score);
+            $em->flush();
         }
 
         return $this->redirectToRoute('admin_score_index');

@@ -12,9 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use RuntimeException;
 
-/**
- * @ORM\Entity(repositoryClass=ElectionRepository::class)
- */
+#[ORM\Entity(repositoryClass: ElectionRepository::class)]
 class Election
 {
     public const SIMPLE_ELECTION = 'simple';
@@ -22,63 +20,59 @@ class Election
 
     /**
      * @var int|null
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     /**
      * @var string|null
-     * @ORM\Column(type="string", nullable=true)
      */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $title = null;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", nullable=true)
      */
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
     /**
      * @var Season|null
-     * @ORM\ManyToOne(targetEntity=Season::class, inversedBy="elections")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Season::class, inversedBy: 'elections')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Season $season;
 
     /**
      * @var DateTime|null
-     * @ORM\Column(type="datetime")
      */
+    #[ORM\Column(type: 'datetime')]
     private ?DateTime $startDate;
 
     /**
      * @var DateTime|null
-     * @ORM\Column(type="datetime")
      */
+    #[ORM\Column(type: 'datetime')]
     private ?DateTime $endDate;
 
     /**
      * @var int|null
-     * @ORM\Column(type="integer", nullable=true)
      */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $maxVotes = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ElectionVote::class, mappedBy="election", cascade={"persist","remove"})
-     */
+    #[ORM\OneToMany(targetEntity: ElectionVote::class, mappedBy: 'election', cascade: ['persist', 'remove'])]
     private Collection $electionVotes;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ElectionShowBuff::class, mappedBy="election", cascade={"persist","remove"})
-     */
+    #[ORM\OneToMany(targetEntity: ElectionShowBuff::class, mappedBy: 'election', cascade: ['persist', 'remove'])]
     private Collection $electionShowBuffs;
 
     /**
      * @var string
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private string $electionType = '';
 
     /**

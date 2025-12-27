@@ -21,18 +21,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/admin/election")
- */
+#[Route('/admin/election')]
 class AdminElectionController extends AbstractController
 {
     /**
-     * @Route("/", name="admin_election_index", methods={"GET"})
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/', name: 'admin_election_index', methods: ['GET'])]
     public function index(
         ElectionRepository $electionRepository
     ): Response {
@@ -45,12 +43,12 @@ class AdminElectionController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_election_new", methods={"GET","POST"})
      * @param Request $request
      * @param ElectionRepository $electionRepository
      * @param EntityManagerInterface $entityManager
      * @return Response
      */
+    #[Route('/new', name: 'admin_election_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         ElectionRepository $electionRepository,
@@ -77,13 +75,13 @@ class AdminElectionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_election_show", methods={"GET"}, requirements={"id":"\d+"})
      * @param Election $election
      * @param VoterInfoHelper $voterInfoHelper
      * @return Response
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
+    #[Route('/{id}', name: 'admin_election_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(
         Election $election,
         VoterInfoHelper $voterInfoHelper
@@ -102,13 +100,13 @@ class AdminElectionController extends AbstractController
     /**
      * Export election data as a CSV file
      *
-     * @Route("/export/{id}", name="admin_election_export", methods={"GET"}, requirements={"id":"\d+"})
      * @param VoterInfoHelper $voterInfoHelper
      * @param Election $election
      * @return Response
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
+    #[Route('/export/{id}', name: 'admin_election_export', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function export(
         VoterInfoHelper $voterInfoHelper,
         Election $election
@@ -138,12 +136,12 @@ class AdminElectionController extends AbstractController
     /**
      * Export election data as a CSV file
      *
-     * @Route("/export_raw/{id}", name="admin_election_export_raw", methods={"GET"}, requirements={"id":"\d+"})
      * @param ExportHelper $exportHelper
      * @param ElectionVoteRepository $electionVoteRepository
      * @param Election $election
      * @return Response
      */
+    #[Route('/export_raw/{id}', name: 'admin_election_export_raw', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function exportRaw(
         ExportHelper $exportHelper,
         ElectionVoteRepository $electionVoteRepository,
@@ -201,13 +199,13 @@ class AdminElectionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_election_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      * @param Request $request
      * @param Election $election
      * @param ElectionRepository $electionRepository
      * @param EntityManagerInterface $em
      * @return Response
      */
+    #[Route('/{id}/edit', name: 'admin_election_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(
         Request $request,
         Election $election,
@@ -233,7 +231,6 @@ class AdminElectionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/buff", name="admin_election_buff", methods={"GET","POST"}, requirements={"id":"\d+"})
      * @param Request $request
      * @param Election $election
      * @param ShowRepository $showRepository
@@ -244,6 +241,7 @@ class AdminElectionController extends AbstractController
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
+    #[Route('/{id}/buff', name: 'admin_election_buff', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function buff(
         Request $request,
         Election $election,
@@ -304,12 +302,12 @@ class AdminElectionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_election_delete", methods={"DELETE"}, requirements={"id":"\d+"})
      * @param Request $request
      * @param Election $election
      * @param EntityManagerInterface $entityManager
      * @return Response
      */
+    #[Route('/{id}', name: 'admin_election_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function delete(
         Request $request,
         Election $election,

@@ -10,27 +10,26 @@ use App\Repository\ElectionRepository;
 use App\Repository\SeasonRepository;
 use App\Repository\ShowRepository;
 use App\Service\AnilistApi;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/admin/show")
- */
+#[Route('/admin/show')]
 class AdminShowController extends AbstractController
 {
     /**
-     * @Route("/", name="admin_show_index", methods={"GET"})
      * @param Request $request
      * @param ShowRepository $showRepository
      * @param SeasonRepository $seasonRepository
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/', name: 'admin_show_index', methods: ['GET'])]
     public function index(
         Request $request,
         ShowRepository $showRepository,
@@ -92,7 +91,6 @@ class AdminShowController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_show_new", methods={"GET","POST"})
      * @param Request $request
      * @param AnilistApi $anilistApi
      * @param ElectionRepository $electionRepository
@@ -100,10 +98,12 @@ class AdminShowController extends AbstractController
      * @throws GuzzleException
      * @throws JsonException
      */
+    #[Route('/new', name: 'admin_show_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         AnilistApi $anilistApi,
-        ElectionRepository $electionRepository
+        ElectionRepository $electionRepository,
+        EntityManagerInterface $em
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
         $show = new Show();
@@ -111,7 +111,6 @@ class AdminShowController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $this->saveNewRelatedShows($show, $em);
             try {
                 $anilistData = $anilistApi->fetch($show->getAnilistId());
@@ -141,11 +140,11 @@ class AdminShowController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_show_show", methods={"GET"})
      * @param Show $show
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/{id}', name: 'admin_show_show', methods: ['GET'])]
     public function show(
         Show $show,
         ElectionRepository $electionRepository
@@ -159,7 +158,6 @@ class AdminShowController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_show_edit", methods={"GET","POST"})
      * @param Request $request
      * @param Show $show
      * @param AnilistApi $anilistApi
@@ -169,12 +167,14 @@ class AdminShowController extends AbstractController
      * @throws GuzzleException
      * @throws JsonException
      */
+    #[Route('/{id}/edit', name: 'admin_show_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Show $show,
         AnilistApi $anilistApi,
         ElectionRepository $electionRepository,
-        ShowRepository $showRepository
+        ShowRepository $showRepository,
+        EntityManagerInterface $em
     ): Response {
         $originalRelatedShows = $showRepository->getRelatedShows($show);
         $electionIsActive = $electionRepository->electionIsActive();
@@ -182,7 +182,6 @@ class AdminShowController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             foreach($originalRelatedShows as $originalRelatedShow) {
                 $originalRelatedShow->setFirstShow(null);
                 $em->persist($originalRelatedShow);
@@ -219,17 +218,16 @@ class AdminShowController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_show_delete", methods={"DELETE"})
      * @param Request $request
      * @param Show $show
      * @return Response
      */
-    public function delete(Request $request, Show $show): Response
+    #[Route('/{id}', name: 'admin_show_delete', methods: ['DELETE'])]
+    public function delete(Request $request, Show $show, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$show->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($show);
-            $entityManager->flush();
+            $em->remove($show);
+            $em->flush();
         }
 
         return $this->redirectToRoute('admin_show_index');

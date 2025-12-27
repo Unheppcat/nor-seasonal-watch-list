@@ -10,20 +10,18 @@ use App\Repository\ElectionVoteRepository;
 use App\Repository\ShowRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/election/vote")
- */
+#[Route('/election/vote')]
 class ElectionVoteController extends AbstractController
 {
     /**
-     * @Route("/{id}/edit", name="election_vote_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      * @param Request $request
      * @param ElectionVote $electionVote
      * @param ElectionVoteRepository $electionVoteRepository
@@ -32,11 +30,13 @@ class ElectionVoteController extends AbstractController
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
+    #[Route('/{id}/edit', name: 'election_vote_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(
         Request $request,
         ElectionVote $electionVote,
         ElectionVoteRepository $electionVoteRepository,
-        ShowRepository $showRepository
+        ShowRepository $showRepository,
+        EntityManagerInterface $em
     ): Response {
         try {
             /** @var User $user */
@@ -80,8 +80,8 @@ class ElectionVoteController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 if ($maxVotes > 0 && $currentVoteCount >= $maxVotes && $electionVote->getChosen()) {
                     $electionVote->setChosen(false);
-                    $this->getDoctrine()->getManager()->persist($electionVote);
-                    $this->getDoctrine()->getManager()->flush();
+                    $em->persist($electionVote);
+                    $em->flush();
                     if ($request->isXmlHttpRequest()) {
                         return new JsonResponse(
                             ['data' => [
@@ -94,7 +94,7 @@ class ElectionVoteController extends AbstractController
 
                     throw new UnauthorizedHttpException('This page should never be requested directly.');
                 }
-                $this->getDoctrine()->getManager()->flush();
+                $em->flush();
 
                 if ($request->isXmlHttpRequest()) {
                     if ($election->getElectionType() === Election::RANKED_CHOICE_ELECTION) {

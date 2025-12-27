@@ -6,30 +6,30 @@ use App\Entity\ShowSeasonScore;
 use App\Entity\User;
 use App\Form\ShowSeasonScoreType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/show/season/score")
- */
+#[Route('/show/season/score')]
 class ShowSeasonScoreController extends AbstractController
 {
     /**
-     * @Route("/{id}/edit/{key}", name="admin_show_season_score_edit", methods={"GET","POST"})
      * @param Request $request
      * @param ShowSeasonScore $showSeasonScore
      * @param FormFactoryInterface $formFactory
      * @return Response
      */
+    #[Route('/{id}/edit/{key}', name: 'admin_show_season_score_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         ShowSeasonScore $showSeasonScore,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        EntityManagerInterface $em
     ): Response {
         try {
             /** @var User $user */
@@ -57,7 +57,7 @@ class ShowSeasonScoreController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $em->flush();
 
                 if ($request->isXmlHttpRequest()) {
                     // Just send back fact of success

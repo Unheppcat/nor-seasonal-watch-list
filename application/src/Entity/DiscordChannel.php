@@ -7,43 +7,41 @@ namespace App\Entity;
 use App\Repository\DiscordChannelRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=DiscordChannelRepository::class)
- */
+#[ORM\Entity(repositoryClass: DiscordChannelRepository::class)]
 class DiscordChannel
 {
     /**
      * @var int|null
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255)
      */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name = '';
 
     /**
      * @var Season
-     * @ORM\ManyToOne(targetEntity=Season::class, inversedBy="discordChannels")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Season::class, inversedBy: 'discordChannels')]
+    #[ORM\JoinColumn(nullable: false)]
     private Season $season;
 
     /**
      * @var Show
-     * @ORM\OneToOne(targetEntity=Show::class, inversedBy="discordChannel", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\OneToOne(targetEntity: Show::class, inversedBy: 'discordChannel', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private Show $animeShow;
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean")
      */
+    #[ORM\Column(type: 'boolean')]
     private bool $hidden = false;
 
     /**

@@ -7,40 +7,35 @@ namespace App\Entity;
 use App\Repository\ElectionShowBuffRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ElectionShowBuffRepository::class)
- */
+#[ORM\Entity(repositoryClass: ElectionShowBuffRepository::class)]
 class ElectionShowBuff
 {
     /**
      * @var int|null
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = 0;
 
     /**
      * @var Election|null
-     *
-     * @ORM\ManyToOne(targetEntity=Election::class, inversedBy="electionShowBuffs")
-     * @ORM\JoinColumn(nullable=true)
      */
+    #[ORM\ManyToOne(targetEntity: Election::class, inversedBy: 'electionShowBuffs')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Election $election = null;
 
     /**
      * @var Show|null
-     * @ORM\ManyToOne(targetEntity=Show::class, inversedBy="electionShowBuffs")
-     * @ORM\JoinColumn(nullable=true)
      */
+    #[ORM\ManyToOne(targetEntity: Show::class, inversedBy: 'electionShowBuffs')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Show $animeShow = null;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $buffRule = null;
 
     /**

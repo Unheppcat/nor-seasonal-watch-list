@@ -23,13 +23,12 @@ use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use function Symfony\Component\String\u;
 
 class AllWatchController extends AbstractController
 {
     /**
-     * @Route("/community/watch", name="all_watch_index", options={"expose"=true})
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param SeasonRepository $seasonRepository
@@ -47,6 +46,7 @@ class AllWatchController extends AbstractController
      * @throws NonUniqueResultException
      * @throws \Doctrine\DBAL\Driver\Exception
      */
+    #[Route('/community/watch', name: 'all_watch_index', options: ['expose' => true])]
     public function index(
         Request $request,
         EntityManagerInterface $em,
@@ -112,7 +112,6 @@ class AllWatchController extends AbstractController
     }
 
     /**
-     * @Route("/community/export", name="all_watch_export", options={"expose"=true})
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param ShowRepository $showRepository
@@ -127,6 +126,7 @@ class AllWatchController extends AbstractController
      * @throws NonUniqueResultException
      * @throws \Doctrine\DBAL\Driver\Exception
      */
+    #[Route('/community/export', name: 'all_watch_export', options: ['expose' => true])]
     public function export(
         Request $request,
         EntityManagerInterface $em,

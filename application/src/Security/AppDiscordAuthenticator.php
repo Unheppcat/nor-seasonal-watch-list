@@ -13,52 +13,38 @@ use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
-use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
+use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Wohali\OAuth2\Client\Provider\DiscordResourceOwner;
 
-class AppDiscordAuthenticator extends SocialAuthenticator // AbstractGuardAuthenticator
+class AppDiscordAuthenticator extends OAuth2Authenticator
 {
     private ClientRegistry $clientRegistry;
     private EntityManagerInterface $em;
     private RouterInterface $router;
-    /**
-     * @var string
-     */
     private string $norGuildId;
-    /**
-     * @var DiscordApi
-     */
     private DiscordApi $discordApi;
-    /**
-     * @var FlashBagInterface
-     */
-    private FlashBagInterface $flashBag;
+    private RequestStack $requestStack;
 
     /**
      * AppDiscordAuthenticator constructor.
-     * @param ClientRegistry $clientRegistry
-     * @param EntityManagerInterface $em
-     * @param RouterInterface $router
-     * @param DiscordApi $discordApi
-     * @param FlashBagInterface $flashBag
-     * @param string $norGuildId
      */
     public function __construct(
         ClientRegistry $clientRegistry,
         EntityManagerInterface $em,
         RouterInterface $router,
         DiscordApi $discordApi,
-        FlashBagInterface $flashBag,
+        RequestStack $requestStack,
         string $norGuildId
     ) {
         $this->clientRegistry = $clientRegistry;
@@ -66,24 +52,54 @@ class AppDiscordAuthenticator extends SocialAuthenticator // AbstractGuardAuthen
         $this->router = $router;
         $this->norGuildId = $norGuildId;
         $this->discordApi = $discordApi;
-        $this->flashBag = $flashBag;
+        $this->requestStack = $requestStack;
     }
 
-    public function supports(Request $request): bool
+    public function supports(Request $request): ?bool
     {
         $requestedRoute = $request->attributes->get('_route');
         return ($requestedRoute === 'connect_discord_check' || $requestedRoute === 'secure_connect_discord_check');
     }
 
-    public function getCredentials(Request $request): AccessToken
+    public function authenticate(Request $request): Passport
     {
-        return $this->fetchAccessToken($this->getDiscordClient());
+        $client = $this->getDiscordClient();
+        $accessToken = $this->fetchAccessToken($client);
+
+        return new SelfValidatingPassport(
+            new UserBadge($accessToken->getToken(), function() use ($accessToken, $client) {
+                return $this->getUserFromToken($accessToken, $client);
+            })
+        );
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider): User
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    {
+        $session = $this->requestStack->getSession();
+        $targetUrl = $session->get('loginOriginalRequestUri');
+        if ($targetUrl === null) {
+            $targetUrl = $this->router->generate('https_default');
+        }
+        return new RedirectResponse($targetUrl);
+    }
+
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    {
+        $session = $this->requestStack->getSession();
+        $session->getFlashBag()->add('danger', strtr($exception->getMessageKey(), $exception->getMessageData()));
+        $targetUrl = $this->router->generate('https_default');
+        return new RedirectResponse($targetUrl);
+    }
+
+    private function getDiscordClient(): OAuth2ClientInterface
+    {
+        return $this->clientRegistry->getClient('discord');
+    }
+
+    private function getUserFromToken(AccessToken $credentials, OAuth2ClientInterface $client): User
     {
         /** @var DiscordResourceOwner $discordUser */
-        $discordUser = $this->getDiscordClient()->fetchUserFromToken($credentials);
+        $discordUser = $client->fetchUserFromToken($credentials);
         $discordId = $discordUser->getId();
         $localUsername = $discordUser->getUsername() . '#' . $discordUser->getDiscriminator();
 
@@ -162,69 +178,7 @@ class AppDiscordAuthenticator extends SocialAuthenticator // AbstractGuardAuthen
         return $user;
     }
 
-    public function checkCredentials($credentials, UserInterface $user): bool
-    {
-        return ($credentials !== null);
-    }
-
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
-    {
-        $this->flashBag->add('danger', strtr($exception->getMessageKey(), $exception->getMessageData()));
-        $targetUrl = $this->router->generate('https_default');
-        return new RedirectResponse($targetUrl);
-    }
-
     /**
-     * @param Request $request
-     * @param TokenInterface $token
-     * @param string $providerKey
-     * @return RedirectResponse|null
-     */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): ?RedirectResponse
-    {
-        // Go home
-        $targetUrl = $request->getSession()->get('loginOriginalRequestUri');
-        if ($targetUrl === null) {
-            $targetUrl = $this->router->generate('https_default');
-        }
-        return new RedirectResponse($targetUrl);
-        // Or allow the original controller to process this request
-        // return null;
-    }
-
-    /**
-     * Called when authentication is needed, but it's not sent.
-     * This redirects to the 'login'.
-     * @param Request $request
-     * @param AuthenticationException|null $authException
-     * @return RedirectResponse
-     */
-    public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
-    {
-        $request->getSession()->set('loginOriginalRequestUri', $request->getRequestUri());
-        return new RedirectResponse(
-            '/discord/connect',
-            Response::HTTP_TEMPORARY_REDIRECT
-        );
-    }
-
-    public function supportsRememberMe(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @return OAuth2ClientInterface
-     */
-    private function getDiscordClient(): OAuth2ClientInterface
-    {
-        return $this->clientRegistry->getClient('discord');
-    }
-
-    /**
-     * @param string $userToken
-     * @param string $userDiscordId
-     * @return string|null
      * @throws GuzzleException
      * @throws JsonException
      */
@@ -235,10 +189,6 @@ class AppDiscordAuthenticator extends SocialAuthenticator // AbstractGuardAuthen
     }
 
     /**
-     * @param string $userToken
-     * @param array $existingRoles
-     * @param string $userDiscordId
-     * @return array
      * @throws GuzzleException|JsonException
      */
     private function updateDiscordRoles(string $userToken, array $existingRoles, string $userDiscordId): array

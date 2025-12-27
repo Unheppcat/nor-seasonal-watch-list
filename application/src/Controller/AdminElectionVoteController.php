@@ -6,22 +6,21 @@ use App\Entity\ElectionVote;
 use App\Form\ElectionVoteType;
 use App\Repository\ElectionRepository;
 use App\Repository\ElectionVoteRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/admin/election/vote")
- */
+#[Route('/admin/election/vote')]
 class AdminElectionVoteController extends AbstractController
 {
     /**
-     * @Route("/", name="admin_election_vote_index", methods={"GET"})
      * @param ElectionVoteRepository $electionVoteRepository
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/', name: 'admin_election_vote_index', methods: ['GET'])]
     public function index(
         ElectionVoteRepository $electionVoteRepository,
         ElectionRepository $electionRepository
@@ -35,14 +34,15 @@ class AdminElectionVoteController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_election_vote_new", methods={"GET","POST"})
      * @param Request $request
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/new', name: 'admin_election_vote_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
-        ElectionRepository $electionRepository
+        ElectionRepository $electionRepository,
+        EntityManagerInterface $em
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
         $electionVote = new ElectionVote();
@@ -50,9 +50,8 @@ class AdminElectionVoteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($electionVote);
-            $entityManager->flush();
+            $em->persist($electionVote);
+            $em->flush();
 
             return $this->redirectToRoute('admin_election_vote_index');
         }
@@ -66,11 +65,11 @@ class AdminElectionVoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_election_vote_show", methods={"GET"}, requirements={"id":"\d+"})
      * @param ElectionVote $electionVote
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/{id}', name: 'admin_election_vote_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(
         ElectionVote $electionVote,
         ElectionRepository $electionRepository
@@ -84,23 +83,24 @@ class AdminElectionVoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_election_vote_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      * @param Request $request
      * @param ElectionVote $electionVote
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/{id}/edit', name: 'admin_election_vote_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(
         Request $request,
         ElectionVote $electionVote,
-        ElectionRepository $electionRepository
+        ElectionRepository $electionRepository,
+        EntityManagerInterface $em
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
         $form = $this->createForm(ElectionVoteType::class, $electionVote);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
             return $this->redirectToRoute('admin_election_vote_index');
         }
@@ -114,17 +114,16 @@ class AdminElectionVoteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_election_vote_delete", methods={"DELETE"}, requirements={"id":"\d+"})
      * @param Request $request
      * @param ElectionVote $electionVote
      * @return Response
      */
-    public function delete(Request $request, ElectionVote $electionVote): Response
+    #[Route('/{id}', name: 'admin_election_vote_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    public function delete(Request $request, ElectionVote $electionVote, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$electionVote->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($electionVote);
-            $entityManager->flush();
+            $em->remove($electionVote);
+            $em->flush();
         }
 
         return $this->redirectToRoute('admin_election_vote_index');
