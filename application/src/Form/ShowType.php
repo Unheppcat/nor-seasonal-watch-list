@@ -37,7 +37,7 @@ class ShowType extends AbstractType
             ->add('relatedShows', EntityType::class, [
                 'class' => Show::class,
                 'choice_label' => function(Show $show) {
-                    return $show->getAllTitles();
+                    return $show->getTitlesForSelect();
                 },
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     // Only return already selected shows to avoid loading entire database

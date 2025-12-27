@@ -186,7 +186,7 @@ class AdminShowController extends AbstractController
         foreach ($shows as $show) {
             $results[] = [
                 'id' => $show->getId(),
-                'text' => $show->getAllTitles(),
+                'text' => $show->getTitlesForSelect(),
             ];
         }
 

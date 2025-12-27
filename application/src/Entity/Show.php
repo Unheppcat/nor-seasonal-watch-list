@@ -236,6 +236,18 @@ class Show
         return empty($result) ? null : implode('<br>', $result);
     }
 
+    public function getTitlesForSelect(): ?string
+    {
+        $result = [];
+        if (!empty($this->japaneseTitle)) {
+            $result[] = $this->japaneseTitle;
+        }
+        if (!empty($this->englishTitle)) {
+            $result[] = $this->englishTitle;
+        }
+        return empty($result) ? null : implode(' | ', $result);
+    }
+
     public function getVoteStyleTitles(): ?string
     {
         $result = '';
