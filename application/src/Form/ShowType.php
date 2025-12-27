@@ -34,21 +34,34 @@ class ShowType extends AbstractType
                 'multiple'=> true,
                 'required' => false,
             ])
-            ->add('relatedShows', EntityType::class, [
+            // Note: relatedShows field will be added in PRE_SUBMIT event listener
+            // to handle dynamic validation of Select2-chosen shows
+            ->add('excludeFromElections', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Exclude from elections'
+            ])
+        ;
+
+        // PRE_SET_DATA: Add relatedShows field on initial load
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $show = $event->getData();
+            $form = $event->getForm();
+
+            // Get currently selected related show IDs
+            $selectedIds = [];
+            if ($show && $show->getRelatedShows()) {
+                foreach ($show->getRelatedShows() as $relatedShow) {
+                    $selectedIds[] = $relatedShow->getId();
+                }
+            }
+
+            // Add relatedShows field with query for pre-selected shows
+            $form->add('relatedShows', EntityType::class, [
                 'class' => Show::class,
                 'choice_label' => function(Show $show) {
                     return $show->getTitlesForSelect();
                 },
-                'query_builder' => function (EntityRepository $er) use ($options) {
-                    // Only return already selected shows to avoid loading entire database
-                    $show = $options['data'];
-                    $selectedIds = [];
-                    if ($show && $show->getRelatedShows()) {
-                        foreach ($show->getRelatedShows() as $relatedShow) {
-                            $selectedIds[] = $relatedShow->getId();
-                        }
-                    }
-
+                'query_builder' => function (EntityRepository $er) use ($selectedIds) {
                     $qb = $er->createQueryBuilder('sh')
                         ->orderBy('sh.japaneseTitle', 'ASC');
 
@@ -68,15 +81,7 @@ class ShowType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
-            ])
-            ->add('excludeFromElections', CheckboxType::class, [
-                'required' => false,
-                'label' => 'Exclude from elections'
-            ])
-        ;
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $show = $event->getData();
-            $form = $event->getForm();
+            ]);
 
             if ($show !== null && $show->getId() !== null) {
                 $form->add('japaneseTitle')
@@ -92,6 +97,47 @@ class ShowType extends AbstractType
                     ;
 
             }
+        });
+
+        // PRE_SUBMIT: Re-add relatedShows field with query that includes submitted IDs
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+            $form = $event->getForm();
+
+            // Get submitted related show IDs
+            $submittedIds = [];
+            if (isset($data['relatedShows']) && is_array($data['relatedShows'])) {
+                $submittedIds = array_filter(array_map('intval', $data['relatedShows']));
+            }
+
+            // Re-add relatedShows field with query that includes submitted IDs
+            $form->add('relatedShows', EntityType::class, [
+                'class' => Show::class,
+                'choice_label' => function(Show $show) {
+                    return $show->getTitlesForSelect();
+                },
+                'query_builder' => function (EntityRepository $er) use ($submittedIds) {
+                    $qb = $er->createQueryBuilder('sh')
+                        ->orderBy('sh.japaneseTitle', 'ASC');
+
+                    if (!empty($submittedIds)) {
+                        // Include all submitted show IDs in the valid choices
+                        $qb->where('sh.id IN (:submittedIds)')
+                            ->setParameter('submittedIds', $submittedIds);
+                    } else {
+                        // Return empty result set if nothing submitted
+                        $qb->where('1 = 0');
+                    }
+
+                    return $qb;
+                },
+                'expanded' => false,
+                'multiple' => true,
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ]);
         });
     }
 
