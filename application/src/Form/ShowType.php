@@ -36,16 +36,38 @@ class ShowType extends AbstractType
             ])
             ->add('relatedShows', EntityType::class, [
                 'class' => Show::class,
+                'choice_label' => function(Show $show) {
+                    return $show->getAllTitles();
+                },
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                    $showId = $options['data'] ? $options['data']->getId() : null;
-                    return $er->createQueryBuilder('sh')
-                        ->andWhere('sh.id != :thisId')
-                        ->setParameter('thisId', $showId)
+                    // Only return already selected shows to avoid loading entire database
+                    $show = $options['data'];
+                    $selectedIds = [];
+                    if ($show && $show->getRelatedShows()) {
+                        foreach ($show->getRelatedShows() as $relatedShow) {
+                            $selectedIds[] = $relatedShow->getId();
+                        }
+                    }
+
+                    $qb = $er->createQueryBuilder('sh')
                         ->orderBy('sh.japaneseTitle', 'ASC');
+
+                    if (!empty($selectedIds)) {
+                        $qb->where('sh.id IN (:selectedIds)')
+                            ->setParameter('selectedIds', $selectedIds);
+                    } else {
+                        // Return empty result set if nothing selected
+                        $qb->where('1 = 0');
+                    }
+
+                    return $qb;
                 },
                 'expanded' => false,
                 'multiple' => true,
                 'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
             ])
             ->add('excludeFromElections', CheckboxType::class, [
                 'required' => false,

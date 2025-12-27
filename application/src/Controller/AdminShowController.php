@@ -94,6 +94,7 @@ class AdminShowController extends AbstractController
      * @param Request $request
      * @param AnilistApi $anilistApi
      * @param ElectionRepository $electionRepository
+     * @param SeasonRepository $seasonRepository
      * @return Response
      * @throws GuzzleException
      * @throws JsonException
@@ -103,14 +104,35 @@ class AdminShowController extends AbstractController
         Request $request,
         AnilistApi $anilistApi,
         ElectionRepository $electionRepository,
+        SeasonRepository $seasonRepository,
         EntityManagerInterface $em
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
         $show = new Show();
+
+        // Pre-populate seasons from session if available
+        $session = $request->getSession();
+        $previouslySelectedSeasonIds = $session->get('last_selected_seasons', []);
+
+        if (!empty($previouslySelectedSeasonIds)) {
+            $previousSeasons = $seasonRepository->findBy(['id' => $previouslySelectedSeasonIds]);
+            foreach ($previousSeasons as $season) {
+                $show->addSeason($season);
+            }
+        }
+
         $form = $this->createForm(ShowType::class, $show);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Store selected season IDs in session for next time
+            $selectedSeasons = $show->getSeasons();
+            $selectedSeasonIds = [];
+            foreach ($selectedSeasons as $season) {
+                $selectedSeasonIds[] = $season->getId();
+            }
+            $session->set('last_selected_seasons', $selectedSeasonIds);
+
             $this->saveNewRelatedShows($show, $em);
             try {
                 $anilistData = $anilistApi->fetch($show->getAnilistId());
@@ -231,6 +253,32 @@ class AdminShowController extends AbstractController
         }
 
         return $this->redirectToRoute('admin_show_index');
+    }
+
+    /**
+     * AJAX endpoint to search shows for autocomplete
+     */
+    #[Route('/search', name: 'admin_show_search', methods: ['GET'], options: ['expose' => true])]
+    public function search(Request $request, ShowRepository $showRepository): Response
+    {
+        $term = $request->query->get('term', '');
+        $currentShowId = $request->query->get('exclude', null);
+
+        if (strlen($term) < 2) {
+            return $this->json([]);
+        }
+
+        $shows = $showRepository->searchByTitle($term, $currentShowId);
+
+        $results = [];
+        foreach ($shows as $show) {
+            $results[] = [
+                'id' => $show->getId(),
+                'text' => $show->getAllTitles(),
+            ];
+        }
+
+        return $this->json($results);
     }
 
     /**
