@@ -162,6 +162,32 @@ class AdminShowController extends AbstractController
     }
 
     /**
+     * AJAX endpoint to search shows for autocomplete
+     */
+    #[Route('/search', name: 'admin_show_search', methods: ['GET'], options: ['expose' => true])]
+    public function search(Request $request, ShowRepository $showRepository): Response
+    {
+        $term = $request->query->get('term', '');
+        $currentShowId = $request->query->get('exclude', null);
+
+        if (strlen($term) < 2) {
+            return $this->json([]);
+        }
+
+        $shows = $showRepository->searchByTitle($term, $currentShowId);
+
+        $results = [];
+        foreach ($shows as $show) {
+            $results[] = [
+                'id' => $show->getId(),
+                'text' => $show->getAllTitles(),
+            ];
+        }
+
+        return $this->json($results);
+    }
+
+    /**
      * @param Show $show
      * @param ElectionRepository $electionRepository
      * @return Response
@@ -253,32 +279,6 @@ class AdminShowController extends AbstractController
         }
 
         return $this->redirectToRoute('admin_show_index');
-    }
-
-    /**
-     * AJAX endpoint to search shows for autocomplete
-     */
-    #[Route('/search', name: 'admin_show_search', methods: ['GET'], options: ['expose' => true])]
-    public function search(Request $request, ShowRepository $showRepository): Response
-    {
-        $term = $request->query->get('term', '');
-        $currentShowId = $request->query->get('exclude', null);
-
-        if (strlen($term) < 2) {
-            return $this->json([]);
-        }
-
-        $shows = $showRepository->searchByTitle($term, $currentShowId);
-
-        $results = [];
-        foreach ($shows as $show) {
-            $results[] = [
-                'id' => $show->getId(),
-                'text' => $show->getAllTitles(),
-            ];
-        }
-
-        return $this->json($results);
     }
 
     /**
