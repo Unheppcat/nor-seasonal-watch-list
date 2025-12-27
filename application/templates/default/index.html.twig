@@ -6,66 +6,59 @@
 
     {% if user %}
         {% if is_granted('ROLE_SWL_USER') %}
-            {# lg/xl version #}
-            <div class="row justify-content-center d-none d-lg-flex py-3">
+            <div class="row justify-content-center d-flex py-3">
                 <div class="col">
                     <h1 class="text-center">
                         {% include 'default/fragment/headline.html.twig' %}
                     </h1>
                 </div>
             </div>
-            <div class="row justify-content-center d-none d-lg-flex py-3 gx-5">
+            <div class="row d-flex flex-column flex-lg-row align-items-center align-items-lg-top justify-content-center py-3 g-5">
                 <div class="col" style="width: 300px; max-width: 300px;">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <div style="font-size:100px;color:#aaaaaa;">
-                                <a class="nor-red" href="{{ path('my_watch_index') }}">
-                                    <i class="bi bi-bookmark"></i>
-                                </a>
-                            </div>
+                    <div class="card text-center home-nav-card">
+                        <div class="card-header p-0">
+                            <a class="d-flex align-items-center justify-content-center d-block link-nor-red text-decoration-none py-2 px-3" href="{{ path('my_watch_index') }}">
+                                <i class="bi bi-bookmark d-flex align-items-center justify-content-center py-4" style="font-size:100px;"></i>
+                            </a>
                         </div>
                         <div class="card-body">
                             <h5>Personal Watch List</h5>
                             <p class="">
                                 Record what you are<br>watching.
                             </p>
-                            <a class="btn btn-lg btn-primary mt-3 mb-3" href="{{ path('my_watch_index') }}">Personal</a>
+                            <a class="btn btn-lg btn-outline-inverse mt-3 mb-3" href="{{ path('my_watch_index') }}">Personal</a>
                         </div>
                     </div>
                 </div>
                 <div class="col" style="width: 300px; max-width: 300px;">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <div style="font-size:100px;color:#aaaaaa;">
-                                <a class="nor-red" href="{{ path('all_watch_index') }}">
-                                    <i class="bi bi-bookmarks"></i>
-                                </a>
-                            </div>
+                    <div class="card text-center home-nav-card">
+                        <div class="card-header p-0">
+                            <a class="d-flex align-items-center justify-content-center d-block link-nor-red text-decoration-none py-2 px-3" href="{{ path('all_watch_index') }}">
+                                <i class="bi bi-bookmarks d-flex align-items-center justify-content-center py-4" style="font-size:100px;"></i>
+                            </a>
                         </div>
                         <div class="card-body">
                             <h5>Community Watch List</h5>
                             <p class="">
                                 See what others are<br>watching.
                             </p>
-                            <a class="btn btn-lg btn-primary mt-3 mb-3" href="{{ path('all_watch_index') }}">Community</a>
+                            <a class="btn btn-lg btn-outline-inverse mt-3 mb-3" href="{{ path('all_watch_index') }}">Community</a>
                         </div>
                     </div>
                 </div>
                 <div class="col" style="width: 300px; max-width: 300px;">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <div style="font-size:100px;color:#aaaaaa;">
-                                <a class="nor-red" href="{{ path('my_vote') }}">
-                                    <i class="bi bi-check-square"></i>
-                                </a>
-                            </div>
+                    <div class="card text-center home-nav-card">
+                        <div class="card-header p-0">
+                            <a class="d-flex align-items-center justify-content-center d-block link-nor-red text-decoration-none py-2 px-3" href="{{ path('my_vote') }}">
+                                <i class="bi bi-check-square d-flex align-items-center justify-content-center py-4" style="font-size:100px;"></i>
+                            </a>
                         </div>
                         <div class="card-body">
                             <h5>Election</h5>
                             <p class="">
                                 Vote for NOR show<br>discussion channels.
                             </p>
-                            <a class="btn btn-lg btn-success mt-3 mb-3" href="{{ path('my_vote') }}">
+                            <a class="btn btn-lg {% if electionIsActive is defined and electionIsActive %}btn-nor-red{% else %}btn-outline-inverse{% endif %} mt-3 mb-3" href="{{ path('my_vote') }}">
                                 {% if electionIsActive is defined and electionIsActive %}
                                     Voting Open
                                 {% else %}
@@ -76,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center d-none d-lg-flex py-3 gx-5">
+            <div class="row justify-content-center d-flex py-3 gx-0 gx-lg-5">
                 <div class="mt-5">
                     {% for label, messages in app.flashes() %}
                         {% for message in messages %}
@@ -86,89 +79,6 @@
                         {% endfor %}
                     {% endfor %}
                 </div>
-            </div>
-            {# xs, sm, md version #}
-            <div class="row justify-content-center d-flex d-lg-none py-3">
-                <div class="col">
-                    <h1 class="text-center">
-                        {% include 'default/fragment/headline.html.twig' %}
-                    </h1>
-                </div>
-            </div>
-            <div class="row justify-content-center d-flex d-lg-none py-3">
-                <div class="col" style="width: 300px; max-width: 300px;">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <div style="font-size:100px;color:#aaaaaa;">
-                                <a href="{{ path('my_watch_index') }}">
-                                    <i class="bi bi-bookmark"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5>Personal Watch List</h5>
-                            <p class="">
-                                Record what you are<br>watching.
-                            </p>
-                            <a class="btn btn-lg btn-primary mt-3 mb-3" href="{{ path('my_watch_index') }}">Personal</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center d-flex d-lg-none py-3">
-                <div class="col" style="width: 300px; max-width: 300px;">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <div style="font-size:100px;color:#aaaaaa;">
-                                <a href="{{ path('all_watch_index') }}">
-                                    <i class="bi bi-bookmarks"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5>Community Watch List</h5>
-                            <p class="">
-                                See what others are<br>watching.
-                            </p>
-                            <a class="btn btn-lg btn-primary mt-3 mb-3" href="{{ path('all_watch_index') }}">Community</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center d-flex d-lg-none py-3">
-                <div class="col" style="width: 300px; max-width: 300px;">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <div style="font-size:100px;color:#aaaaaa;">
-                                <a href="{{ path('my_vote') }}">
-                                    <i class="bi bi-check-square"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5>Election</h5>
-                            <p class="">
-                                Vote for NOR show<br>discussion channels.
-                            </p>
-                            <a class="btn btn-lg btn-success mt-3 mb-3" href="{{ path('my_vote') }}">
-                                {% if electionIsActive is defined and electionIsActive %}
-                                    Voting Open
-                                {% else %}
-                                    Vote
-                                {% endif %}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center d-flex d-lg-none py-3">
-                {% for label, messages in app.flashes() %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label }}" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endfor %}
             </div>
 
         {% else %}

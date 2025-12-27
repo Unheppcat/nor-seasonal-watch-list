@@ -6,7 +6,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.2.0",
+        "php": "^8.2",
         "ext-json": "*",
         "babdev/pagerfanta-bundle": "^3.2",
         "composer/package-versions-deprecated": "1.11.99.1",
@@ -52,7 +52,7 @@
         "symfony/validator": "5.4.*",
         "symfony/web-link": "5.4.*",
         "symfony/yaml": "5.4.*",
-        "twbs/bootstrap": "^5.1",
+        "twbs/bootstrap": "^5.3",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
         "wohali/oauth2-discord-new": "^1.1",
@@ -104,13 +104,16 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json":  "symfony-cmd"
         },
+        "build-bootstrap": [
+            "./scripts/build-bootstrap.sh"
+        ],
         "post-install-cmd": [
             "npm install --force",
             "@auto-scripts"
         ],
         "post-update-cmd": [
             "npm install --force",
-            "@auto-scripts"
+            "@build-bootstrap"
         ]
     },
     "conflict": {

@@ -1,0 +1,82 @@
+/* This file gets loaded when colors mode is 'dark'. */
+
+#main_nav {
+    background-color: var(--bs-gray-800);
+}
+
+.d-dark-none {
+    display: none !important;
+}
+
+.activity-watching {
+    background-color: #007eb9;
+}
+.activity-ptw {
+    background-color: rgb(128, 191, 220);
+}
+.activity-stopped {
+    background-color: rgb(245, 245, 245);
+}
+
+.score-th8a {
+    background-color: #c90d0d;
+    border: 1px solid #c90d0d;
+}
+.score-highly, .score-highly-favorable {
+    background-color: rgb(214, 74, 74);
+    border: 1px solid rgb(214, 74, 74);
+}
+.score-favorable {
+    background-color: rgb(228, 134, 134);
+    border: 1px solid rgb(228, 134, 134);
+}
+.score-neutral {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(150, 150, 150);
+}
+.score-unfavorable {
+    background-color: rgb(64, 64, 64);
+    border: 1px solid rgb(96, 96, 96);
+}
+.text-th8a {
+    color: #c90d0d;
+}
+
+a {
+    color: #4591df;
+}
+
+.second-nav-bar {
+    background-color: #4a4a4a !important;
+}
+
+.third-nav-bar {
+    background-color: #222;
+}
+
+.home-nav-card .card-header {
+    background-color: rgba(var(--bs-body-color-rgb), 0.08); /* lighter .card-header */
+}
+
+.mood-emoji-favorable-color {
+    color: #eecb62;
+}
+.mood-emoji-heart-eyes-color {
+    color: crimson;
+}
+.mood-emoji-dark-mouth-color {
+    color: #664301;
+}
+.mood-emoji-light-mouth-color {
+    color: #aaaaaa;
+}
+.mood-emoji-neutral-color {
+    color: #bbbbbb;
+}
+.mood-emoji-unfavorable-color {
+    color: #555555;
+}
+
+.table td, .table th {
+    border-bottom: 1px solid #444;
+}

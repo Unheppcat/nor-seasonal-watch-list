@@ -1,0 +1,165 @@
+/* Stylesheet for theme-agnostic layout rules */
+
+body {
+    min-height: 30rem;
+}
+
+.navbar {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+.navbar-dark .nav-link .text-nor-red-light {
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out
+}
+.navbar-dark .nav-link:hover .text-nor-red-light, .navbar-dark .nav-link:active .text-nor-red-light {
+    color: hsl(from var(--bs-nor-red-light) h s calc(l + 10)) !important;
+}
+
+.home-nav-card .card-header .link-nor-red {
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out
+}
+.home-nav-card .card-header .link-nor-red:hover, .home-nav-card .card-header .link-nor-red:active {
+    color: hsl(from var(--bs-nor-red) h s calc(l + 10)) !important;
+}
+
+.recommendation-row {
+    margin-bottom: 0;
+    padding-left: 28px;
+}
+
+.watching-legend-pip {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+.second-nav-bar {
+    z-index: 900;
+}
+
+.third-nav-bar {
+    z-index: 900;
+}
+
+a.show-anchor {
+    position: relative;
+    top: -8rem;
+    z-index: -100;
+}
+
+a.show-anchor-condensed {
+    position: relative;
+    top: -11rem;
+    z-index: -100;
+}
+
+a.back-to-top-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 100;
+}
+
+/**
+ * CSS rules that go with the _shared/show_title.html.twig template.
+ *
+ * The template renders a primary title and zero or more alternative titles.
+ * Each title can be truncated based on the number of lines on screen, and an
+ * optional 'expand' link is shown to reveal the full titles without truncation.
+ * Thus, there are three possible states, which are controlled by CSS classes:
+ *
+ * .show-titles (initial state)
+ *   enable line clamping if requested, hide expand link
+ * .show-titles.truncated (browser decides to truncate lines)
+ *   enable line clamping if requested, show expand link
+ * .show-titles.truncated.show-titles-no-clamp (user clicks 'expand')
+ *   disable line clamping, hide expand link
+ *
+ * ClampShowTitles.js handles adding and removing the .truncated class and
+ * adds the .show-titles-no-clamp class when the expand link is clicked.
+ */
+.show-titles .show-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.show-titles:not(.show-titles-no-clamp) [data-line-clamp="2"] {
+    /* As of Feb 2025, line-clamp is supported by major browsers with the -webkit prefix: https://caniuse.com/css-line-clamp */
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+.show-titles:not(.show-titles-no-clamp) [data-line-clamp="4"] {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+}
+.show-titles .expand-link {
+    cursor: pointer;
+    visibility: hidden;
+}
+.show-titles.truncated:not(.show-titles-no-clamp) .expand-link {
+    visibility: visible;
+    font-size: 0.9em;
+}
+.show-title-primary {
+    font-size: 1.15rem;
+}
+
+.watch-list .btn-outline-inverse {
+    filter: brightness(85%);
+}
+
+.activity-emoji-container, .mood-emoji-container {
+    font-size: calc(1.375rem + 1.5vw); /* .fs-1 */
+    position:relative;
+}
+
+@media (min-width: 992px) {
+    .activity-emoji-container, .mood-emoji-container {
+        font-size: calc(1.3rem + .6vw); /* .fs-3 */
+    }
+}
+
+@media (min-width: 1200px) {
+    .activity-emoji-container, .mood-emoji-container {
+        font-size: 1.6rem;
+    }
+}
+
+.mood-emoji-container .bi {
+    grid-area: 1 / 1;
+}
+
+.mood-emoji-container .bi-circle-fill {
+    z-index: -1;
+}
+
+.bi-x-upper-half::before {
+    clip-path: polygon(20% 10%, 80% 10%, 98% 50%, 2% 50%);
+}
+.bi-x-lower-half::before {
+    clip-path: polygon(2% 50%, 98% 50%, 80% 90%, 20% 90%);
+}
+.bi-x-shrunk-circle::before {
+    clip-path: circle(48%);
+}
+
+.all-watch-bar-chart-container {
+    /* Shrink the left-most column to fit mood/activity emoji icon, let the rest expand to fill the remaining space */
+    grid-template-columns: min-content auto;
+}
+
+.has-markdown th {
+    padding-right: 1em;
+}
+.has-markdown td {
+    padding-right: 1em;
+}
+
+.jump-link {
+    line-height: 1.6;
+}
+.jump-link .bi {
+    font-size: 0.8em;
+    margin-left: 0.2rem;
+}

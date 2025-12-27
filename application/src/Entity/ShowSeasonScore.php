@@ -171,13 +171,20 @@ class ShowSeasonScore
         ];
     }
 
-    public function jsonSerializeForWatch(): array
+    public function jsonSerializeForWatchApi(): array
     {
         return [
             'id' => $this->getId(),
             'activity' => $this->getActivity() ? $this->getActivity()->jsonSerialize() : [],
             'recommendation' => $this->getScore() ? $this->getScore()->jsonSerialize() : [],
             'user' => $this->getUser() ? $this->getUser()->jsonSerialize() : [],
+        ];
+    }
+
+    public function jsonSerializeForWatchView(): array
+    {
+        return [
+            'show' => $this->getShow() ? $this->getShow()->jsonSerializeForWatchView() : [],
         ];
     }
 }

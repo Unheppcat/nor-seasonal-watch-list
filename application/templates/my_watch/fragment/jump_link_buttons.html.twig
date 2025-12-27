@@ -1,31 +1,29 @@
-<div class="row">
+<div class="row mt-2">
     <div class="col-4 col-xl-3 col-xxl-2 d-grid gap-0">
-        {% if row.score.show.getAnilistId %}
+        {% if row.score.show.anilistShowUrl %}
             <a
-                    href="https://anilist.co/anime/{{ row.score.show.getAnilistId }}"
-                    class="btn btn-sm btn-info m-1 ms-0 d-inline-block d-lg-none"
-            >Anilist</a>
-            <a
-                    href="https://anilist.co/anime/{{ row.score.show.getAnilistId }}"
+                    href="{{ row.score.show.anilistShowUrl }}"
                     target="_blank"
-                    class="btn btn-sm btn-info m-1 ms-0 d-none d-lg-inline-block"
-            >Anilist</a>
+                    class="jump-link d-inline-flex align-items-center text-decoration-none"
+            >
+              <span class="text-decoration-underline">Anilist</span>
+              <span class="bi bi-box-arrow-up-right d-inline-flex align-items-center"></span>
+            </a>
         {% endif %}
-        {% if row.score.show.getMalId %}
+        {% if row.score.show.malShowUrl %}
             <a
-                    href="https://myanimelist.net/anime/{{ row.score.show.getMalId }}"
-                    class="btn btn-sm btn-info m-1 ms-0 d-inline-block d-lg-none"
-            >MAL</a>
-            <a
-                    href="https://myanimelist.net/anime/{{ row.score.show.getMalId }}"
+                    href="{{ row.score.show.malShowUrl }}"
                     target="_blank"
-                    class="btn btn-sm btn-info m-1 ms-0 d-none d-lg-inline-block"
-            >MAL</a>
+                    class="jump-link d-inline-flex align-items-center text-decoration-none"
+            >
+              <span class="text-decoration-underline">MAL</span>
+              <span class="bi bi-box-arrow-up-right d-inline-flex align-items-center"></span>
+            </a>
         {% endif %}
-        <a class="btn btn-sm btn-primary m-1 ms-0 d-inline-block d-lg-none" href="{{ path('all_watch_index') }}#show_target_{{ row.score.show.getId }}">
+        <a class="jump-link d-inline-block d-lg-none" href="{{ path('all_watch_index') }}#show_target_{{ row.score.show.id }}">
             Community
         </a>
-        <a class="btn btn-sm btn-primary m-1 ms-0 d-none d-lg-inline-block" href="{{ path('all_watch_index') }}#show_target_wide_{{ row.score.show.getId }}">
+        <a class="jump-link d-none d-lg-inline-block" href="{{ path('all_watch_index') }}#show_target_wide_{{ row.score.show.id }}">
             Community
         </a>
     </div>

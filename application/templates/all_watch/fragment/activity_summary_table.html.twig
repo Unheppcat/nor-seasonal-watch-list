@@ -1,17 +1,29 @@
 <table class="table table-sm align-middle">
     <tr>
-        <td><div class="activity-watching watching-legend-pip"></div></td>
-        <td>Watching</td>
+        <td>
+            <div class="d-flex align-items-center gap-2">
+                <span class="activity-watching watching-legend-pip"></span>
+                Watching
+            </div>
+        </td>
         <td class="text-end">{{ row.consolidatedActivities.watching_count }}</td>
     </tr>
     <tr>
-        <td><div class="activity-ptw watching-legend-pip"></div></td>
-        <td>Plan to watch</td>
+        <td>
+            <div class="d-flex align-items-center gap-2">
+                <span class="activity-ptw watching-legend-pip"></span>
+                Plan to watch
+            </div>
+        </td>
         <td class="text-end">{{ row.consolidatedActivities.ptw_count }}</td>
     </tr>
     <tr>
-        <td><div class="activity-stopped watching-legend-pip"></div></td>
-        <td>Stopped</td>
+        <td>
+            <div class="d-flex align-items-center gap-2">
+                <span class="activity-stopped watching-legend-pip"></span>
+                Stopped
+            </div>
+        </td>
         <td class="text-end">{{ row.consolidatedActivities.stopped_count }}</td>
     </tr>
 </table>

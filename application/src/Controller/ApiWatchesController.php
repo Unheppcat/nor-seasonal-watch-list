@@ -217,7 +217,7 @@ class ApiWatchesController extends AbstractController
         $values['season'] = $selectedSeason->jsonSerialize();
         foreach ($values['shows'] as $key => $datum) {
             foreach ($datum['scores'] as $subKey => $score) {
-                $values['shows'][$key]['scores'][$subKey] = $score->jsonSerializeForWatch();
+                $values['shows'][$key]['scores'][$subKey] = $score->jsonSerializeForWatchApi();
             }
         }
         return new JsonResponse($values);

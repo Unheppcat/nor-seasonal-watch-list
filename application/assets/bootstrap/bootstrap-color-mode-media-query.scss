@@ -1,0 +1,40 @@
+@use "sass:map";
+
+// Based on https://getbootstrap.com/docs/5.3/customize/sass/#importing
+// Option B: Include parts of Bootstrap
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../../vendor/twbs/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+$color-mode-type: media-query;
+@import "./_default_variable_overrides.scss";
+
+// 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
+@import "../../vendor/twbs/bootstrap/scss/variables";
+@import "../../vendor/twbs/bootstrap/scss/variables-dark";
+
+// 4. Include any default map overrides here
+@import "./_default_map_overrides.scss";
+
+// 5. Include remainder of required parts
+@import "../../vendor/twbs/bootstrap/scss/maps";
+@import "../../vendor/twbs/bootstrap/scss/mixins";
+@import "../../vendor/twbs/bootstrap/scss/root";
+
+// 6-7. Optional includes
+@import "./_bootstrap_optional_components.scss";
+
+// 8. Add additional custom code here
+@media (prefers-color-scheme: light) {
+  .btn-outline-inverse {
+    $value: map.get($theme-colors, "dark");
+    @include button-outline-variant($value);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .btn-outline-inverse {
+    $value: map.get($theme-colors, "light");
+    @include button-outline-variant($value);
+  }
+}

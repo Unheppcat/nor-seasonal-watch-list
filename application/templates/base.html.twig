@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
 {% if user is defined and user is not null %}
     {% set colorsMode = user.getPreferences.getColorsMode %}
 {% else %}
     {% set colorsMode = 'os' %}
 {% endif %}
+<html lang="en" {% if colorsMode in ['dark', 'light'] %}data-bs-theme="{{ colorsMode }}"{% endif %}>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,19 +12,17 @@
 
         {% if colorsMode == 'os' %}
             {# Let the browser pick the color mode #}
-            <link href="/css/bootstrap-dark.min.css?v={{ asset_version }}" rel="stylesheet">
-        {% elseif colorsMode == 'light' %}
-            {# Use a light mode stylesheet #}
-            <link href="/bootstrap/css/bootstrap.min.css?v={{ asset_version }}" rel="stylesheet">
+            <link href="/bootstrap/css/bootstrap-color-mode-media-query.min.css?v={{ asset_version }}" rel="stylesheet">
         {% else  %}
-            {# User a dark mode stylesheet #}
-            <link href="/css/bootstrap-dark-only.min.css?v={{ asset_version }}" rel="stylesheet">
+            {# Let Bootstrap choose the right color mode based on data-bs-theme #}
+            <link href="/bootstrap/css/bootstrap-color-mode-data.min.css?v={{ asset_version }}" rel="stylesheet">
         {% endif %}
         <link href="/bootstrap-icons/font/bootstrap-icons.css?v={{ asset_version }}" rel="stylesheet">
+        <link href="/css/layout.css?v={{ asset_version }}" rel="stylesheet">
         {% if colorsMode == 'dark' %}
-            <link href="/css/dark-main.css?v={{ asset_version }}" rel="stylesheet">
+            <link href="/css/colors-dark.css?v={{ asset_version }}" rel="stylesheet">
         {% else %}
-            <link href="/css/main.css?v={{ asset_version }}" rel="stylesheet">
+            <link href="/css/colors-light-os.css?v={{ asset_version }}" rel="stylesheet">
         {% endif %}
 
         <title>{% block title %}Seasonal Watch List{% endblock %}</title>
@@ -51,80 +49,80 @@
 
         {% block javascripts %}{% endblock %}
     </head>
-    <body>
-    <nav id="main_nav" class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">
-                <!--suppress CheckImageSize -->
-                <img src="/img/NOR_symbol_40_invert_transparent.png" alt="NOR" width="40px" class="d-inline p-1">
-                Seasonal Watch List
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    {% if app.user and is_granted('ROLE_SWL_USER') %}
-                        <li class="nav-item">
-                            <a class="nav-link {% if app.request.pathinfo == '/personal/watch' %}active{% endif %}" href="{{ path('my_watch_index') }}">Personal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if app.request.pathinfo == '/community/watch' %}active{% endif %}" href="{{ path('all_watch_index') }}">Community</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if app.request.pathinfo == '/vote' %}active{% endif %}" href="{{ path('my_vote') }}">
-                                {% if electionIsActive is defined and electionIsActive %}
-                                    Voting <span class="text-nor-red">Open</span>
-                                {% else %}
-                                    Vote
-                                {% endif %}
-                            </a>
-                        </li>
-                        {% if is_granted('ROLE_SWL_ADMIN') or is_granted('ROLE_SWL_STAFF') %}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle {% if app.request.pathinfo starts with '/admin/' %}active{% endif %}" href="#" id="navbarDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    Manage
+    <body class="user-colors-mode-{% if colorsMode in ['os', 'dark', 'light'] %}{{ colorsMode }}{% else %}os{% endif %}">
+    <div class="sticky-top mb-3 mb-lg-4">
+        <nav id="main_nav" class="navbar navbar-expand-md navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <!--suppress CheckImageSize -->
+                    <img src="/img/NOR_symbol_40_invert_transparent.png" alt="NOR" width="40px" class="d-inline p-1">
+                    Seasonal Watch List
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        {% if app.user and is_granted('ROLE_SWL_USER') %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if app.request.pathinfo == '/personal/watch' %}active{% endif %}" href="{{ path('my_watch_index') }}">Personal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if app.request.pathinfo == '/community/watch' %}active{% endif %}" href="{{ path('all_watch_index') }}">Community</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if app.request.pathinfo == '/vote' %}active{% endif %}" href="{{ path('my_vote') }}">
+                                    {% if electionIsActive is defined and electionIsActive %}
+                                        Voting <span class="text-nor-red-light">Open</span>
+                                    {% else %}
+                                        Vote
+                                    {% endif %}
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li>
-                                        <a class="dropdown-item {% if app.request.pathinfo == '/admin/season/' %}active{% endif %}" href="{{ path('admin_season_index') }}">Seasons</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item {% if app.request.pathinfo == '/admin/show/' %}active{% endif %}" href="{{ path('admin_show_index') }}">Shows</a>
-                                    </li>
-                                    {% if is_granted('ROLE_SWL_ADMIN') %}
+                            </li>
+                            {% if is_granted('ROLE_SWL_ADMIN') %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle {% if app.request.pathinfo starts with '/admin/' %}active{% endif %}" href="#" id="navbarDropdown" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        Manage
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li>
+                                            <a class="dropdown-item {% if app.request.pathinfo == '/admin/season/' %}active{% endif %}" href="{{ path('admin_season_index') }}">Seasons</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item {% if app.request.pathinfo == '/admin/show/' %}active{% endif %}" href="{{ path('admin_show_index') }}">Shows</a>
+                                        </li>
                                         <li>
                                             <a class="dropdown-item {% if app.request.pathinfo == '/admin/election/' %}active{% endif %}" href="{{ path('admin_election_index') }}">Elections</a>
                                         </li>
-                                    {% endif %}
-                                </ul>
-                            </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
                         {% endif %}
+                    </ul>
+                    {% if app.user %}
+                    <ul class="navbar-nav navbar-right mb-2 mb-md-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if app.request.pathinfo starts with '/account/' %}active{% endif %}" href="#" id="navbarAccountDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Account
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarAccountDropdown">
+                                <li>
+                                    <a class="dropdown-item {% if app.request.pathinfo == '/account/preferences' %}active{% endif %}" href="{{ path('account_preferences') }}">Preferences</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('connect_discord_disconnect') }}">Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                     {% endif %}
-                </ul>
-                {% if app.user %}
-                <ul class="navbar-nav navbar-right mb-2 mb-md-0">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {% if app.request.pathinfo starts with '/account/' %}active{% endif %}" href="#" id="navbarAccountDropdown" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            Account
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarAccountDropdown">
-                            <li>
-                                <a class="dropdown-item {% if app.request.pathinfo == '/account/preferences' %}active{% endif %}" href="{{ path('account_preferences') }}">Preferences</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ path('connect_discord_disconnect') }}">Logout</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                {% endif %}
+                </div>
             </div>
-        </div>
-    </nav>
-    {% block second_navbar %}{% endblock %}
+        </nav>
+        {% block second_navbar %}{% endblock %}
+    </div>
     <div class="container">
         {% block body %}{% endblock %}
     </div>
@@ -137,9 +135,20 @@
 {#    <script src="/js/dataTables.bootstrap5.min.js"></script>#}
     <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}?v={{ asset_version }}"></script>
     <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}&v={{ asset_version }}"></script>
-    <!--suppress BadExpressionStatementJS -->
     <script type="application/javascript">
-        const isDarkMode ={% if colorsMode == 'dark' %} true {% else %} false {% endif %}
+        function detectDarkMode() {
+            const htmlElement = document.getElementsByTagName("html").item(0);
+            if (htmlElement && htmlElement.dataset.bsTheme) {
+                return htmlElement.dataset.bsTheme === 'dark';
+            }
+            if (window.matchMedia) {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+            return false;
+        }
+        const bootstrapTheme = document.getElementByTag
+
+        const isDarkMode = detectDarkMode();
     </script>
     {% block body_javascripts %}{% endblock %}
     </body>
