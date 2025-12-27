@@ -168,7 +168,13 @@ class AdminShowController extends AbstractController
     public function search(Request $request, ShowRepository $showRepository): Response
     {
         $term = $request->query->get('term', '');
-        $currentShowId = $request->query->get('exclude', null);
+        $excludeParam = $request->query->get('exclude', null);
+
+        // Convert exclude parameter to int or null
+        $currentShowId = null;
+        if ($excludeParam !== null && $excludeParam !== '') {
+            $currentShowId = (int) $excludeParam;
+        }
 
         if (strlen($term) < 2) {
             return $this->json([]);
