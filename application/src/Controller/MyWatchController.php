@@ -21,12 +21,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class MyWatchController extends AbstractController
 {
     /**
-     * @Route("/personal/watch", name="my_watch_index", options={"expose"=true})
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param SeasonRepository $seasonRepository
@@ -41,6 +40,7 @@ class MyWatchController extends AbstractController
      * @return Response
      * @throws NonUniqueResultException
      */
+    #[Route('/personal/watch', name: 'my_watch_index', options: ['expose' => true])]
     public function index(
         Request $request,
         EntityManagerInterface $em,

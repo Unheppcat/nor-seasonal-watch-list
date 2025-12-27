@@ -2,6 +2,33 @@
 
 {% block title %}Edit Show{% endblock %}
 
+{% block stylesheets %}
+    <link href="/select2/css/select2.min.css?v={{ asset_version }}" rel="stylesheet">
+    <style>
+        /* Custom styling for Select2 to match Bootstrap theme */
+        .select2-container--bootstrap-5 .select2-selection {
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            min-height: calc(1.5em + 0.75rem + 2px);
+        }
+        .select2-container--bootstrap-5 .select2-selection--multiple {
+            padding: 0.25rem;
+        }
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            margin: 0.25rem;
+            border-radius: 0.25rem;
+        }
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice__remove {
+            color: white;
+            margin-right: 0.25rem;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
 
     {{ include('show/fragment/flashes.html.twig') }}
@@ -20,4 +47,15 @@
 
 
 
+{% endblock %}
+
+{% block body_javascripts %}
+    <script src="/select2/js/select2.min.js?v={{ asset_version }}"></script>
+    <script src="/js/AdminShowForm.js?v={{ asset_version }}"></script>
+    <script>
+        // Pass the current show ID to the JavaScript
+        $(document).ready(function() {
+            $('#show_relatedShows').attr('data-current-show-id', {{ show.id }});
+        });
+    </script>
 {% endblock %}

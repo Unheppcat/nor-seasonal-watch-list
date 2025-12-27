@@ -5,21 +5,20 @@ namespace App\Controller;
 use App\Entity\DiscordChannel;
 use App\Form\DiscordChannelType;
 use App\Repository\DiscordChannelRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/admin/discord/channel")
- */
+#[Route('/admin/discord/channel')]
 class AdminDiscordChannelController extends AbstractController
 {
     /**
-     * @Route("/", name="admin_discord_channel_index", methods={"GET"})
      * @param DiscordChannelRepository $discordChannelRepository
      * @return Response
      */
+    #[Route('/', name: 'admin_discord_channel_index', methods: ['GET'])]
     public function index(DiscordChannelRepository $discordChannelRepository): Response
     {
         return $this->render('discord_channel/index.html.twig', [
@@ -29,25 +28,24 @@ class AdminDiscordChannelController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_discord_channel_new", methods={"GET","POST"})
      * @param Request $request
      * @return Response
      */
-    public function new(Request $request): Response
+    #[Route('/new', name: 'admin_discord_channel_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $em): Response
     {
         $discordChannel = new DiscordChannel();
         $form = $this->createForm(DiscordChannelType::class, $discordChannel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($discordChannel);
+            $em->persist($discordChannel);
             $show = $discordChannel->getShow();
             if ($show !== null) {
                 $show->setDiscordChannel($discordChannel);
-                $entityManager->persist($show);
+                $em->persist($show);
             }
-            $entityManager->flush();
+            $em->flush();
 
             return $this->redirectToRoute('admin_discord_channel_index');
         }
@@ -60,10 +58,10 @@ class AdminDiscordChannelController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_discord_channel_show", methods={"GET"})
      * @param DiscordChannel $discordChannel
      * @return Response
      */
+    #[Route('/{id}', name: 'admin_discord_channel_show', methods: ['GET'])]
     public function show(DiscordChannel $discordChannel): Response
     {
         return $this->render('discord_channel/show.html.twig', [
@@ -73,29 +71,28 @@ class AdminDiscordChannelController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_discord_channel_edit", methods={"GET","POST"})
      * @param Request $request
      * @param DiscordChannel $discordChannel
      * @return Response
      */
-    public function edit(Request $request, DiscordChannel $discordChannel): Response
+    #[Route('/{id}/edit', name: 'admin_discord_channel_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, DiscordChannel $discordChannel, EntityManagerInterface $em): Response
     {
         $previousShow = $discordChannel->getShow();
         $form = $this->createForm(DiscordChannelType::class, $discordChannel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager = $this->getDoctrine()->getManager();
             $show = $discordChannel->getShow();
             if ($previousShow !== null && ($show === null || $show->getId() !== $previousShow->getId())) {
                 $previousShow->setDiscordChannel(null);
-                $manager->persist($previousShow);
+                $em->persist($previousShow);
             }
             if ($show !== null) {
                 $show->setDiscordChannel($discordChannel);
-                $manager->persist($show);
+                $em->persist($show);
             }
-            $manager->flush();
+            $em->flush();
 
             return $this->redirectToRoute('admin_discord_channel_index');
         }
@@ -108,22 +105,21 @@ class AdminDiscordChannelController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_discord_channel_delete", methods={"DELETE"})
      * @param Request $request
      * @param DiscordChannel $discordChannel
      * @return Response
      */
-    public function delete(Request $request, DiscordChannel $discordChannel): Response
+    #[Route('/{id}', name: 'admin_discord_channel_delete', methods: ['DELETE'])]
+    public function delete(Request $request, DiscordChannel $discordChannel, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$discordChannel->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
             $show = $discordChannel->getShow();
             if ($show !== null) {
                 $show->setDiscordChannel(null);
-                $entityManager->persist($show);
+                $em->persist($show);
             }
-            $entityManager->remove($discordChannel);
-            $entityManager->flush();
+            $em->remove($discordChannel);
+            $em->flush();
         }
 
         return $this->redirectToRoute('admin_discord_channel_index');

@@ -12,71 +12,57 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonException;
 
-/**
- * @ORM\Entity(repositoryClass=SeasonRepository::class)
- */
+#[ORM\Entity(repositoryClass: SeasonRepository::class)]
 class Season
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $year = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $yearPart = null;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private ?int $rankOrder = null;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Show::class, mappedBy="seasons")
-     */
+    #[ORM\ManyToMany(targetEntity: Show::class, mappedBy: 'seasons')]
     private Collection $shows;
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity=Election::class, mappedBy="season", cascade={"persist","remove"})
      */
+    #[ORM\OneToMany(targetEntity: Election::class, mappedBy: 'season', cascade: ['persist', 'remove'])]
     private Collection $elections;
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity=ElectionVote::class, mappedBy="season", cascade={"persist","remove"})
      */
+    #[ORM\OneToMany(targetEntity: ElectionVote::class, mappedBy: 'season', cascade: ['persist', 'remove'])]
     private Collection $votes;
 
     /**
      * @var Collection|ShowSeasonScore[]
-     * @ORM\OneToMany(targetEntity=ShowSeasonScore::class, mappedBy="season", cascade={"persist","remove"})
      */
+    #[ORM\OneToMany(targetEntity: ShowSeasonScore::class, mappedBy: 'season', cascade: ['persist', 'remove'])]
     private Collection $showSeasonScores;
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity=DiscordChannel::class, mappedBy="season", cascade={"persist","remove"})
      */
+    #[ORM\OneToMany(targetEntity: DiscordChannel::class, mappedBy: 'season', cascade: ['persist', 'remove'])]
     private $discordChannels;
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean")
      */
+    #[ORM\Column(type: 'boolean')]
     private bool $hiddenFromSeasonsList = false;
 
     public function __construct()

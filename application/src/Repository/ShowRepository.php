@@ -341,4 +341,30 @@ class ShowRepository extends ServiceEntityRepository
             ->setParameter('firstShow', $show)
             ->getQuery()->getResult();
     }
+
+    /**
+     * Search shows by title for autocomplete
+     *
+     * @param string $searchTerm
+     * @param int|null $excludeId
+     * @return Show[]
+     */
+    public function searchByTitle(string $searchTerm, ?int $excludeId = null): array
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.japaneseTitle LIKE :searchTerm')
+            ->orWhere('s.englishTitle LIKE :searchTerm')
+            ->orWhere('s.fullJapaneseTitle LIKE :searchTerm')
+            ->orWhere('s.fullEnglishTitle LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->orderBy('s.japaneseTitle', 'ASC')
+            ->setMaxResults(20);
+
+        if ($excludeId !== null) {
+            $qb->andWhere('s.id != :excludeId')
+                ->setParameter('excludeId', $excludeId);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

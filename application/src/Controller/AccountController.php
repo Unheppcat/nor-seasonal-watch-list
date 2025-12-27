@@ -5,26 +5,26 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserPreferencesType;
 use App\Repository\ElectionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/account")
- */
+#[Route('/account')]
 class AccountController extends AbstractController
 {
     /**
-     * @Route("/preferences", name="account_preferences", methods={"GET","POST"})
      * @param Request $request
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/preferences', name: 'account_preferences', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
-        ElectionRepository $electionRepository
+        ElectionRepository $electionRepository,
+        EntityManagerInterface $em
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
         /** @var User $user */
@@ -40,7 +40,6 @@ class AccountController extends AbstractController
             $prefs->setColorsMode($colorsMode);
             $prefs->setAllWatchesViewMode($swlViewMode);
             $user->setPreferences($prefs);
-            $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
         }
@@ -53,10 +52,10 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/preferences/reset_api_key", name="account_preferences_reset_api_key", methods={"POST"})
      * @return Response
      */
-    public function resetApiKey(): Response
+    #[Route('/preferences/reset_api_key', name: 'account_preferences_reset_api_key', methods: ['POST'])]
+    public function resetApiKey(EntityManagerInterface $em): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -65,19 +64,17 @@ class AccountController extends AbstractController
         } catch (Exception $e) {
             $user->setApiKey(null);
         }
-        $em = $this->getDoctrine()->getManager();
         $em->persist($user);
         $em->flush();
 
         return $this->redirectToRoute('account_preferences');
     }
 
-    public function clearApiKey(): Response
+    public function clearApiKey(EntityManagerInterface $em): Response
     {
         /** @var User $user */
         $user = $this->getUser();
         $user->setApiKey(null);
-        $em = $this->getDoctrine()->getManager();
         $em->persist($user);
         $em->flush();
 

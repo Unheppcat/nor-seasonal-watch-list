@@ -6,23 +6,22 @@ use App\Entity\ShowSeasonScore;
 use App\Form\ShowSeasonScoreType;
 use App\Repository\ElectionRepository;
 use App\Repository\ShowSeasonScoreRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/admin/show/season/score")
- */
+#[Route('/admin/show/season/score')]
 class AdminShowSeasonScoreController extends AbstractController
 {
     /**
-     * @Route("/", name="admin_show_season_score_index", options={"expose"=true}, methods={"GET"})
      * @param ShowSeasonScoreRepository $showSeasonScoreRepository
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/', name: 'admin_show_season_score_index', options: ['expose' => true], methods: ['GET'])]
     public function index(
         ShowSeasonScoreRepository $showSeasonScoreRepository,
         ElectionRepository $electionRepository
@@ -36,14 +35,15 @@ class AdminShowSeasonScoreController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_show_season_score_new", methods={"GET","POST"})
      * @param Request $request
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/new', name: 'admin_show_season_score_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
-        ElectionRepository $electionRepository
+        ElectionRepository $electionRepository,
+        EntityManagerInterface $em
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
         $showSeasonScore = new ShowSeasonScore();
@@ -51,9 +51,8 @@ class AdminShowSeasonScoreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($showSeasonScore);
-            $entityManager->flush();
+            $em->persist($showSeasonScore);
+            $em->flush();
 
             return $this->redirectToRoute('admin_show_season_score_index');
         }
@@ -67,11 +66,11 @@ class AdminShowSeasonScoreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_show_season_score_show", methods={"GET"})
      * @param ShowSeasonScore $showSeasonScore
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/{id}', name: 'admin_show_season_score_show', methods: ['GET'])]
     public function show(
         ShowSeasonScore $showSeasonScore,
         ElectionRepository $electionRepository
@@ -85,16 +84,17 @@ class AdminShowSeasonScoreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_show_season_score_edit", methods={"GET","POST"})
      * @param Request $request
      * @param ShowSeasonScore $showSeasonScore
      * @param ElectionRepository $electionRepository
      * @return Response
      */
+    #[Route('/{id}/edit', name: 'admin_show_season_score_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         ShowSeasonScore $showSeasonScore,
-        ElectionRepository $electionRepository
+        ElectionRepository $electionRepository,
+        EntityManagerInterface $em
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
         $form = $this->createForm(
@@ -110,7 +110,7 @@ class AdminShowSeasonScoreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
             if ($request->isXmlHttpRequest()) {
                 // Just send back fact of success
@@ -137,17 +137,16 @@ class AdminShowSeasonScoreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_show_season_score_delete", methods={"DELETE"})
      * @param Request $request
      * @param ShowSeasonScore $showSeasonScore
      * @return Response
      */
-    public function delete(Request $request, ShowSeasonScore $showSeasonScore): Response
+    #[Route('/{id}', name: 'admin_show_season_score_delete', methods: ['DELETE'])]
+    public function delete(Request $request, ShowSeasonScore $showSeasonScore, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$showSeasonScore->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($showSeasonScore);
-            $entityManager->flush();
+            $em->remove($showSeasonScore);
+            $em->flush();
         }
 
         return $this->redirectToRoute('admin_show_season_score_index');

@@ -1,4 +1,5 @@
 security:
+    enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
@@ -17,17 +18,14 @@ security:
         api:
             pattern: ^/api/v1/
             provider: api_user_provider
-            guard:
-                authenticators:
-                    - App\Security\ApiKeyAuthenticator
+            custom_authenticators:
+                - App\Security\ApiKeyAuthenticator
         main:
-            anonymous: true
             lazy: true
             provider: app_user_provider
             access_denied_handler: App\Security\AccessDeniedHandler
-            guard:
-                authenticators:
-                    - App\Security\AppDiscordAuthenticator
+            custom_authenticators:
+                - App\Security\AppDiscordAuthenticator
             logout:
                 path: connect_discord_disconnect
                 target: '/'

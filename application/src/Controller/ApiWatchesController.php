@@ -11,17 +11,12 @@ use App\Repository\ShowSeasonScoreRepository;
 use Doctrine\DBAL\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use function Symfony\Component\String\u;
 
 class ApiWatchesController extends AbstractController
 {
     /**
-     * @Route("/api/v1/seasons/{year}/{yearPart}/community-watches",
-     *     name="api_watches_by_year_and_year_part",
-     *     options={"expose"=false}
-     * )
-     *
      * @param int $year
      * @param string $yearPart
      * @param SeasonRepository $seasonRepository
@@ -31,6 +26,7 @@ class ApiWatchesController extends AbstractController
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
+    #[Route('/api/v1/seasons/{year}/{yearPart}/community-watches', name: 'api_watches_by_year_and_year_part', options: ['expose' => false])]
     public function byYearAndYearPart(
         int $year,
         string $yearPart,
@@ -60,8 +56,6 @@ class ApiWatchesController extends AbstractController
     }
 
     /**
-     * @Route("/api/v1/seasons/{id}/community-watches", name="api_watches_by_season_id", options={"expose"=false})
-     *
      * @param int $id
      * @param SeasonRepository $seasonRepository
      * @param ShowRepository $showRepository
@@ -70,6 +64,7 @@ class ApiWatchesController extends AbstractController
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
+    #[Route('/api/v1/seasons/{id}/community-watches', name: 'api_watches_by_season_id', options: ['expose' => false])]
     public function bySeasonId(
         int $id,
         SeasonRepository $seasonRepository,

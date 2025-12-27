@@ -8,61 +8,52 @@ namespace App\Entity;
 use App\Repository\ShowSeasonScoreRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="show_season_score",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(
- *             name="show_season_score_unique",
- *             columns={"season_id", "show_id", "user_id"}
- *         )
- *     }
- * )
- * @ORM\Entity(repositoryClass=ShowSeasonScoreRepository::class)
- */
+#[ORM\Table(name: 'show_season_score')]
+#[ORM\UniqueConstraint(name: 'show_season_score_unique', columns: ['season_id', 'show_id', 'user_id'])]
+#[ORM\Entity(repositoryClass: ShowSeasonScoreRepository::class)]
 class ShowSeasonScore
 {
     /**
      * @var int|null
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     /**
      * @var Activity|null
-     * @ORM\ManyToOne(targetEntity=Activity::class, inversedBy="scores")
-     * @ORM\JoinColumn(nullable=true)
      */
+    #[ORM\ManyToOne(targetEntity: Activity::class, inversedBy: 'scores')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Activity $activity = null;
 
     /**
      * @var Score|null
-     * @ORM\ManyToOne(targetEntity=Score::class, inversedBy="showSeasonScores")
-     * @ORM\JoinColumn(nullable=true)
      */
+    #[ORM\ManyToOne(targetEntity: Score::class, inversedBy: 'showSeasonScores')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Score $score = null;
 
     /**
      * @var Season|null
-     * @ORM\ManyToOne(targetEntity=Season::class, inversedBy="showSeasonScores")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Season::class, inversedBy: 'showSeasonScores')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Season $season;
 
     /**
      * @var Show|null
-     * @ORM\ManyToOne(targetEntity=Show::class, inversedBy="scores")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Show::class, inversedBy: 'scores')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Show $show;
 
     /**
      * @var User|null
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="showSeasonScores")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'showSeasonScores')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
 
     public function getId(): ?int

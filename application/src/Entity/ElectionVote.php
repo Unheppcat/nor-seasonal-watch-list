@@ -8,66 +8,57 @@ namespace App\Entity;
 use App\Repository\ElectionVoteRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="election_vote",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(
- *             name="election_vote_unique",
- *             columns={"anime_show_id", "season_id", "user_id", "election_id"}
- *         )
- *     }
- * )
- * @ORM\Entity(repositoryClass=ElectionVoteRepository::class)
- */
+#[ORM\Table(name: 'election_vote')]
+#[ORM\UniqueConstraint(name: 'election_vote_unique', columns: ['anime_show_id', 'season_id', 'user_id', 'election_id'])]
+#[ORM\Entity(repositoryClass: ElectionVoteRepository::class)]
 class ElectionVote
 {
     /**
      * @var int|null
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     /**
      * @var Show|null
-     * @ORM\ManyToOne(targetEntity=Show::class, inversedBy="votes")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Show::class, inversedBy: 'votes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Show $animeShow;
 
     /**
      * @var Season|null
-     * @ORM\ManyToOne(targetEntity=Season::class, inversedBy="votes")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Season::class, inversedBy: 'votes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Season $season;
 
     /**
      * @var User|null
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="electionVotes")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'electionVotes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean")
      */
+    #[ORM\Column(type: 'boolean')]
     private bool $chosen = false;
 
     /**
      * @var int|null
-     * @ORM\Column(name="rank_choice", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'rank_choice', type: 'integer', nullable: true)]
     private ?int $rank = null;
 
     /**
      * @var Election|null
-     * @ORM\ManyToOne(targetEntity=Election::class, inversedBy="electionVotes")
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Election::class, inversedBy: 'electionVotes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Election $election;
 
     /**

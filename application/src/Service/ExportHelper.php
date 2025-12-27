@@ -37,7 +37,7 @@ final class ExportHelper
             // Enclose fields containing $delimiter, $enclosure or whitespace
             /** @noinspection RegExpUnnecessaryNonCapturingGroup */
             /** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
-            if ( $encloseAll || preg_match( "/(?:${delimiter_esc}|${enclosure_esc}|\s)/", $field ) ) {
+            if ( $encloseAll || preg_match( "/(?:{$delimiter_esc}|{$enclosure_esc}|\s)/", $field ) ) {
                 $output[] = $enclosure . str_replace($enclosure, $enclosure . $enclosure, (string)$field) . $enclosure;
             }
             else {

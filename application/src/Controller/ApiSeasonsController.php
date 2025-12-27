@@ -7,15 +7,15 @@ namespace App\Controller;
 use App\Repository\SeasonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ApiSeasonsController extends AbstractController
 {
     /**
-     * @Route("/api/v1/seasons", name="api_seasons", options={"expose"=false})
      * @param SeasonRepository $seasonRepository
      * @return JsonResponse
      */
+    #[Route('/api/v1/seasons', name: 'api_seasons', options: ['expose' => false])]
     public function index(SeasonRepository $seasonRepository): JsonResponse
     {
         $seasons = $seasonRepository->getAllInRankOrder();
