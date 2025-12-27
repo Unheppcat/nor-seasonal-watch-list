@@ -6,7 +6,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.4.0",
+        "php": "^8.2.0",
         "ext-json": "*",
         "babdev/pagerfanta-bundle": "^3.2",
         "composer/package-versions-deprecated": "1.11.99.1",
@@ -31,7 +31,7 @@
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",
         "symfony/expression-language": "5.4.*",
-        "symfony/flex": "^1.3.1",
+        "symfony/flex": "^2.0",
         "symfony/form": "5.4.*",
         "symfony/framework-bundle": "5.4.*",
         "symfony/http-client": "5.4.*",
@@ -68,7 +68,6 @@
         "symfony/web-profiler-bundle": "^5.2"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-latest"
     },
     "config": {
         "optimize-autoloader": true,
@@ -78,6 +77,10 @@
         "sort-packages": true,
         "allow-plugins": {
             "symfony/flex": true
+        },
+        "audit": {
+            "abandoned": "report",
+            "ignore": ["PKSA-yfw5-9gnj-n2c7", "PKSA-k1b4-kshy-xgbh", "PKSA-2z36-j4q9-rsfy", "PKSA-fvw5-9t6n-nwvr", "PKSA-6d8m-6kgw-18zr"]
         }
     },
     "autoload": {

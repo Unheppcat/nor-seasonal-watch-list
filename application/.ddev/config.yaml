@@ -1,0 +1,30 @@
+name: nor-seasonal-watch-list
+type: php
+docroot: public
+php_version: "8.2"
+webserver_type: nginx-fpm
+router_http_port: "80"
+router_https_port: "443"
+xdebug_enabled: false
+additional_hostnames: []
+additional_fqdns: []
+database:
+  type: mysql
+  version: "5.7"
+nfs_mount_enabled: false
+mutagen_enabled: false
+use_dns_when_possible: true
+composer_version: "2"
+web_environment: []
+
+# Hooks to set up the database connection for Symfony
+hooks:
+  post-start:
+    - exec: "echo 'DATABASE_URL=\"mysql://db:db@db:3306/db?serverVersion=5.7\"' > .env.local.ddev"
+
+# Additional environment variables
+web_extra_exposed_ports:
+  - name: nodejs
+    container_port: 3000
+    http_port: 3000
+    https_port: 3001

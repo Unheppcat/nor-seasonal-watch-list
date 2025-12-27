@@ -1,0 +1,30 @@
+version: '3.6'
+
+services:
+  phpmyadmin:
+    container_name: ddev-${DDEV_SITENAME}-phpmyadmin
+    image: phpmyadmin:latest
+    restart: "no"
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_APPROOT
+    expose:
+      - "80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: db
+      PMA_PASSWORD: db
+      MYSQL_ROOT_PASSWORD: root
+      VIRTUAL_HOST: $DDEV_HOSTNAME
+      HTTP_EXPOSE: 8036:80
+      HTTPS_EXPOSE: 8037:80
+    external_links:
+      - "ddev-router:${DDEV_SITENAME}.ddev.site"
+    networks:
+      - default
+      - ddev_default
+
+networks:
+  ddev_default:
+    external: true

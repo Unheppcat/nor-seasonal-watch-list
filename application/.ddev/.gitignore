@@ -1,0 +1,21 @@
+*
+
+# Ignore generated files
+.ddev-docker-*
+.webimageBuild
+.dbsnapshot
+.sshimageBuild
+.webimageExtra
+.dbimageBuild
+import-db/
+.global_commands/
+commands/host/launch
+config.*.yaml
+db_snapshots/
+sequelpro.spf
+.ddev-error.log
+
+# Keep these files
+!.gitignore
+!config.yaml
+!docker-compose.*.yaml
