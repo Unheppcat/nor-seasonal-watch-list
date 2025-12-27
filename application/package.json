@@ -4,9 +4,8 @@
     "chart.js": "^2.9.4",
     "jquery": "^3.5.1",
     "select2": "^4.0.13"
-    "jquery": "^3.5.1"
   },
   "devDependencies": {
-    "sass": "^1.83.0"
+    "sass": "1.77.8"
   }
 }

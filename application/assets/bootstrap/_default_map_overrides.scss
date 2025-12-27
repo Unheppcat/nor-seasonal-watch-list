@@ -1,3 +1,6 @@
+@use "sass:map";
+@use "../../vendor/twbs/bootstrap/scss/variables";
+
 $custom-colors: (
     "nor-red": #c90d0d,
     /* nor-red with lightness adjusted using Okhsl so that
@@ -9,4 +12,4 @@ $custom-colors: (
      */
     "nor-red-light": #fc2c23,
 );
-$theme-colors: map-merge($theme-colors, $custom-colors);
+variables.$theme-colors: map.merge(variables.$theme-colors, $custom-colors);

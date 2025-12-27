@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f2efb07f7075af42ff10c2ac064a3c1",
+    "content-hash": "4895724ea7280dab9df6e1ec42270fae",
     "packages": [
         {
             "name": "babdev/pagerfanta-bundle",
@@ -6809,10 +6809,6 @@
             "require": {
                 "composer-plugin-api": "^2.1",
                 "php": ">=8.1"
-            },
-            "conflict": {
-                "composer/semver": "<1.7.2",
-                "symfony/dotenv": "<5.4"
             },
             "conflict": {
                 "composer/semver": "<1.7.2"

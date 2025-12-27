@@ -1,7 +1,7 @@
 // Part of https://getbootstrap.com/docs/5.3/customize/sass/#importing
 // Option B: Include parts of Bootstrap
 
-// 6. Optionally include any other parts as needed
+// Optionally include any other parts as needed
 // Note: This actually includes all of the rest of what gets imported in Bootstrap's
 // bootstrap.scss file. Having unused CSS rules around seems worth it compared to
 // spending time puzzling over when something doesn't work when you want to use
@@ -39,5 +39,5 @@
 @import "../../vendor/twbs/bootstrap/scss/placeholders";
 @import "../../vendor/twbs/bootstrap/scss/helpers";
 
-// 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+// Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 @import "../../vendor/twbs/bootstrap/scss/utilities/api";

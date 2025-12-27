@@ -11,22 +11,22 @@ target_dir=public/bootstrap
 # Clean everything out
 rm -rf "$target_dir"
 
-# Copy JavaScript file
+# Copy JavaScript files
 mkdir -p "$target_dir/js"
 for source_filename in bootstrap.bundle.min.js bootstrap.bundle.min.js.map; do
     source_path="$source_dir/js/$source_filename"
     cp "$source_path" "$target_dir/js/"
 done
 
-# Build CSS files
+# Copy Bootstrap CSS files and rename with color mode suffixes
 mkdir -p "$target_dir/css"
-for source_path in $(ls assets/bootstrap/*.scss); do
-    filename=${source_path##*/}
-    basename=${filename%.*} # strip extension
-    # skip partials
-    if [[ $basename == _* ]]; then
-        continue
-    fi
-    npx sass --style expanded $source_path "$target_dir/css/$basename.css"
-    npx sass --style compressed $source_path "$target_dir/css/$basename.min.css"
-done
+
+# Copy as bootstrap-color-mode-data (data attribute mode is Bootstrap 5.3 default)
+cp "$source_dir/css/bootstrap.css" "$target_dir/css/bootstrap-color-mode-data.css"
+cp "$source_dir/css/bootstrap.min.css" "$target_dir/css/bootstrap-color-mode-data.min.css"
+
+# Copy as bootstrap-color-mode-media-query (same file, different name for compatibility)
+cp "$source_dir/css/bootstrap.css" "$target_dir/css/bootstrap-color-mode-media-query.css"
+cp "$source_dir/css/bootstrap.min.css" "$target_dir/css/bootstrap-color-mode-media-query.min.css"
+
+echo "Bootstrap files copied successfully from $source_dir to $target_dir"

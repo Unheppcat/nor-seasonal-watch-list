@@ -1,40 +1,32 @@
-@use "sass:map";
+// Custom Bootstrap build with media-query color mode support
 
-// Based on https://getbootstrap.com/docs/5.3/customize/sass/#importing
-// Option B: Include parts of Bootstrap
+// Import color overrides
+$white:    #fff !default;
+$gray-100: #f9f9f9 !default;
+$gray-200: #ececec !default;
+$gray-300: #e1e1e1 !default;
+$gray-400: #d3d3d3 !default;
+$gray-500: #b4b4b4 !default;
+$gray-600: #747474 !default;
+$gray-700: #4f4f4f !default;
+$gray-800: #393939 !default;
+$gray-900: #242424 !default;
+$black:    #000 !default;
 
-// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
-@import "../../vendor/twbs/bootstrap/scss/functions";
+// Set color mode type BEFORE importing Bootstrap
+$color-mode-type: media-query !default;
 
-// 2. Include any default variable overrides here
-$color-mode-type: media-query;
-@import "./_default_variable_overrides.scss";
+// Import complete Bootstrap
+@import "../../vendor/twbs/bootstrap/scss/bootstrap";
 
-// 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
-@import "../../vendor/twbs/bootstrap/scss/variables";
-@import "../../vendor/twbs/bootstrap/scss/variables-dark";
-
-// 4. Include any default map overrides here
-@import "./_default_map_overrides.scss";
-
-// 5. Include remainder of required parts
-@import "../../vendor/twbs/bootstrap/scss/maps";
-@import "../../vendor/twbs/bootstrap/scss/mixins";
-@import "../../vendor/twbs/bootstrap/scss/root";
-
-// 6-7. Optional includes
-@import "./_bootstrap_optional_components.scss";
-
-// 8. Add additional custom code here
+// Add custom button variant
 @media (prefers-color-scheme: light) {
   .btn-outline-inverse {
-    $value: map.get($theme-colors, "dark");
-    @include button-outline-variant($value);
+    @include button-outline-variant($dark);
   }
 }
 @media (prefers-color-scheme: dark) {
   .btn-outline-inverse {
-    $value: map.get($theme-colors, "light");
-    @include button-outline-variant($value);
+    @include button-outline-variant($light);
   }
 }
