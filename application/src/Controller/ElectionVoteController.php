@@ -22,15 +22,16 @@ use Symfony\Component\Routing\Attribute\Route;
 class ElectionVoteController extends AbstractController
 {
     /**
-     * @param Request $request
-     * @param ElectionVote $electionVote
+     * @param Request                $request
+     * @param ElectionVote           $electionVote
      * @param ElectionVoteRepository $electionVoteRepository
-     * @param ShowRepository $showRepository
+     * @param ShowRepository         $showRepository
+     * @param EntityManagerInterface $em
      * @return Response
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    #[Route('/{id}/edit', name: 'election_vote_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/edit', name: 'election_vote_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         ElectionVote $electionVote,
@@ -44,11 +45,15 @@ class ElectionVoteController extends AbstractController
             if ($user === null) {
                 return new JsonResponse(['data' => ['status' => 'permission_denied']], Response::HTTP_FORBIDDEN);
             }
-            if ($electionVote->getUser()->getId() !== $user->getId()) {
+            if (!$electionVote->getUser() || $electionVote->getUser()->getId() !== $user->getId()) {
                 return new JsonResponse(['data' => ['status' => 'permission_denied']], Response::HTTP_FORBIDDEN);
             }
 
             $election = $electionVote->getElection();
+            if ($election === null) {
+                return new JsonResponse(['data' => ['status' => 'election_not_found']], Response::HTTP_NOT_FOUND);
+            }
+
             $maxVotes = $election->getMaxVotes();
             $currentVoteCount = $electionVoteRepository->getCountForUserAndElection($user, $election);
             if ($maxVotes < 1 || $maxVotes === null) {
@@ -155,7 +160,7 @@ class ElectionVoteController extends AbstractController
 //                ]);
 //                return new Response($html, 400);
             }
-        } catch (UniqueConstraintViolationException $e) {
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (UniqueConstraintViolationException $e) {
             return new JsonResponse(
                 ['data' => [
                     'status' => 'failed',

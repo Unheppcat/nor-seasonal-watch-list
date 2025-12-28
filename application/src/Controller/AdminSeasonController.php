@@ -34,8 +34,9 @@ class AdminSeasonController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/new', name: 'admin_season_new', methods: ['GET', 'POST'])]
@@ -83,9 +84,10 @@ class AdminSeasonController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Season $season
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param Season                 $season
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}/edit', name: 'admin_season_edit', methods: ['GET', 'POST'])]
@@ -114,8 +116,9 @@ class AdminSeasonController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Season $season
+     * @param Request                $request
+     * @param Season                 $season
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}', name: 'admin_season_delete', methods: ['DELETE'])]

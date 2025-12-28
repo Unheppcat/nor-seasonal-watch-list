@@ -16,8 +16,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class AccountController extends AbstractController
 {
     /**
-     * @param Request $request
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/preferences', name: 'account_preferences', methods: ['GET', 'POST'])]
@@ -52,6 +53,7 @@ class AccountController extends AbstractController
     }
 
     /**
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/preferences/reset_api_key', name: 'account_preferences_reset_api_key', methods: ['POST'])]
@@ -61,7 +63,7 @@ class AccountController extends AbstractController
         $user = $this->getUser();
         try {
             $user->setApiKey(sha1(random_bytes(20)));
-        } catch (Exception $e) {
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (Exception $e) {
             $user->setApiKey(null);
         }
         $em->persist($user);
@@ -70,6 +72,7 @@ class AccountController extends AbstractController
         return $this->redirectToRoute('account_preferences');
     }
 
+    /** @noinspection PhpUnused */
     public function clearApiKey(EntityManagerInterface $em): Response
     {
         /** @var User $user */

@@ -34,8 +34,9 @@ class AdminElectionVoteController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/new', name: 'admin_election_vote_new', methods: ['GET', 'POST'])]
@@ -69,7 +70,7 @@ class AdminElectionVoteController extends AbstractController
      * @param ElectionRepository $electionRepository
      * @return Response
      */
-    #[Route('/{id}', name: 'admin_election_vote_show', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'admin_election_vote_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(
         ElectionVote $electionVote,
         ElectionRepository $electionRepository
@@ -83,12 +84,13 @@ class AdminElectionVoteController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ElectionVote $electionVote
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param ElectionVote           $electionVote
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
-    #[Route('/{id}/edit', name: 'admin_election_vote_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/edit', name: 'admin_election_vote_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         ElectionVote $electionVote,
@@ -114,11 +116,12 @@ class AdminElectionVoteController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ElectionVote $electionVote
+     * @param Request                $request
+     * @param ElectionVote           $electionVote
+     * @param EntityManagerInterface $em
      * @return Response
      */
-    #[Route('/{id}', name: 'admin_election_vote_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'admin_election_vote_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function delete(Request $request, ElectionVote $electionVote, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$electionVote->getId(), $request->request->get('_token'))) {

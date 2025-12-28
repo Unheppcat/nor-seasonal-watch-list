@@ -28,7 +28,8 @@ class AdminDiscordChannelController extends AbstractController
     }
 
     /**
-     * @param Request $request
+     * @param Request                $request
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/new', name: 'admin_discord_channel_new', methods: ['GET', 'POST'])]
@@ -41,6 +42,7 @@ class AdminDiscordChannelController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($discordChannel);
             $show = $discordChannel->getShow();
+            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if ($show !== null) {
                 $show->setDiscordChannel($discordChannel);
                 $em->persist($show);
@@ -71,8 +73,9 @@ class AdminDiscordChannelController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param DiscordChannel $discordChannel
+     * @param Request                $request
+     * @param DiscordChannel         $discordChannel
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}/edit', name: 'admin_discord_channel_edit', methods: ['GET', 'POST'])]
@@ -84,6 +87,7 @@ class AdminDiscordChannelController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $show = $discordChannel->getShow();
+            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if ($previousShow !== null && ($show === null || $show->getId() !== $previousShow->getId())) {
                 $previousShow->setDiscordChannel(null);
                 $em->persist($previousShow);
@@ -105,8 +109,9 @@ class AdminDiscordChannelController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param DiscordChannel $discordChannel
+     * @param Request                $request
+     * @param DiscordChannel         $discordChannel
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}', name: 'admin_discord_channel_delete', methods: ['DELETE'])]
@@ -114,6 +119,7 @@ class AdminDiscordChannelController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$discordChannel->getId(), $request->request->get('_token'))) {
             $show = $discordChannel->getShow();
+            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if ($show !== null) {
                 $show->setDiscordChannel(null);
                 $em->persist($show);

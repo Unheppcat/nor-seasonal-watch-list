@@ -35,8 +35,9 @@ class AdminShowSeasonScoreController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/new', name: 'admin_show_season_score_new', methods: ['GET', 'POST'])]
@@ -84,9 +85,10 @@ class AdminShowSeasonScoreController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ShowSeasonScore $showSeasonScore
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param ShowSeasonScore        $showSeasonScore
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}/edit', name: 'admin_show_season_score_edit', methods: ['GET', 'POST'])]
@@ -137,8 +139,9 @@ class AdminShowSeasonScoreController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ShowSeasonScore $showSeasonScore
+     * @param Request                $request
+     * @param ShowSeasonScore        $showSeasonScore
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}', name: 'admin_show_season_score_delete', methods: ['DELETE'])]

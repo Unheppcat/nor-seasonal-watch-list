@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnusedAliasInspection */
 /** @noinspection UnknownInspectionInspection */
 /** @noinspection PhpUnused */
 
@@ -168,10 +168,9 @@ class AllWatchController extends AbstractController
         }
         $header = null;
         foreach ($data as $row) {
-            $userData = [];
-            foreach ($usersWithData as $key => $value) {
-                $userData[$key] = $value;
-            }
+            $userData = array_map(static function ($value) {
+                return $value;
+            }, $usersWithData);
             $myRow = [];
             $myRow['title'] = $row['show']['title'];
             foreach($row['scores'] as $score) {

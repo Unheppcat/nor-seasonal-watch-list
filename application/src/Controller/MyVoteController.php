@@ -38,7 +38,7 @@ class MyVoteController extends AbstractController
     ): Response {
         $electionIsActive = $electionRepository->electionIsActive();
 
-        $electionId = $request->get('election');
+        $electionId = $request->query->get('election');
         $election = null;
         if ($electionId !== null) {
             $election = $electionRepository->find($electionId);

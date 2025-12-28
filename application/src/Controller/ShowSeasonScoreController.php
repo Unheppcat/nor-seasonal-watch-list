@@ -19,15 +19,18 @@ use Symfony\Component\Routing\Attribute\Route;
 class ShowSeasonScoreController extends AbstractController
 {
     /**
-     * @param Request $request
-     * @param ShowSeasonScore $showSeasonScore
-     * @param FormFactoryInterface $formFactory
+     * @param Request                $request
+     * @param ShowSeasonScore        $showSeasonScore
+     * @param string                 $key
+     * @param FormFactoryInterface   $formFactory
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}/edit/{key}', name: 'admin_show_season_score_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         ShowSeasonScore $showSeasonScore,
+        string $key,
         FormFactoryInterface $formFactory,
         EntityManagerInterface $em
     ): Response {
@@ -37,11 +40,9 @@ class ShowSeasonScoreController extends AbstractController
             if ($user === null) {
                 return new JsonResponse(['data' => ['status' => 'permission_denied']], Response::HTTP_FORBIDDEN);
             }
-            if ($showSeasonScore->getUser()->getId() !== $user->getId()) {
+            if (!$showSeasonScore->getUser() || $showSeasonScore->getUser()->getId() !== $user->getId()) {
                 return new JsonResponse(['data' => ['status' => 'permission_denied']], Response::HTTP_FORBIDDEN);
             }
-
-            $key = $request->get('key');
 
             $form = $formFactory->createNamed(
                 'show_season_score_' . $key,
@@ -74,7 +75,7 @@ class ShowSeasonScoreController extends AbstractController
                 ]);
                 return new Response($html, 400);
             }
-        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (UniqueConstraintViolationException $e) {
+        } /** @noinspection PhpRedundantCatchClauseInspection */ /** @noinspection PhpUnusedLocalVariableInspection */ catch (UniqueConstraintViolationException $e) {
             return new JsonResponse(['data' => ['status' => 'failed']], Response::HTTP_BAD_REQUEST);
         }
 

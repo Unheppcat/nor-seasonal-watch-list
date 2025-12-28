@@ -34,8 +34,9 @@ class AdminScoreController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/new', name: 'admin_score_new', methods: ['GET', 'POST'])]
@@ -84,9 +85,10 @@ class AdminScoreController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Score $score
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param Score                  $score
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}/edit', name: 'admin_score_edit', methods: ['GET', 'POST'])]
@@ -116,8 +118,9 @@ class AdminScoreController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Score $score
+     * @param Request                $request
+     * @param Score                  $score
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}', name: 'admin_score_delete', methods: ['DELETE'])]

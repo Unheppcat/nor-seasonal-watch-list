@@ -34,8 +34,9 @@ class AdminActivityController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/new', name: 'admin_activity_new', methods: ['GET', 'POST'])]
@@ -84,9 +85,10 @@ class AdminActivityController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Activity $activity
-     * @param ElectionRepository $electionRepository
+     * @param Request                $request
+     * @param Activity               $activity
+     * @param ElectionRepository     $electionRepository
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}/edit', name: 'admin_activity_edit', methods: ['GET', 'POST'])]
@@ -116,8 +118,9 @@ class AdminActivityController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Activity $activity
+     * @param Request                $request
+     * @param Activity               $activity
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}', name: 'admin_activity_delete', methods: ['DELETE'])]

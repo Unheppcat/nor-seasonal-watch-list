@@ -42,13 +42,13 @@ class AdminShowController extends AbstractController
         $currentPerPage = $session->get('perPage', 10);
         $currentSort = $session->get('sort', 'rumaji_asc');
         $currentSeason = $session->get('season', '');
-        $pageNum = $request->get('page', $currentPage);
-        $perPage = $request->get('perPage', $currentPerPage);
+        $pageNum = $request->query->get('page', $currentPage);
+        $perPage = $request->query->get('perPage', $currentPerPage);
         if ($perPage !== $currentPerPage) {
             $pageNum = 1;
         }
-        $sort = $request->get('sort', $currentSort);
-        $season = $request->get('season', $currentSeason);
+        $sort = $request->query->get('sort', $currentSort);
+        $season = $request->query->get('season', $currentSeason);
         if ($season === '') {
             $season = null;
         } else {
@@ -91,10 +91,11 @@ class AdminShowController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param AnilistApi $anilistApi
-     * @param ElectionRepository $electionRepository
-     * @param SeasonRepository $seasonRepository
+     * @param Request                $request
+     * @param AnilistApi             $anilistApi
+     * @param ElectionRepository     $electionRepository
+     * @param SeasonRepository       $seasonRepository
+     * @param EntityManagerInterface $em
      * @return Response
      * @throws GuzzleException
      * @throws JsonException
@@ -142,7 +143,7 @@ class AdminShowController extends AbstractController
                 } else {
                     $this->addFlash('warning', 'Update from the Anilist API failed');
                 }
-            } catch (Exception $e) {
+            } /** @noinspection PhpUnusedLocalVariableInspection */ catch (Exception $e) {
                 $this->addFlash('warning', 'Update from the Anilist API failed');
             }
 
@@ -164,10 +165,11 @@ class AdminShowController extends AbstractController
     /**
      * AJAX endpoint to search shows for autocomplete
      */
-    #[Route('/search', name: 'admin_show_search', methods: ['GET'], options: ['expose' => true])]
+    #[Route('/search', name: 'admin_show_search', options: ['expose' => true], methods: ['GET'])]
     public function search(Request $request, ShowRepository $showRepository): Response
     {
         $term = $request->query->get('term', '');
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $excludeParam = $request->query->get('exclude', null);
 
         // Convert exclude parameter to int or null
@@ -212,11 +214,12 @@ class AdminShowController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Show $show
-     * @param AnilistApi $anilistApi
-     * @param ElectionRepository $electionRepository
-     * @param ShowRepository $showRepository
+     * @param Request                $request
+     * @param Show                   $show
+     * @param AnilistApi             $anilistApi
+     * @param ElectionRepository     $electionRepository
+     * @param ShowRepository         $showRepository
+     * @param EntityManagerInterface $em
      * @return Response
      * @throws GuzzleException
      * @throws JsonException
@@ -242,6 +245,7 @@ class AdminShowController extends AbstractController
             }
             $this->saveNewRelatedShows($show, $em);
 
+            /** @noinspection PhpPossiblePolymorphicInvocationInspection */
             if ($form->get('updateFromAnilist') && $form->get('updateFromAnilist')->isClicked()) {
                 try {
                     $anilistData = $anilistApi->fetch($show->getAnilistId());
@@ -251,7 +255,7 @@ class AdminShowController extends AbstractController
                     } else {
                         $this->addFlash('warning', 'Update from the Anilist API failed');
                     }
-                } catch (Exception $e) {
+                } /** @noinspection PhpUnusedLocalVariableInspection */ catch (Exception $e) {
                     $this->addFlash('warning', 'Update from the Anilist API failed');
                 }
             }
@@ -272,8 +276,9 @@ class AdminShowController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Show $show
+     * @param Request                $request
+     * @param Show                   $show
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/{id}', name: 'admin_show_delete', methods: ['DELETE'])]
