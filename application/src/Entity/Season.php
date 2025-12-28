@@ -38,26 +38,26 @@ class Season
     /**
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: Election::class, mappedBy: 'season', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'season', targetEntity: Election::class, cascade: ['persist', 'remove'])]
     private Collection $elections;
 
     /**
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: ElectionVote::class, mappedBy: 'season', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'season', targetEntity: ElectionVote::class, cascade: ['persist', 'remove'])]
     private Collection $votes;
-
-    /**
-     * @var Collection|ShowSeasonScore[]
-     */
-    #[ORM\OneToMany(targetEntity: ShowSeasonScore::class, mappedBy: 'season', cascade: ['persist', 'remove'])]
-    private Collection $showSeasonScores;
 
     /**
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: DiscordChannel::class, mappedBy: 'season', cascade: ['persist', 'remove'])]
-    private $discordChannels;
+    #[ORM\OneToMany(mappedBy: 'season', targetEntity: ShowSeasonScore::class, cascade: ['persist', 'remove'])]
+    private Collection $showSeasonScores;
+
+    /**
+     * @var ArrayCollection|Collection
+     */
+    #[ORM\OneToMany(mappedBy: 'season', targetEntity: DiscordChannel::class, cascade: ['persist', 'remove'])]
+    private Collection|ArrayCollection $discordChannels;
 
     /**
      * @var bool
@@ -158,7 +158,7 @@ class Season
     }
 
     /**
-     * @return Collection|Show[]
+     * @return Collection
      */
     public function getShows(): Collection
     {
@@ -201,7 +201,7 @@ class Season
     }
 
     /**
-     * @return Collection|Election[]
+     * @return Collection
      */
     public function getElections(): Collection
     {
@@ -223,24 +223,7 @@ class Season
     }
 
     /**
-     * @param Election $election
-     * @return $this
-     */
-    public function removeElection(Election $election): self
-    {
-        if ($this->elections->removeElement($election)) {
-            // set the owning side to null (unless already changed)
-            /** @noinspection NestedPositiveIfStatementsInspection */
-            if ($election->getSeason() === $this) {
-                $election->setSeason(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ElectionVote[]
+     * @return Collection
      */
     public function getVotes(): Collection
     {
@@ -273,7 +256,7 @@ class Season
 
 
     /**
-     * @return Collection|DiscordChannel[]
+     * @return Collection
      */
     public function getDiscordChannels(): Collection
     {
@@ -294,23 +277,6 @@ class Season
         return $this;
     }
 
-    /**
-     * @param DiscordChannel $discordChannel
-     * @return $this
-     */
-    public function removeDiscordChannel(DiscordChannel $discordChannel): self
-    {
-        if ($this->discordChannels->removeElement($discordChannel)) {
-            // set the owning side to null (unless already changed)
-            /** @noinspection NestedPositiveIfStatementsInspection */
-            if ($discordChannel->getSeason() === $this) {
-                $discordChannel->setSeason(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function jsonSerialize(): array {
         return [
             'id' => $this->getId(),
@@ -322,17 +288,17 @@ class Season
     }
 
     /**
-     * @return ShowSeasonScore[]|Collection
+     * @return Collection
      */
-    public function getShowSeasonScores()
+    public function getShowSeasonScores(): Collection
     {
         return $this->showSeasonScores;
     }
 
     /**
-     * @param ShowSeasonScore[]|Collection $showSeasonScores
+     * @param Collection|ShowSeasonScore[] $showSeasonScores
      */
-    public function setShowSeasonScores($showSeasonScores): void
+    public function setShowSeasonScores(Collection|array $showSeasonScores): void
     {
         $this->showSeasonScores = $showSeasonScores;
     }

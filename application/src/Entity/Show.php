@@ -37,22 +37,22 @@ class Show
     private ?string $fullEnglishTitle = null;
 
     /**
-     * @var Collection|Season[]
+     * @var Collection
      */
     #[ORM\ManyToMany(targetEntity: Season::class, inversedBy: 'shows')]
     #[OrderBy(['rankOrder' => 'ASC'])]
     private Collection $seasons;
 
     /**
-     * @var Collection|ShowSeasonScore[]
+     * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: ShowSeasonScore::class, mappedBy: 'show', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'show', targetEntity: ShowSeasonScore::class, cascade: ['persist', 'remove'])]
     private Collection $scores;
 
     /**
-     * @var Collection|ElectionVote[]
+     * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: ElectionVote::class, mappedBy: 'animeShow', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'animeShow', targetEntity: ElectionVote::class, cascade: ['persist', 'remove'])]
     private Collection $votes;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -103,20 +103,20 @@ class Show
     /**
      * @var DiscordChannel|null
      */
-    #[ORM\OneToOne(targetEntity: DiscordChannel::class, mappedBy: 'animeShow', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'animeShow', targetEntity: DiscordChannel::class, cascade: ['persist', 'remove'])]
     #[JoinColumn(nullable: true)]
     private ?DiscordChannel $discordChannel = null;
 
     /**
-     * @var Collection|Show[]
+     * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: Show::class, mappedBy: 'firstShow', cascade: ['persist', 'detach'])]
+    #[ORM\OneToMany(mappedBy: 'firstShow', targetEntity: Show::class, cascade: ['persist', 'detach'])]
     private Collection $relatedShows;
 
     /**
      * @var Show|null
      */
-    #[ORM\ManyToOne(targetEntity: Show::class, inversedBy: 'relatedShows', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Show::class, cascade: ['persist'], inversedBy: 'relatedShows')]
     private ?Show $firstShow = null;
 
     /**
@@ -125,7 +125,7 @@ class Show
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $malId = null;
 
-    #[ORM\OneToMany(targetEntity: ElectionShowBuff::class, mappedBy: 'animeShow', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'animeShow', targetEntity: ElectionShowBuff::class, cascade: ['persist', 'remove'])]
     private Collection $electionShowBuffs;
 
     public function __construct()
@@ -317,7 +317,7 @@ class Show
     }
 
     /**
-     * @return Collection|Season[]
+     * @return Collection
      */
     public function getSeasons(): Collection
     {
@@ -349,9 +349,9 @@ class Show
     }
 
     /**
-     * @return Collection|ShowSeasonScore[]
+     * @return ArrayCollection|Collection
      */
-    public function getScores()
+    public function getScores(): ArrayCollection|Collection
     {
         return $this->scores;
     }
@@ -381,9 +381,9 @@ class Show
     }
 
     /**
-     * @return Collection|ElectionVote[]
+     * @return ArrayCollection|Collection
      */
-    public function getVotes()
+    public function getVotes(): ArrayCollection|Collection
     {
         return $this->votes;
     }
@@ -626,7 +626,7 @@ class Show
     }
 
     /**
-     * @return Show[]|Collection
+     * @return Collection
      */
     public function getRelatedShows(): Collection
     {
@@ -681,7 +681,7 @@ class Show
     }
 
     /**
-     * @return Collection|ElectionShowBuff[]
+     * @return Collection
      */
     public function getElectionShowBuffs(): Collection
     {

@@ -34,7 +34,7 @@ class DiscordChannel
     /**
      * @var Show
      */
-    #[ORM\OneToOne(targetEntity: Show::class, inversedBy: 'discordChannel', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'discordChannel', targetEntity: Show::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private Show $animeShow;
 

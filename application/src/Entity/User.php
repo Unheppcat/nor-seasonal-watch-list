@@ -102,13 +102,13 @@ class User implements UserInterface
     /**
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: ShowSeasonScore::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ShowSeasonScore::class, cascade: ['persist', 'remove'])]
     private Collection $showSeasonScores;
 
     /**
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: ElectionVote::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ElectionVote::class, cascade: ['persist', 'remove'])]
     private Collection $electionVotes;
 
     /**
@@ -386,7 +386,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|ShowSeasonScore[]
+     * @return Collection
      */
     public function getShowSeasonScores(): Collection
     {
@@ -408,20 +408,6 @@ class User implements UserInterface
     }
 
     /**
-     * @param ShowSeasonScore $showSeasonScore
-     * @return $this
-     */
-    public function removeShowSeasonScore(ShowSeasonScore $showSeasonScore): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->showSeasonScores->removeElement($showSeasonScore) && $showSeasonScore->getUser() === $this) {
-            $showSeasonScore->setUser(null);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function __toString(): string
@@ -430,7 +416,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|ElectionVote[]
+     * @return Collection
      */
     public function getElectionVotes(): Collection
     {
@@ -446,23 +432,6 @@ class User implements UserInterface
         if (!$this->electionVotes->contains($electionVote)) {
             $this->electionVotes[] = $electionVote;
             $electionVote->setUser($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ElectionVote $electionVote
-     * @return $this
-     */
-    public function removeElectionVote(ElectionVote $electionVote): self
-    {
-        if ($this->electionVotes->removeElement($electionVote)) {
-            // set the owning side to null (unless already changed)
-            /** @noinspection NestedPositiveIfStatementsInspection */
-            if ($electionVote->getUser() === $this) {
-                $electionVote->setUser(null);
-            }
         }
 
         return $this;
@@ -529,7 +498,7 @@ class User implements UserInterface
         if (null === $this->apiKey) {
             try {
                 $this->apiKey = sha1(random_bytes(20));
-            } catch (Exception $e) {
+            } /** @noinspection PhpUnusedLocalVariableInspection */ catch (Exception $e) {
                 $this->apiKey = null;
             }
         }

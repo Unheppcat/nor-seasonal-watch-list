@@ -63,10 +63,10 @@ class Election
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $maxVotes = null;
 
-    #[ORM\OneToMany(targetEntity: ElectionVote::class, mappedBy: 'election', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'election', targetEntity: ElectionVote::class, cascade: ['persist', 'remove'])]
     private Collection $electionVotes;
 
-    #[ORM\OneToMany(targetEntity: ElectionShowBuff::class, mappedBy: 'election', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'election', targetEntity: ElectionShowBuff::class, cascade: ['persist', 'remove'])]
     private Collection $electionShowBuffs;
 
     /**
@@ -158,13 +158,13 @@ class Election
             $now = new DateTime();
             return $this->getStartDate() && $this->getEndDate() &&
                 $now >= $this->getStartDate() && $now <= $this->getEndDate();
-        } catch (Exception $e) {
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (Exception $e) {
             return false;
         }
     }
 
     /**
-     * @return Collection|ElectionVote[]
+     * @return Collection
      */
     public function getElectionVotes(): Collection
     {
@@ -180,23 +180,6 @@ class Election
         if (!$this->electionVotes->contains($showSeasonVote)) {
             $this->electionVotes[] = $showSeasonVote;
             $showSeasonVote->setElection($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ElectionVote $showSeasonVote
-     * @return $this
-     */
-    public function removeElectionVote(ElectionVote $showSeasonVote): self
-    {
-        if ($this->electionVotes->removeElement($showSeasonVote)) {
-            // set the owning side to null (unless already changed)
-            /** @noinspection NestedPositiveIfStatementsInspection */
-            if ($showSeasonVote->getElection() === $this) {
-                $showSeasonVote->setElection(null);
-            }
         }
 
         return $this;
@@ -274,7 +257,7 @@ class Election
     }
 
     /**
-     * @return Collection|ElectionShowBuff[]
+     * @return Collection
      */
     public function getElectionShowBuffs(): Collection
     {

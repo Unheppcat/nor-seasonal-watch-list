@@ -64,9 +64,9 @@ class Score
     private string $slug = '';
 
     /**
-     * @var Collection|ShowSeasonScore[]
+     * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: ShowSeasonScore::class, mappedBy: 'score', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'score', targetEntity: ShowSeasonScore::class, cascade: ['persist', 'remove'])]
     private Collection $showSeasonScores;
 
     public function __construct()
@@ -226,17 +226,17 @@ class Score
     }
 
     /**
-     * @return ShowSeasonScore[]|Collection
+     * @return ArrayCollection|Collection|array
      */
-    public function getShowSeasonScores()
+    public function getShowSeasonScores(): ArrayCollection|Collection|array
     {
         return $this->showSeasonScores;
     }
 
     /**
-     * @param ShowSeasonScore[]|Collection $showSeasonScores
+     * @param Collection|ShowSeasonScore[] $showSeasonScores
      */
-    public function setShowSeasonScores($showSeasonScores): void
+    public function setShowSeasonScores(Collection|array $showSeasonScores): void
     {
         $this->showSeasonScores->clear();
         $showSeasonScores->map(function ($score) { $this->showSeasonScores->add($score); });

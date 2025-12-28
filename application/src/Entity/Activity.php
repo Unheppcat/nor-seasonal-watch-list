@@ -64,13 +64,13 @@ class Activity
     private string $slug = '';
 
     /**
-     * @var Collection|ShowSeasonScore[]
+     * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: ShowSeasonScore::class, mappedBy: 'activity', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: ShowSeasonScore::class, cascade: ['persist', 'remove'])]
     private Collection $scores;
 
     /**
-     * @return ShowSeasonScore[]|Collection
+     * @return Collection
      */
     public function getScores(): Collection
     {
@@ -78,7 +78,7 @@ class Activity
     }
 
     /**
-     * @param ShowSeasonScore[]|Collection $scores
+     * @param Collection $scores
      */
     public function setScores(Collection $scores): void
     {

@@ -40,7 +40,7 @@ final class BuffedElection
     /**
      * @return ArrayCollection|Collection
      */
-    public function getVoteTallies()
+    public function getVoteTallies(): ArrayCollection|Collection
     {
         return $this->voteTallies;
     }
