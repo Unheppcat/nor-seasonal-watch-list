@@ -54,7 +54,6 @@ final class VoterInfoHelper
      * @param Election $election
      * @return array
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     public function getInfo(
         Election $election
@@ -81,7 +80,6 @@ final class VoterInfoHelper
     /**
      * @param Election $election
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     public function initializeForExport(Election $election): void
     {

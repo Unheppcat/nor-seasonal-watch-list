@@ -14,7 +14,7 @@ final class SelectedSortHelper
     public function getSelectedSort(Request $request, string $listName): ?string
     {
         $sessionKey = 'sort_' . $listName;
-        $selectedSortName = $request->get('sort');
+        $selectedSortName = $request->query->get('sort');
         if ($selectedSortName === null) {
             $selectedSortName = $request->getSession()->get($sessionKey);
             if ($selectedSortName === null) {

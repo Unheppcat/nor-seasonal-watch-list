@@ -29,7 +29,7 @@ final class SelectedAllWatchModeHelper
      */
     public function getSelectedMode(Request $request, User $user): string
     {
-        $selectedMode = $request->get('mode');
+        $selectedMode = $request->query->get('mode');
         if ($selectedMode === null) {
             $selectedMode = $user->getPreferences()->getAllWatchesViewMode();
         }

@@ -30,8 +30,9 @@ final class SelectedSeasonHelper
      */
     public function getSelectedSeason(Request $request): ?Season
     {
-        $selectedSeasonId = $request->get('season');
+        $selectedSeasonId = $request->query->get('season');
         if ($selectedSeasonId === null) {
+            /** @noinspection PhpRedundantOptionalArgumentInspection */
             $selectedSeasonId = $request->getSession()->get('selectedSeasonId', null);
         }
         if ($selectedSeasonId === null) {
@@ -45,7 +46,7 @@ final class SelectedSeasonHelper
         if ($season && $season->isHiddenFromSeasonsList()) {
             $season = $this->seasonRepository->getMostRecentSeason();
         }
-        $selectedSeasonId = $season ? $season->getId() : null;
+        $selectedSeasonId = $season?->getId();
         $request->getSession()->set('selectedSeasonId', $selectedSeasonId);
         return $season;
     }

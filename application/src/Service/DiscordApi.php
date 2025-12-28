@@ -1,4 +1,7 @@
-<?php /** @noinspection PhpUndefinedClassInspection */
+<?php /** @noinspection PhpUnused */
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
+/** @noinspection PhpUndefinedClassInspection */
 
 namespace App\Service;
 
@@ -40,7 +43,7 @@ class DiscordApi
     public function getMe(): ?array
     {
         $result = $this->sendRequest('GET', '/users/@me');
-        if ($result && (int)$result->getStatusCode() > 100 && (int)$result->getStatusCode() < 300) {
+        if ($result && $result->getStatusCode() > 100 && $result->getStatusCode() < 300) {
             return json_decode($result->getBody(), true, 512, JSON_THROW_ON_ERROR);
         }
         return null;
@@ -70,13 +73,13 @@ class DiscordApi
     public function getGuildMemberInfo(string $guildId, string $memberId): ?array
     {
         static $info = [];
-        if (isset($info["{$guildId}:{$memberId}"])) {
-            return $info["{$guildId}:{$memberId}"];
+        if (isset($info["$guildId:$memberId"])) {
+            return $info["$guildId:$memberId"];
         }
         $result = $this->sendRequest('GET', '/guilds/' . $guildId . '/members/' . $memberId, null, true);
-        if ($result && (int)$result->getStatusCode() > 100 && (int)$result->getStatusCode() < 300) {
+        if ($result && $result->getStatusCode() > 100 && $result->getStatusCode() < 300) {
             $data = json_decode($result->getBody(), true, 512, JSON_THROW_ON_ERROR);
-            $info["{$guildId}:{$memberId}"] = $data;
+            $info["$guildId:$memberId"] = $data;
             return $data;
         }
         return null;
@@ -95,7 +98,7 @@ class DiscordApi
             return $guilds[$guildId];
         }
         $result = $this->sendRequest('GET', '/guilds/' . $guildId, null, true);
-        if ($result && (int)$result->getStatusCode() > 100 && (int)$result->getStatusCode() < 300) {
+        if ($result && $result->getStatusCode() > 100 && $result->getStatusCode() < 300) {
             $data = json_decode($result->getBody(), true, 512, JSON_THROW_ON_ERROR);
             $guilds[$guildId] = $data;
             return $data;
@@ -171,22 +174,22 @@ class DiscordApi
      * @param $method
      * @param $endpoint
      * @param null $body
-     * @param false $asBot
+     * @param bool $asBot
      * @return ResponseInterface|null
      * @throws GuzzleException
      */
-    public function sendRequest($method, $endpoint, $body = null, $asBot = false): ?ResponseInterface
+    public function sendRequest($method, $endpoint, $body = null, bool $asBot = false): ?ResponseInterface
     {
         if ($asBot) {
             $authorization = 'Bot ' . $this->botToken;
         } else {
+            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if ($this->token === null) {
                 throw new RuntimeException('Token not set, library has not been initialized');
             }
             $authorization = 'Bearer ' . $this->token;
         }
-        $client = new Client(['exceptions' => false]);
-        return $client->request($method, $this->rootUrl . $endpoint, [
+        return (new Client(['exceptions' => false]))->request($method, $this->rootUrl . $endpoint, [
             'body' => $body,
             'headers' => [ 'Authorization' => $authorization],
             'http_errors' => false

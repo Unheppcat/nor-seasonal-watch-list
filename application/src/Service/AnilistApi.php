@@ -33,12 +33,12 @@ class AnilistApi
                 try {
                     $data = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
                     return $data['data']['Media'];
-                } catch (Exception $e) {
+                } /** @noinspection PhpUnusedLocalVariableInspection */ catch (Exception $e) {
                     return null;
                 }
             }
             return null;
-        } catch (RequestException|Exception $e) {
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (RequestException|Exception $e) {
             return null;
         }
     }
@@ -66,7 +66,7 @@ class AnilistApi
         } else {
             try {
                 $show->setSynonyms(json_encode($data['synonyms'], JSON_THROW_ON_ERROR));
-            } catch (JsonException $e) {
+            } /** @noinspection PhpUnusedLocalVariableInspection */ catch (JsonException $e) {
                 $show->setSynonyms('');
             }
         }
