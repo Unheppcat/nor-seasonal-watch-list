@@ -40,10 +40,10 @@ class Score
     private int $rankOrder = 0;
 
     /**
-     * @var float|null
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', precision: 10, scale: 3, nullable: true)]
-    private ?float $value = null;
+    private ?string $value = null;
 
     /**
      * @var string
@@ -121,18 +121,18 @@ class Score
     }
 
     /**
-     * @return float|null
+     * @return string|null
      */
-    public function getValue(): ?float
+    public function getValue(): ?string
     {
         return $this->value;
     }
 
     /**
-     * @param float|null $value
+     * @param string|null $value
      * @return $this
      */
-    public function setValue(?float $value): self
+    public function setValue(?string $value): self
     {
         $this->value = $value;
 

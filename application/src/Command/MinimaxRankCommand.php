@@ -6,15 +6,19 @@ namespace App\Command;
 
 use App\Service\MinimaxRankHelper;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'vote:minimaxrank',
+    description: 'Calculate minimax ranking.'
+)]
 class MinimaxRankCommand extends Command
 {
-    protected static $defaultName = 'vote:minimaxrank';
 
     private MinimaxRankHelper $helper;
 
@@ -29,12 +33,10 @@ class MinimaxRankCommand extends Command
         $this->helper = $helper;
     }
 
-    /** @noinspection ReturnTypeCanBeDeclaredInspection */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this
-            ->setDescription('Calculate minimax ranking.')
             ->addArgument(
                 'ballot_file',
                 InputArgument::REQUIRED,
@@ -43,7 +45,7 @@ class MinimaxRankCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
