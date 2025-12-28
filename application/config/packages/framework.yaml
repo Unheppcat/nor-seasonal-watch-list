@@ -2,7 +2,8 @@
 framework:
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true
-    #http_method_override: true
+    http_method_override: true
+    allowed_http_method_override: ['PUT', 'DELETE', 'PATCH']
 
     #trusted_proxies: '127.0.0.1,REMOTE_ADDR'
     #trusted_proxies: '127.0.0.1'
