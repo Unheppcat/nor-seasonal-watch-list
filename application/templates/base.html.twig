@@ -4,6 +4,7 @@
 {% else %}
     {% set colorsMode = 'os' %}
 {% endif %}
+<!--suppress JSUnresolvedReference -->
 <html lang="en" {% if colorsMode in ['dark', 'light'] %}data-bs-theme="{{ colorsMode }}"{% endif %}>
     <head>
         <meta charset="UTF-8">
@@ -130,9 +131,6 @@
     <script src="/js/jquery.min.js?v={{ asset_version }}"></script>
     <script src="/js/popper.min.js?v={{ asset_version }}"></script>
     <script src="/bootstrap/js/bootstrap.bundle.min.js?v={{ asset_version }}"></script>
-{#    <script src="/js/datatables.min.js"></script>#}
-{#    <script src="/js/jquery.dataTables.min.js"></script>#}
-{#    <script src="/js/dataTables.bootstrap5.min.js"></script>#}
     <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}?v={{ asset_version }}"></script>
     <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}&v={{ asset_version }}"></script>
     <script type="application/javascript">
