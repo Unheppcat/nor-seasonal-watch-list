@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 namespace App;
 
@@ -11,6 +11,7 @@ class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $container->import('../config/{packages}/*.yaml');
@@ -24,6 +25,7 @@ class Kernel extends BaseKernel
         }
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->import('../config/{routes}/'.$this->environment.'/*.yaml');
