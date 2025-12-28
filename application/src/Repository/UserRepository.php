@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Repository;
 
@@ -28,7 +28,7 @@ class UserRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('u');
         if ($sortColumn !== null) {
-            $qb->orderBy("u.{$sortColumn}", $sortDirection);
+            $qb->orderBy("u.$sortColumn", $sortDirection);
         }
         return $qb->getQuery()->getResult();
     }

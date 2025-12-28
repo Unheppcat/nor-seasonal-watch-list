@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Repository;
 
@@ -64,7 +64,7 @@ class ElectionRepository extends ServiceEntityRepository
     {
         try {
             return ($this->getFirstActiveElection() !== null);
-        } catch (NonUniqueResultException $e) {
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (NonUniqueResultException $e) {
             return true;
         }
     }

@@ -1,4 +1,6 @@
-<?php /** @noinspection UnknownInspectionInspection */
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
+
+/** @noinspection UnknownInspectionInspection */
 
 namespace App\Repository;
 
@@ -7,7 +9,6 @@ use App\Entity\ElectionVote;
 use App\Entity\Show;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\DBAL\Driver\Exception as DoctrineException;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -64,7 +65,6 @@ class ElectionVoteRepository extends ServiceEntityRepository
     /**
      * @param Election $election
      * @return array
-     * @throws DoctrineException
      * @throws Exception
      */
     public function getCountsForElection(
@@ -90,18 +90,19 @@ EOF;
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         $result = $stmt->executeQuery(['election_id' => $election->getId()]);
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
         if ($result !== null) {
             $rows = $result->fetchAllAssociative();
             foreach ($rows as $key => $row) {
                 if ($row['buff_rule'] !== null) {
-                    if (strpos($row['buff_rule'], '*') === 0) {
+                    if (str_starts_with($row['buff_rule'], '*')) {
                         $originalCount = (int)$row['vote_count'];
                         $buff = substr($row['buff_rule'], 1);
                         $rows[$key]['buffed_vote_count'] = (int)round($originalCount * (float)$buff);
-                    } elseif (strpos($row['buff_rule'], '+') === 0) {
+                    } elseif (str_starts_with($row['buff_rule'], '+')) {
                         $originalCount = (int)$row['vote_count'];
                         $buff = substr($row['buff_rule'], 1);
-                        $rows[$key]['buffed_vote_count'] = (int)round($originalCount + $buff);
+                        $rows[$key]['buffed_vote_count'] = (int)round($originalCount + (float)$buff);
                     }
                 }
             }
@@ -114,7 +115,6 @@ EOF;
     /**
      * @param Election $election
      * @return array
-     * @throws DoctrineException
      * @throws Exception
      */
     public function getRanksForElection(
@@ -136,6 +136,7 @@ EOF;
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         $result = $stmt->executeQuery(['election_id' => $election->getId()]);
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
         if ($result !== null) {
             return $result->fetchAllAssociative();
         }
@@ -143,10 +144,9 @@ EOF;
     }
 
     /**
-     * @param User $user
+     * @param User     $user
      * @param Election $election
      * @return int
-     * @throws DoctrineException
      * @throws Exception
      */
     public function getCountForUserAndElection(User $user, Election $election): int
@@ -161,24 +161,20 @@ EOF;
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         $result = $stmt->executeQuery(['user_id' => $user->getId(), 'election_id' => $election->getId()]);
-        if ($result !== null) {
-            return (int)$result->fetchOne();
-        }
-        return 0;
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
+        return (int)$result?->fetchOne();
     }
 
     /**
      * @param Election $election
      * @return int
-     * @throws DoctrineException
      * @throws Exception
-     * @noinspection PhpUnused
      */
     public function getVoterCountForElection(
         Election $election
     ): int {
-        if ($election->getElectionType() === Election::SIMPLE_ELECTION) {
-            $sql = <<<EOF
+        $sql = match ($election->getElectionType()) {
+            Election::SIMPLE_ELECTION => <<<EOF
 SELECT COUNT(ev2.user_id) AS voter_count
 FROM 
     (SELECT ev.user_id
@@ -186,10 +182,8 @@ FROM
     WHERE ev.chosen = 1
     AND ev.election_id = :election_id
     GROUP BY ev.user_id) as ev2
-EOF;
-        }
-        if ($election->getElectionType() === Election::RANKED_CHOICE_ELECTION) {
-            $sql = <<<EOF
+EOF,
+            Election::RANKED_CHOICE_ELECTION => <<<EOF
 SELECT COUNT(ev2.user_id) AS voter_count
 FROM 
     (SELECT ev.user_id
@@ -197,8 +191,9 @@ FROM
     WHERE ev.rank_choice IS NOT NULL
     AND ev.election_id = :election_id
     GROUP BY ev.user_id) as ev2
-EOF;
-        }
+EOF,
+            default => throw new Exception('Unknown election type: ' . $election->getElectionType()),
+        };
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         $result = $stmt->executeQuery(['election_id' => $election->getId()]);
@@ -208,7 +203,6 @@ EOF;
     /**
      * @param Election $election
      * @return int
-     * @throws DoctrineException
      * @throws Exception
      */
     public function getBuffedVoteCountForElection(

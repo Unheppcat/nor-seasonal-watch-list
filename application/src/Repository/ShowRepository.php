@@ -1,4 +1,5 @@
-<?php /** @noinspection UnknownInspectionInspection */
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
+/** @noinspection UnknownInspectionInspection */
 
 /** @noinspection PhpUnused */
 
@@ -137,24 +138,12 @@ class ShowRepository extends ServiceEntityRepository
      */
     private function setOrderBy(QueryBuilder $qb, ?string $sortColumn, ?string $sortOrder): void
     {
-        switch ($sortColumn) {
-            case 'english':
-                $orderBy = 'englishTitle';
-                break;
-            case 'kanji':
-                $orderBy = 'fullJapaneseTitle';
-                break;
-            case '':
-            case null:
-            case 'none':
-                $orderBy = null;
-                break;
-            case 'rumaji':
-                $orderBy = 'japaneseTitle';
-                break;
-            default:
-                $orderBy = 'japaneseTitle';
-        }
+        $orderBy = match ($sortColumn) {
+            'english' => 'englishTitle',
+            'kanji' => 'fullJapaneseTitle',
+            '', null, 'none' => null,
+            default => 'japaneseTitle',
+        };
         // Prevent invalid sort orders
         $sortOrder = (strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC');
         if ($orderBy !== null) {
@@ -232,6 +221,7 @@ class ShowRepository extends ServiceEntityRepository
                 $orderBy = 's.japaneseTitle';
                 $sortOrder = 'asc';
         }
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
         if ($orderBy !== null) {
             $qb->orderBy($orderBy, $sortOrder);
             if ($orderBy !== 's.japaneseTitle') {

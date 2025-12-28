@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
+/** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Repository;
 
@@ -81,7 +83,7 @@ class SeasonRepository extends ServiceEntityRepository
                     return null;
             }
             return $this->findOneBy(['year' => $year, 'yearPart' => $quarter]);
-        } catch (Exception $e) {
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (Exception $e) {
             return null;
         }
     }

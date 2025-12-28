@@ -1,4 +1,5 @@
-<?php /** @noinspection UnknownInspectionInspection */
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
+/** @noinspection UnknownInspectionInspection */
 
 /** @noinspection PhpUnused */
 

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 /** @noinspection UnknownInspectionInspection */
 /** @noinspection PhpUnused */
 
@@ -164,7 +164,6 @@ class ShowSeasonScoreRepository extends ServiceEntityRepository
     /**
      * @param Season $season
      * @return array
-     * @throws \Doctrine\DBAL\Driver\Exception
      * @throws Exception
      */
     public function getActivitiesForSeason(Season $season): array
@@ -209,14 +208,12 @@ WHERE ss.season_id = :season_id
 EOF;
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery(['season_id' => $season->getId()]);
-        return $result->fetchAllAssociative();
+        return $stmt->executeQuery(['season_id' => $season->getId()])->fetchAllAssociative();
     }
 
     /**
      * @param Season $season
      * @return array
-     * @throws \Doctrine\DBAL\Driver\Exception
      * @throws Exception
      */
     public function getScoresForSeason(Season $season): array
@@ -317,7 +314,6 @@ WHERE ss.season_id = :season_id
 EOF;
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery(['season_id' => $season->getId()]);
-        return $result->fetchAllAssociative();
+        return $stmt->executeQuery(['season_id' => $season->getId()])->fetchAllAssociative();
     }
 }
