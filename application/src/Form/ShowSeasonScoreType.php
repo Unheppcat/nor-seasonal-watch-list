@@ -35,7 +35,7 @@ class ShowSeasonScoreType extends AbstractType
                 },
                 'choice_attr' => ChoiceList::attr(
                     $this,
-                    function (?Activity $activity) {
+                    static function (?Activity $activity) {
                         return $activity ? ['class' => 'activity-choice-' . $activity->getColorValue()] : [];
                     },
                     Activity::class
@@ -55,7 +55,7 @@ class ShowSeasonScoreType extends AbstractType
                 },
                 'choice_attr' => ChoiceList::attr(
                     $this,
-                    function (?Score $score) {
+                    static function (?Score $score) {
                         return $score ? ['class' => 'score-choice-' . $score->getColorValue()] : [];
                     },
                     Score::class

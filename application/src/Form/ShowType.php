@@ -19,10 +19,6 @@ class ShowType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-//            ->add('japaneseTitle')
-//            ->add('englishTitle')
-//            ->add('fullJapaneseTitle')
-//            ->add('fullEnglishTitle')
             ->add('anilistId')
             ->add('seasons', EntityType::class, [
                 'class' => Season::class,
@@ -87,8 +83,6 @@ class ShowType extends AbstractType
                 $form->add('japaneseTitle')
                     ->add('fullJapaneseTitle')
                     ->add('englishTitle')
-//                    ->add('description')
-//                    ->add('hashtag')
                     ->add('coverImageMedium')
                     ->add('coverImageLarge')
                     ->add('siteUrl')
