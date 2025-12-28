@@ -139,13 +139,13 @@ class AppDiscordAuthenticator extends OAuth2Authenticator
                             $this->em->persist($priorUser);
                         }
                         $existingUser->setUsername($localUsername);
-                    } catch (Exception $e) {
+                    } /** @noinspection PhpUnusedLocalVariableInspection */ catch (Exception $e) {
                         // Leave username unchanged for now
                     }
                 }
                 $this->em->persist($existingUser);
                 $this->em->flush();
-            } catch (GuzzleException|Exception $e) {
+            } /** @noinspection PhpUnusedLocalVariableInspection */ catch (GuzzleException|Exception $e) {
                 // Leave existing roles for now
             }
 
@@ -163,13 +163,13 @@ class AppDiscordAuthenticator extends OAuth2Authenticator
         $user->setDiscordTokenExpires($credentials->getExpires());
         try {
             $user->setRoles($this->updateDiscordRoles($credentials->getToken(), ['ROLE_USER'], $discordId));
-        } catch (GuzzleException|Exception $e) {
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (GuzzleException|Exception $e) {
             $user->setRoles(['ROLE_USER']);
         }
         try {
             $nickname = $this->getDiscordNickname($credentials->getToken(), $discordId);
             $user->setDisplayName($nickname);
-        } catch (GuzzleException|Exception $e) {
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (GuzzleException|Exception $e) {
             $user->setDisplayName(null);
         }
 

@@ -16,7 +16,7 @@ class AccessDeniedHandler implements AccessDeniedHandlerInterface
     /**
      * @var Environment
      */
-    private $twig;
+    private Environment $twig;
 
     public function __construct(Environment $twig)
     {
