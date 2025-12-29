@@ -46,14 +46,25 @@ class AnilistApi
     public function updateShow(Show $show, array $data): void
     {
 //        echo("<pre>\n"); print_r($data); die();
-        $show->setJapaneseTitle($data['title']['romaji']);
-        if (empty($data['title']['english'])) {
-            if (empty($show->getEnglishTitle())) {
-                $show->setEnglishTitle($data['title']['romaji']);
-            }
-        } else {
-            $show->setEnglishTitle($data['title']['english']);
+        $anilistEnglish = $data['title']['english'] ?? '';
+        $anilistJapanese = $data['title']['romaji'];
+        $localEnglish = $show->getEnglishTitle();
+
+        $show->setJapaneseTitle($anilistJapanese);
+
+        // Handle englishTitle update logic:
+        // 1. If local is empty, always fill with Anilist value
+        if (empty($localEnglish)) {
+            // Use Anilist english, or fallback to romaji if english is empty
+            $show->setEnglishTitle(!empty($anilistEnglish) ? $anilistEnglish : $anilistJapanese);
         }
+        // 2. If Anilist english differs from Anilist japanese, replace local (even if it has a value)
+        else if (!empty($anilistEnglish) && $anilistEnglish !== $anilistJapanese) {
+            $show->setEnglishTitle($anilistEnglish);
+        }
+        // 3. If Anilist english same as Anilist japanese (or empty), keep local value (preserve manual edits)
+        // else: do nothing - preserve local englishTitle
+
         $show->setFullEnglishTitle($data['title']['english']);
         $show->setFullJapaneseTitle($data['title']['native']);
         $show->setDescription($data['description']);
