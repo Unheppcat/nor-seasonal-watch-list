@@ -126,8 +126,22 @@ class AdminShowController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Store selected season IDs in session for next time
+            // Validate that no seasons with active elections are being added
             $selectedSeasons = $show->getSeasons();
+            foreach ($selectedSeasons as $season) {
+                if ($season->hasActiveElection()) {
+                    $this->addFlash('error', 'Cannot link show to season "' . $season->getName() . '" - it has an active election');
+                    return $this->render('show/new.html.twig', [
+                        'user' => $this->getUser(),
+                        'show' => $show,
+                        'form' => $form->createView(),
+                        'mode' => 'add',
+                        'electionIsActive' => $electionIsActive,
+                    ]);
+                }
+            }
+
+            // Store selected season IDs in session for next time
             $selectedSeasonIds = [];
             foreach ($selectedSeasons as $season) {
                 $selectedSeasonIds[] = $season->getId();
@@ -234,11 +248,52 @@ class AdminShowController extends AbstractController
         EntityManagerInterface $em
     ): Response {
         $originalRelatedShows = $showRepository->getRelatedShows($show);
+
+        // Capture original seasons before form handling
+        $originalSeasons = [];
+        foreach ($show->getSeasons() as $season) {
+            $originalSeasons[$season->getId()] = $season;
+        }
+
         $electionIsActive = $electionRepository->electionIsActive();
         $form = $this->createForm(ShowType::class, $show);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Get new seasons after form submission
+            $newSeasons = [];
+            foreach ($show->getSeasons() as $season) {
+                $newSeasons[$season->getId()] = $season;
+            }
+
+            // Check for removed seasons with active elections
+            foreach ($originalSeasons as $seasonId => $season) {
+                if (!isset($newSeasons[$seasonId]) && $season->hasActiveElection()) {
+                    $this->addFlash('error', 'Cannot remove season "' . $season->getName() . '" - it has an active election');
+                    return $this->render('show/edit.html.twig', [
+                        'user' => $this->getUser(),
+                        'show' => $show,
+                        'form' => $form->createView(),
+                        'mode' => 'edit',
+                        'electionIsActive' => $electionIsActive,
+                    ]);
+                }
+            }
+
+            // Check for added seasons with active elections
+            foreach ($newSeasons as $seasonId => $season) {
+                if (!isset($originalSeasons[$seasonId]) && $season->hasActiveElection()) {
+                    $this->addFlash('error', 'Cannot add season "' . $season->getName() . '" - it has an active election');
+                    return $this->render('show/edit.html.twig', [
+                        'user' => $this->getUser(),
+                        'show' => $show,
+                        'form' => $form->createView(),
+                        'mode' => 'edit',
+                        'electionIsActive' => $electionIsActive,
+                    ]);
+                }
+            }
+
             foreach($originalRelatedShows as $originalRelatedShow) {
                 $originalRelatedShow->setFirstShow(null);
                 $em->persist($originalRelatedShow);
@@ -285,8 +340,14 @@ class AdminShowController extends AbstractController
     public function delete(Request $request, Show $show, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$show->getId(), $request->request->get('_token'))) {
+            if (!$show->canBeDeleted()) {
+                $this->addFlash('error', 'Cannot delete show: it has linked seasons');
+                return $this->redirectToRoute('admin_show_edit', ['id' => $show->getId()]);
+            }
+
             $em->remove($show);
             $em->flush();
+            $this->addFlash('success', 'Show deleted successfully');
         }
 
         return $this->redirectToRoute('admin_show_index');

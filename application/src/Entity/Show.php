@@ -718,4 +718,14 @@ class Show
 
         return $this;
     }
+
+    /**
+     * Check if this show can be deleted (has no linked seasons)
+     *
+     * @return bool
+     */
+    public function canBeDeleted(): bool
+    {
+        return $this->seasons->isEmpty();
+    }
 }

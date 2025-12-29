@@ -40,7 +40,11 @@
         <div class="col-md-9">
             {{ include('show/_form.html.twig', {'button_label': 'Update'}) }}
             <div class="float-end">
-                {{ include('show/_delete_form.html.twig') }}
+                {% if show.canBeDeleted %}
+                    {{ include('show/_delete_form.html.twig') }}
+                {% else %}
+                    <p class="text-danger">Cannot be deleted because of linked seasons</p>
+                {% endif %}
             </div>
             <a class="btn btn-light" href="{{ path('admin_show_index') }}">back to list</a>
         </div>

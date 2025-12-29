@@ -26,6 +26,17 @@ class ShowType extends AbstractType
                     return $er->createQueryBuilder('s')
                         ->orderBy('s.rankOrder', 'ASC');
                 },
+                'choice_label' => function(Season $season) {
+                    $label = $season->getName();
+                    if ($season->hasActiveElection()) {
+                        $label .= ' (active election)';
+                    }
+                    return $label;
+                },
+                'choice_attr' => function(Season $season) {
+                    // Disable seasons with active elections
+                    return $season->hasActiveElection() ? ['disabled' => 'disabled'] : [];
+                },
                 'expanded' => true,
                 'multiple'=> true,
                 'required' => false,
