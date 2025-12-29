@@ -125,8 +125,14 @@ class AdminSeasonController extends AbstractController
     public function delete(Request $request, Season $season, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$season->getId(), $request->request->get('_token'))) {
+            if (!$season->canBeDeleted()) {
+                $this->addFlash('error', 'Cannot delete season: it has linked shows or elections');
+                return $this->redirectToRoute('admin_season_edit', ['id' => $season->getId()]);
+            }
+
             $em->remove($season);
             $em->flush();
+            $this->addFlash('success', 'Season deleted successfully');
         }
 
         return $this->redirectToRoute('admin_season_index');

@@ -320,4 +320,29 @@ class Season
         $this->hiddenFromSeasonsList = $hiddenFromSeasonsList;
         return $this;
     }
+
+    /**
+     * Check if this season can be deleted (has no linked shows or elections)
+     *
+     * @return bool
+     */
+    public function canBeDeleted(): bool
+    {
+        return $this->shows->isEmpty() && $this->elections->isEmpty();
+    }
+
+    /**
+     * Check if this season is linked to any active elections
+     *
+     * @return bool
+     */
+    public function hasActiveElection(): bool
+    {
+        foreach ($this->elections as $election) {
+            if ($election->isActive()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
