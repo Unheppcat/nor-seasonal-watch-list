@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -49,10 +50,23 @@ class ShowType extends AbstractType
             ])
         ;
 
-        // PRE_SET_DATA: Add relatedShows field on initial load
+        // PRE_SET_DATA: Add relatedShows field on initial load and handle active election seasons
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $show = $event->getData();
             $form = $event->getForm();
+
+            // Add hidden fields for seasons with active elections to ensure they're submitted
+            // This prevents disabled checkboxes from being treated as unchecked
+            if ($show && $show->getSeasons()) {
+                foreach ($show->getSeasons() as $season) {
+                    if ($season->hasActiveElection()) {
+                        $form->add('season_active_' . $season->getId(), HiddenType::class, [
+                            'data' => $season->getId(),
+                            'mapped' => false,
+                        ]);
+                    }
+                }
+            }
 
             // Get currently selected related show IDs
             $selectedIds = [];
@@ -105,9 +119,28 @@ class ShowType extends AbstractType
         });
 
         // PRE_SUBMIT: Re-add relatedShows field with query that includes submitted IDs
+        // Also merge in active election seasons from hidden fields
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
             $form = $event->getForm();
+
+            // Merge active election seasons from hidden fields into submitted seasons
+            // This ensures disabled checkboxes are treated as still checked
+            $activeElectionSeasonIds = [];
+            foreach ($data as $key => $value) {
+                if (strpos($key, 'season_active_') === 0) {
+                    $activeElectionSeasonIds[] = $value;
+                }
+            }
+
+            if (!empty($activeElectionSeasonIds)) {
+                if (!isset($data['seasons'])) {
+                    $data['seasons'] = [];
+                }
+                // Merge the active election season IDs with submitted seasons
+                $data['seasons'] = array_unique(array_merge($data['seasons'], $activeElectionSeasonIds));
+                $event->setData($data);
+            }
 
             // Get submitted related show IDs
             $submittedIds = [];
