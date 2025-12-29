@@ -12,6 +12,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Season</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Max votes</th>
@@ -23,6 +24,7 @@
         {% for election in elections %}
             <tr>
                 <td>{{ election.getName }}</td>
+                <td>{{ election.season ? election.season.name : '' }}</td>
                 <td>{{ election.startDate ? election.startDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ election.endDate ? election.endDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
@@ -43,7 +45,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">No elections found</td>
+                <td colspan="7">No elections found</td>
             </tr>
         {% endfor %}
         </tbody>
