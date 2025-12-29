@@ -211,6 +211,7 @@ class AppDiscordAuthenticator extends OAuth2Authenticator
 
         if (
             isset($userDiscordRoles['881961735488172093'])      // NOR Staff
+            || isset($userDiscordRoles['1455327621729746944'])  // Unheppcat server SWL_STAFF
         ) {
             $rolesToAdd[] = 'ROLE_SWL_STAFF';
         } else {
