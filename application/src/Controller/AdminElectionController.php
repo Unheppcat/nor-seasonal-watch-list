@@ -183,6 +183,74 @@ class AdminElectionController extends AbstractController
         return $response;
     }
 
+    /**
+     * Export simple election results as a CSV file
+     *
+     * @param VoterInfoHelper $voterInfoHelper
+     * @param Election $election
+     * @return Response
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Driver\Exception
+     */
+    #[Route('/export_simple/{id}', name: 'admin_election_export_simple', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function exportSimple(
+        VoterInfoHelper $voterInfoHelper,
+        Election $election
+    ): Response {
+        // Get vote tallies
+        $info = $voterInfoHelper->getInfo($election);
+        $voteTallies = $info['voteTallies'];
+
+        // Sort by buffedVoteCount descending
+        usort($voteTallies, static function($a, $b) {
+            return $b->getBuffedVoteCount() <=> $a->getBuffedVoteCount();
+        });
+
+        // Create filename
+        $electionName = $election->getSeason() ? $election->getSeason()->getName() : '';
+        $filenameParts = [
+            str_replace(' ', '-', $electionName),
+            'simple-results'
+        ];
+        $filename = implode('-', $filenameParts) . '.csv';
+
+        // Build CSV content
+        $csv = "Show,Rank,Votes,Percent\n";
+
+        $currentRank = 1;
+        $previousCount = null;
+
+        foreach ($voteTallies as $index => $voteTally) {
+            $currentCount = $voteTally->getBuffedVoteCount();
+
+            if ($previousCount === null || $currentCount !== $previousCount) {
+                // Not a tie, set rank to current position (index + 1)
+                $currentRank = $index + 1;
+            }
+            // If it's a tie, keep the same rank as previous
+
+            $showTitle = $voteTally->getShowEnglishTitle();
+            $votes = $voteTally->getBuffedVoteCount();
+            $percent = round($voteTally->getVotePercentOfVoterTotal(), 1);
+
+            // Escape and quote the show title if it contains commas or quotes
+            if (strpos($showTitle, ',') !== false || strpos($showTitle, '"') !== false) {
+                $showTitle = '"' . str_replace('"', '""', $showTitle) . '"';
+            }
+
+            $csv .= "$showTitle,$currentRank,$votes,$percent\n";
+
+            $previousCount = $currentCount;
+        }
+
+        // Create response with CSV content
+        $response = new Response($csv);
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+        return $response;
+    }
+
     private function flipArray(array $showRows): array
     {
         $userRows = [];

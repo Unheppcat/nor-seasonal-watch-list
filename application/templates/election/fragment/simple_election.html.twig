@@ -56,5 +56,14 @@
                 Export vote tally
             </a>
         </div>
+        <div class="mb-3">
+            <a
+                    class="btn btn-secondary"
+                    target="_blank"
+                    href="{{ path('admin_election_export_simple', { 'id': election.id }) }}"
+            >
+                Export simple results
+            </a>
+        </div>
     </td>
 </tr>
