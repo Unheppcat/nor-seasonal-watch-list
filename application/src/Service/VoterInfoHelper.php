@@ -60,7 +60,7 @@ final class VoterInfoHelper
     ): array {
         $info = [];
         $info['electionIsActive'] = $this->electionRepository->electionIsActive();
-        $info['shows'] = $this->showRepository->getShowsForSeasonElectionEligible($election->getSeason());
+        $info['shows'] = $this->showRepository->getShowsForSeason($election->getSeason());
         $info['totalVoterCount'] = $this->electionVoteRepository->getVoterCountForElection($election);
 
         if ($election->getElectionType() === Election::RANKED_CHOICE_ELECTION) {
@@ -84,7 +84,7 @@ final class VoterInfoHelper
     public function initializeForExport(Election $election): void
     {
         $this->election = $election;
-        $shows = $this->showRepository->getShowsForSeasonElectionEligible($election->getSeason());
+        $shows = $this->showRepository->getShowsForSeason($election->getSeason());
         if ($election->getElectionType() === Election::SIMPLE_ELECTION) {
             $totalVoterCount = $this->electionVoteRepository->getVoterCountForElection($election);
             $votesInfo = $this->electionVoteRepository->getCountsForElection($election);
