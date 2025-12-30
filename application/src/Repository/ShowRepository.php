@@ -141,6 +141,7 @@ class ShowRepository extends ServiceEntityRepository
         $orderBy = match ($sortColumn) {
             'english' => 'englishTitle',
             'kanji' => 'fullJapaneseTitle',
+            'excluded' => 'excludeFromElections',
             '', null, 'none' => null,
             default => 'japaneseTitle',
         };

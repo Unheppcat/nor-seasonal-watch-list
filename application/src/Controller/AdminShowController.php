@@ -67,6 +67,14 @@ class AdminShowController extends AbstractController
                 $sortColumn = 'rumaji';
                 $sortOrder = 'DESC';
                 break;
+            case 'excluded_asc':
+                $sortColumn = 'excluded';
+                $sortOrder = 'ASC';
+                break;
+            case 'excluded_desc':
+                $sortColumn = 'excluded';
+                $sortOrder = 'DESC';
+                break;
             default:
                 $sortColumn = 'rumaji';
                 $sortOrder = 'ASC';

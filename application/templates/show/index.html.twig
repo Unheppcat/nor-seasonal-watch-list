@@ -37,6 +37,12 @@
                     </a>
                 </th>
                 <th>Anilist&nbsp;Id</th>
+                <th>
+                    <a href="{{ path('admin_show_index') }}?sort={% if selectedSortName == 'excluded_asc' %}excluded_desc{% else %}excluded_asc{% endif %}">
+                        Exclude
+                        {% if selectedSortName == 'excluded_asc' %}&#9660;{% elseif selectedSortName == 'excluded_desc'%}&#9650;{% endif %}
+                    </a>
+                </th>
                 <th class="col-sm-1">Seasons</th>
                 <th class="col-sm-2"><span class="float-end">Actions</span></th>
             </tr>
@@ -55,6 +61,7 @@
                 </td>
                 <td>{{ show.getEnglishTitle }}</td>
                 <td>{{ show.getAnilistId }}</td>
+                <td>{% if show.excludeFromElections %}Yes{% endif %}</td>
                 <td class="col-sm-1">
                     {% for season in show.seasons %}
                         {{ season.getName }}<br>
@@ -69,7 +76,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">No shows found</td>
+                <td colspan="8">No shows found</td>
             </tr>
         {% endfor %}
         </tbody>
