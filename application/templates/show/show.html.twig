@@ -51,6 +51,12 @@
                 </td>
             </tr>
             <tr>
+                <th scope="row" class="col-md-3">Exclude from Elections</th>
+                <td class="col-md-9">
+                    {% if show.excludeFromElections %}Yes{% else %}No{% endif %}
+                </td>
+            </tr>
+            <tr>
                 <th scope="row" class="col-md-3">Anilist page</th>
                 <td class="col-md-9"><a target="_blank" href="{{ show.siteUrl }}">View</a></td>
             </tr>
@@ -58,7 +64,11 @@
     </table>
 
     <div class="float-end">
-        {{ include('show/_delete_form.html.twig') }}
+        {% if show.canBeDeleted %}
+            {{ include('show/_delete_form.html.twig') }}
+        {% else %}
+            <p class="text-danger">Cannot be deleted because of linked seasons</p>
+        {% endif %}
     </div>
 
     <a class="btn btn-light" href="{{ path('admin_show_index') }}">Back to list</a>
