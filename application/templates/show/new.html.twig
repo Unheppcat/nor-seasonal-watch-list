@@ -32,6 +32,37 @@
             min-width: 8ch !important;
             width: auto !important;
         }
+        /* Remove disk icons from the select2 ul */
+        ul.select2-selection__rendered {
+            list-style-type: none;
+        }
+        /* Prevent overflow and ensure wrapping */
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            padding-left: 0 !important;
+        }
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex-shrink: 1;
+        }
+        /* Remove padding that causes misalignment */
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered li {
+            margin-left: 0 !important;
+        }
+        /* Position clear button absolutely to not affect item flow */
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__clear {
+            position: absolute;
+            right: 0.5rem;
+            bottom: 0.5rem;
+            z-index: 10;
+        }
     </style>
 {% endblock %}
 
