@@ -26,11 +26,6 @@
 </div>
 
 {{ form_start(form) }}
-{#<div class="row">#}
-{#    <div class="col">#}
-{#        {{ form_row(form.fullEnglishTitle) }}#}
-{#    </div>#}
-{#</div>#}
 <div class="row">
     <div class="col-md-6">
         {{ form_row(form.anilistId, {'label': 'Anilist show ID'}) }}
@@ -52,16 +47,6 @@
             {{ form_row(form.englishTitle) }}
         </div>
     </div>
-{#    <div class="row">#}
-{#        <div class="col">#}
-{#            {{ form_row(form.description) }}#}
-{#        </div>#}
-{#    </div>#}
-{#    <div class="row">#}
-{#        <div class="col">#}
-{#            {{ form_row(form.hashtag) }}#}
-{#        </div>#}
-{#    </div>#}
     <div class="row">
         <div class="col">
             {{ form_row(form.coverImageMedium, {'label': 'Cover image small URL'}) }}
@@ -85,7 +70,7 @@
 
 {% endif %}
 <div class="row">
-    <div class="col-md-6">
+    <div class="col">
         <div class="card mt-3 mb-3">
             <div class="card-body">
                 {{ form_row(form.seasons) }}
@@ -95,7 +80,7 @@
 </div>
 {% if show.firstShow %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col">
             <div class="card mt-3 mb-3">
                 <div class="card-body">
                     <dl>
@@ -111,7 +96,7 @@
     </div>
 {% else %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col">
             <div class="card mt-3 mb-3">
                 <div class="card-body">
                     {{ form_row(form.relatedShows) }}
