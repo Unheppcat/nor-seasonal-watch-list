@@ -207,4 +207,19 @@ class RankedChoiceVoteTally
     {
         $this->rankStats = $rankStats;
     }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'showId' => $this->getShowId(),
+            'showJapaneseTitle' => $this->getShowJapaneseTitle(),
+            'showEnglishTitle' => $this->getShowEnglishTitle(),
+            'showFullJapaneseTitle' => $this->getShowFullJapaneseTitle(),
+            'showCombinedTitle' => $this->getShowCombinedTitle(),
+            'relatedShowNames' => $this->getRelatedShowNames(),
+            'rank' => $this->getRank(),
+            'rankStats' => $this->getRankStats(),
+        ];
+    }
 }

@@ -317,4 +317,20 @@ class Election
         }
         $this->electionType = $electionType;
     }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'season' => $this->getSeason()?->jsonSerialize(),
+            'electionType' => $this->getElectionType(),
+            'startDate' => $this->getStartDate()?->format('Y-m-d H:i:s'),
+            'endDate' => $this->getEndDate()?->format('Y-m-d H:i:s'),
+            'maxVotes' => $this->getMaxVotes(),
+            'isActive' => $this->isActive(),
+        ];
+    }
 }

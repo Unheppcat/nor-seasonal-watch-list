@@ -44,7 +44,7 @@
             <p><code>GET /api/v1/seasons/{year}/{yearPart}/community-watches</code></p>
             <p>
                 where {year} is the 4 digit year, and {yearPart} is the text &quot;winter&quot;,
-                &quot;spring&quot;, &quot;summer&quot;, or &quot;fall&quot; (case insensitive).
+                &quot;spring&quot;, &quot;summer&quot;, or &quot;fall&quot; (case-insensitive).
             </p>
             <p>API endpoint 2:</p>
             <p><code>GET /api/v1/seasons/{id}/community-watches</code></p>
@@ -129,6 +129,120 @@
 }</pre>
         </div>
     </div>
+    {% if is_granted('ROLE_SWL_STAFF') %}
+    <div class="row">
+        <div class="col">
+            <h3 class="mt-3">Elections</h3>
+            <p class="text-info">
+                <em>Note: These endpoints require ROLE_SWL_STAFF or ROLE_SWL_ADMIN access.</em>
+            </p>
+
+            <h4 class="mt-3">Get All Elections (Paginated)</h4>
+            <p>Retrieve a paginated list of completed elections (excludes active and future elections).</p>
+            <p><code>GET /api/v1/elections</code></p>
+            <p><strong>Query Parameters:</strong></p>
+            <ul>
+                <li><code>page</code> (optional, default: 1) - Page number</li>
+                <li><code>perPage</code> (optional, default: 5, max: 100) - Number of elections per page</li>
+            </ul>
+            <p class="text-muted">
+                <em>Note: This endpoint only returns elections that have ended (not currently active and start date is not in the future).</em>
+            </p>
+            <p>The request returns data with this structure:</p>
+            <pre class="border border-1 border-dark rounded p-3 overflow-auto" style="max-height: 30rem;">{
+    "status": 200,
+    "pagination": {
+        "currentPage": 1,
+        "perPage": 5,
+        "totalItems": 12,
+        "totalPages": 3
+    },
+    "elections": [
+        {
+            "id": 5,
+            "title": "Winter 2023 Election",
+            "name": "Winter 2023 Election",
+            "description": "Vote for your favorite shows...",
+            "season": {
+                "id": 10,
+                "name": "Winter 2023",
+                "year": 2023,
+                "yearPart": "Winter",
+                "rankOrder": 10
+            },
+            "electionType": "simple",
+            "startDate": "2023-01-15 10:00:00",
+            "endDate": "2023-01-22 23:59:59",
+            "maxVotes": 5,
+            "isActive": false
+        }
+    ]
+}</pre>
+
+            <h4 class="mt-3">Get Single Election</h4>
+            <p>Retrieve detailed data for a single election, including vote tallies.</p>
+            <p><code>GET /api/v1/elections/{id}</code></p>
+            <p>where {id} is the election ID.</p>
+            <p class="text-muted">
+                <em>Note: Returns a 400 error if the election is currently active. Only completed elections can be retrieved.</em>
+            </p>
+            <p>The request returns data with this structure:</p>
+            <pre class="border border-1 border-dark rounded p-3 overflow-auto" style="max-height: 30rem;">{
+    "status": 200,
+    "election": {
+        "id": 5,
+        "title": "Winter 2023 Election",
+        "name": "Winter 2023 Election",
+        "description": "Vote for your favorite shows...",
+        "season": {
+            "id": 10,
+            "name": "Winter 2023",
+            "year": 2023,
+            "yearPart": "Winter",
+            "rankOrder": 10
+        },
+        "electionType": "simple",
+        "startDate": "2023-01-15 10:00:00",
+        "endDate": "2023-01-22 23:59:59",
+        "maxVotes": 5,
+        "isActive": false
+    },
+    "totalVoterCount": 15,
+    "voteTallies": [
+        {
+            "id": 1,
+            "showId": 123,
+            "showJapaneseTitle": "Anime Title",
+            "showEnglishTitle": "English Anime Title",
+            "showFullJapaneseTitle": "Full Japanese Title",
+            "showCombinedTitle": "Anime Title / English Anime Title",
+            "relatedShowNames": [],
+            "voteCount": 12,
+            "buffRule": null,
+            "buffedVoteCount": 12,
+            "votePercentOfTotal": 35.3,
+            "buffedVotePercentOfTotal": 35.3,
+            "votePercentOfVoterTotal": 80.0,
+            "buffedVotePercentOfVoterTotal": 80.0,
+            "rank": 1
+        }
+    ]
+}</pre>
+            <p class="text-muted">
+                <em>Note: Vote tallies are sorted by buffedVoteCount (highest first) and include a "rank" field. Ties receive the same rank, and the next rank after ties is bumped by the number of tied entries. For ranked-choice elections, the voteTallies structure will include "rank" and "rankStats" fields instead of vote counts and percentages.</em>
+            </p>
+
+            <h4 class="mt-3">Get Most Recent Election</h4>
+            <p>Retrieve detailed data for the most recent completed election (by start date), including vote tallies.</p>
+            <p><code>GET /api/v1/elections/most_recent</code></p>
+            <p class="text-muted">
+                <em>Note: This endpoint only returns the most recent election that has ended (not currently active and start date is not in the future).</em>
+            </p>
+            <p>The request returns the same data structure as the single election endpoint above.</p>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="row">
         <div class="col mb-3">
             &nbsp;

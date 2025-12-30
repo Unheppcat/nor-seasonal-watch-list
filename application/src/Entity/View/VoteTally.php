@@ -308,4 +308,24 @@ class VoteTally
         $this->buffedVotePercentOfVoterTotal = $buffedVotePercentOfVoterTotal;
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'showId' => $this->getShowId(),
+            'showJapaneseTitle' => $this->getShowJapaneseTitle(),
+            'showEnglishTitle' => $this->getShowEnglishTitle(),
+            'showFullJapaneseTitle' => $this->getShowFullJapaneseTitle(),
+            'showCombinedTitle' => $this->getShowCombinedTitle(),
+            'relatedShowNames' => $this->getRelatedShowNames(),
+            'voteCount' => $this->getVoteCount(),
+            'buffRule' => $this->getBuffRule(),
+            'buffedVoteCount' => $this->getBuffedVoteCount(),
+            'votePercentOfTotal' => $this->getVotePercentOfTotal(),
+            'buffedVotePercentOfTotal' => $this->getBuffedVotePercentOfTotal(),
+            'votePercentOfVoterTotal' => $this->getVotePercentOfVoterTotal(),
+            'buffedVotePercentOfVoterTotal' => $this->getBuffedVotePercentOfVoterTotal(),
+        ];
+    }
+
 }

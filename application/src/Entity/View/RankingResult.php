@@ -47,4 +47,14 @@ final class RankingResult
     {
         return null;
     }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'showTitle' => $this->getShowTitle(),
+            'showCombinedTitle' => $this->getShowCombinedTitle(),
+            'rank' => $this->getRank(),
+            'relatedShowNames' => $this->getRelatedShowNames(),
+        ];
+    }
 }
