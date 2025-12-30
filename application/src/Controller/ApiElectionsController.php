@@ -11,6 +11,7 @@ use Doctrine\DBAL\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ApiElectionsController extends AbstractController
@@ -88,19 +89,21 @@ class ApiElectionsController extends AbstractController
     /**
      * Get a single election by ID with vote tallies (only if election is not active)
      *
+     * @param Request $request
      * @param int $id
      * @param ElectionRepository $electionRepository
      * @param VoterInfoHelper $voterInfoHelper
-     * @return JsonResponse
+     * @return JsonResponse|Response
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
     #[Route('/api/v1/elections/{id}', name: 'api_election_by_id', requirements: ['id' => '\d+'], options: ['expose' => false], methods: ['GET'])]
     public function byId(
+        Request $request,
         int $id,
         ElectionRepository $electionRepository,
         VoterInfoHelper $voterInfoHelper
-    ): JsonResponse {
+    ): JsonResponse|Response {
         // Check if user has required role
         if (!$this->isGranted('ROLE_SWL_STAFF')) {
             return new JsonResponse([
@@ -126,23 +129,26 @@ class ApiElectionsController extends AbstractController
             ], 400);
         }
 
-        return $this->getElectionData($election, $voterInfoHelper);
+        $format = $request->query->get('format', 'json');
+        return $this->getElectionData($election, $voterInfoHelper, $format);
     }
 
     /**
      * Get the most recent election with vote tallies (excluding active and future elections)
      *
+     * @param Request $request
      * @param ElectionRepository $electionRepository
      * @param VoterInfoHelper $voterInfoHelper
-     * @return JsonResponse
+     * @return JsonResponse|Response
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
     #[Route('/api/v1/elections/most_recent', name: 'api_election_most_recent', options: ['expose' => false], methods: ['GET'])]
     public function mostRecent(
+        Request $request,
         ElectionRepository $electionRepository,
         VoterInfoHelper $voterInfoHelper
-    ): JsonResponse {
+    ): JsonResponse|Response {
         // Check if user has required role
         if (!$this->isGranted('ROLE_SWL_STAFF')) {
             return new JsonResponse([
@@ -178,7 +184,8 @@ class ApiElectionsController extends AbstractController
             ], 404);
         }
 
-        return $this->getElectionData($election, $voterInfoHelper);
+        $format = $request->query->get('format', 'json');
+        return $this->getElectionData($election, $voterInfoHelper, $format);
     }
 
     /**
@@ -186,14 +193,16 @@ class ApiElectionsController extends AbstractController
      *
      * @param Election $election
      * @param VoterInfoHelper $voterInfoHelper
-     * @return JsonResponse
+     * @param string $format
+     * @return JsonResponse|Response
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
     private function getElectionData(
         Election $election,
-        VoterInfoHelper $voterInfoHelper
-    ): JsonResponse {
+        VoterInfoHelper $voterInfoHelper,
+        string $format = 'json'
+    ): JsonResponse|Response {
         $info = $voterInfoHelper->getInfo($election);
 
         $data = [
@@ -240,6 +249,55 @@ class ApiElectionsController extends AbstractController
             }
         }
 
+        // Return CSV format if requested
+        if ($format === 'csv') {
+            return $this->generateCsvResponse($election, $data['voteTallies']);
+        }
+
         return new JsonResponse($data);
+    }
+
+    /**
+     * Generate CSV response from vote tallies
+     *
+     * @param Election $election
+     * @param array $voteTallies
+     * @return Response
+     */
+    private function generateCsvResponse(Election $election, array $voteTallies): Response
+    {
+        // Create filename based on election name
+        $filename = 'election-' . $election->getId() . '-results.csv';
+        if ($election->getSeason()) {
+            $seasonName = str_replace(' ', '-', $election->getSeason()->getName());
+            $filename = $seasonName . '-election-results.csv';
+        }
+
+        // Build CSV content
+        $csv = "Rank,Show,Votes\n";
+
+        foreach ($voteTallies as $tally) {
+            $rank = $tally['rank'] ?? '';
+
+            // Get show title - handle both VoteTally and RankingResult structures
+            $showTitle = $tally['showEnglishTitle'] ?? $tally['showTitle'] ?? '';
+
+            // Get vote count - for simple elections use buffedVoteCount, for ranked-choice might not have it
+            $votes = $tally['buffedVoteCount'] ?? '';
+
+            // Escape and quote the show title if it contains commas or quotes
+            if (strpos($showTitle, ',') !== false || strpos($showTitle, '"') !== false) {
+                $showTitle = '"' . str_replace('"', '""', $showTitle) . '"';
+            }
+
+            $csv .= "$rank,$showTitle,$votes\n";
+        }
+
+        // Create response with CSV content
+        $response = new Response($csv);
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+        return $response;
     }
 }

@@ -183,8 +183,15 @@
             <p>Retrieve detailed data for a single election, including vote tallies.</p>
             <p><code>GET /api/v1/elections/{id}</code></p>
             <p>where {id} is the election ID.</p>
+            <p><strong>Query Parameters:</strong></p>
+            <ul>
+                <li><code>format</code> (optional, default: json) - Response format: "json" or "csv"</li>
+            </ul>
             <p class="text-muted">
                 <em>Note: Returns a 400 error if the election is currently active. Only completed elections can be retrieved.</em>
+            </p>
+            <p class="text-muted">
+                <em>CSV format: Returns a downloadable CSV file with columns: Rank, Show, Votes. The Show column uses the English title, and Votes uses the buffed vote count.</em>
             </p>
             <p>The request returns data with this structure:</p>
             <pre class="border border-1 border-dark rounded p-3 overflow-auto" style="max-height: 30rem;">{
@@ -235,8 +242,15 @@
             <h4 class="mt-3">Get Most Recent Election</h4>
             <p>Retrieve detailed data for the most recent completed election (by start date), including vote tallies.</p>
             <p><code>GET /api/v1/elections/most_recent</code></p>
+            <p><strong>Query Parameters:</strong></p>
+            <ul>
+                <li><code>format</code> (optional, default: json) - Response format: "json" or "csv"</li>
+            </ul>
             <p class="text-muted">
                 <em>Note: This endpoint only returns the most recent election that has ended (not currently active and start date is not in the future).</em>
+            </p>
+            <p class="text-muted">
+                <em>CSV format: Returns a downloadable CSV file with columns: Rank, Show, Votes. The Show column uses the English title, and Votes uses the buffed vote count.</em>
             </p>
             <p>The request returns the same data structure as the single election endpoint above.</p>
         </div>
