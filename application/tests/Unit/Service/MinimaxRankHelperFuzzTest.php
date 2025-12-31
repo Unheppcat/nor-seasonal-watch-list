@@ -25,7 +25,7 @@ class MinimaxRankHelperFuzzTest extends TestCase
      */
     public function itCanConstruct(): void
     {
-        $helper = new MinimaxRankHelper();
+        $helper = new MinimaxRankHelper(false);
         static::assertNotNull($helper);
     }
 
@@ -34,8 +34,9 @@ class MinimaxRankHelperFuzzTest extends TestCase
      */
     public function itCanRank(): void
     {
-        $helper = new MinimaxRankHelper();
+        $helper = new MinimaxRankHelper(false);
         $helper->setTitles($this->getTitles());
+        $helper->setAnilistIds($this->getAnilistIds());
         $helper->setNumberOfWinners(count($this->getTitles()));
         foreach ($this->getBallots() as $ballot) {
             $helper->addBallot($ballot);
@@ -55,12 +56,13 @@ class MinimaxRankHelperFuzzTest extends TestCase
         for ($i = 1; $i <= 5000; $i++) {
             $titleCount = random_int(5, 20);
             $ballotCount = random_int(2, 30);
-            $titles = $this->getFuzzyTitles($titleCount);
-            static::assertCount($titleCount, $titles);
+            $values = $this->getFuzzyValues($titleCount);
+            static::assertCount($titleCount, $values['titles']);
             $ballots = $this->getFuzzyBallots($titleCount, $ballotCount);
             static::assertCount($ballotCount, $ballots);
-            $helper = new MinimaxRankHelper();
-            $helper->setTitles($titles);
+            $helper = new MinimaxRankHelper(false);
+            $helper->setTitles($values['titles']);
+            $helper->setAnilistIds($values['anilistIds']);
             $helper->setNumberOfWinners($titleCount);
             foreach ($ballots as $ballot) {
                 $helper->addBallot($ballot);
@@ -68,7 +70,7 @@ class MinimaxRankHelperFuzzTest extends TestCase
             $ranks = $helper->getRanks();
             if (empty($ranks)) {
                 print("TEST FAILED!\nTitles:\n");
-                print_r($titles);
+                print_r($values['titles']);
                 print("\nBallots:\n");
                 print_r($ballots);
             }
@@ -99,26 +101,24 @@ class MinimaxRankHelperFuzzTest extends TestCase
      * @return array
      * @throws Exception
      */
-    private function getFuzzyTitles(int $titleCount): array
+    private function getFuzzyValues(int $titleCount): array
     {
         $titles = [];
+        $anilistIds = [];
         for ($i = 1; $i <= $titleCount; $i++) {
             $randomKey = random_int(1, 10000);
             while (isset($titles[$randomKey])) {
                 $randomKey = random_int(1, 10000);
             }
             $titles[$randomKey] = sprintf("Title %d", $i);
+            $anilistIds[$randomKey] = $randomKey;
         }
-        return $titles;
+        return [ 'titles' => $titles, 'anilistIds' => $anilistIds ];
     }
 
     private function getBallots(): array
     {
-        $ballots = [];
-        for ($i = 1; $i <= 8; $i++) {
-            $ballots[$i] = ["1", "1", "3", "2", "4", "10", "7", "6", "No opinion", "No opinion"];
-        }
-        return $ballots;
+        return array_fill(1, 8, ["1", "1", "3", "2", "4", "10", "7", "6", "No opinion", "No opinion"]);
     }
 
     /**
@@ -144,5 +144,22 @@ class MinimaxRankHelperFuzzTest extends TestCase
             $ballots[] = $ballot;
         }
         return $ballots;
+    }
+
+    private function getAnilistIds(): array
+    {
+        return [
+            1 =>   '1111111',
+            10 =>  '2222222',
+            3 =>   '3333333',
+            15 =>  '4444444',
+            100 => '5555555',
+            6 =>   '6666666',
+            2 =>   '7777777',
+            33 =>  '8888888',
+            8 =>   '9999999',
+            20 =>  '0000000',
+
+        ];
     }
 }

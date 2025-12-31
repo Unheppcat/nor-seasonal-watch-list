@@ -11,9 +11,12 @@ final class RankingResult
 
     private int $rank;
 
-    public function __construct(?string $showTitle, ?int $rank)
+    private string $anilistId;
+
+    public function __construct(?string $showTitle, ?string $anilistId, ?int $rank)
     {
         $this->showTitle = $showTitle ?? '(unknown)';
+        $this->anilistId = $anilistId ?? '(unknown)';
         $this->rank = $rank ?? 0;
     }
 
@@ -26,6 +29,14 @@ final class RankingResult
     }
 
     /**
+     * @return string
+     */
+    public function getAnilistId(): string
+    {
+        return $this->anilistId;
+    }
+
+    /**
      * @return int
      */
     public function getRank(): int
@@ -35,7 +46,7 @@ final class RankingResult
 
     public function __toString(): string
     {
-        return sprintf("%d: %s", $this->getRank(), $this->getShowTitle());
+        return sprintf("%d: %s | %s", $this->getRank(), $this->getShowTitle(), $this->getAnilistId());
     }
 
     public function getShowCombinedTitle(): string
@@ -53,6 +64,7 @@ final class RankingResult
         return [
             'showTitle' => $this->getShowTitle(),
             'showCombinedTitle' => $this->getShowCombinedTitle(),
+            'anilistId' => $this->getAnilistId(),
             'rank' => $this->getRank(),
             'relatedShowNames' => $this->getRelatedShowNames(),
         ];

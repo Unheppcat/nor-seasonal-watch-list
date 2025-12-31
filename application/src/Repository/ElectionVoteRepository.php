@@ -78,13 +78,14 @@ SELECT COUNT(ev.id) AS vote_count,
        ev.anime_show_id AS show_id,
        s.japanese_title AS japanese_title,
        s.english_title AS english_title,
-       s.full_japanese_title AS full_japanese_title
+       s.full_japanese_title AS full_japanese_title,
+       s.anilist_id AS anilist_id
 FROM election_vote ev
 JOIN anime_show s ON s.id = ev.anime_show_id
 LEFT JOIN election_show_buff esb ON esb.election_id = ev.election_id AND esb.anime_show_id = ev.anime_show_id
 WHERE ev.chosen = 1
 AND ev.election_id = :election_id
-GROUP BY election_id, show_id, japanese_title, english_title, full_japanese_title, buff_rule
+GROUP BY election_id, show_id, japanese_title, english_title, full_japanese_title, anilist_id, buff_rule
 ORDER BY buffed_vote_count DESC
 EOF;
         $conn = $this->getEntityManager()->getConnection();
@@ -127,7 +128,8 @@ SELECT ev.rank_choice AS rank_choice,
        ev.user_id AS user_id,
        s.japanese_title AS japanese_title,
        s.english_title AS english_title,
-       s.full_japanese_title AS full_japanese_title
+       s.full_japanese_title AS full_japanese_title,
+       s.anilist_id AS anilist_id
 FROM election_vote ev
 JOIN anime_show s ON s.id = ev.anime_show_id
 WHERE ev.election_id = :election_id

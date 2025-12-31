@@ -14,13 +14,15 @@ final class MinimaxRankHelper
 
     private array $titles = [];
 
+    private array $anilistIds = [];
+
     private array $ballots = [];
 
     private ?int $numberOfWinners = null;
     private bool $noOpinionIsWorstRank;
 
     /**
-     * @param bool $noOpinionIsWorstRank
+     * @param bool           $noOpinionIsWorstRank
      */
     public function __construct(
         bool $noOpinionIsWorstRank
@@ -41,6 +43,15 @@ final class MinimaxRankHelper
         foreach ($this->titles as $key => $value) {
             $this->candidates[] = $key;
         }
+    }
+
+    /**
+     * @param array $anilistIds
+     * @return void
+     */
+    public function setAnilistIds(array $anilistIds): void
+    {
+        $this->anilistIds = array_values($anilistIds);
     }
 
     public function addBallot(array $ballot): void
@@ -139,7 +150,7 @@ final class MinimaxRankHelper
             // Handle the before-election-starts case of no ballots entered
             if ($nB === 0) {
                 for ($i = 0; $i < $nT; $i++) {
-                    $results[] = new RankingResult($this->titles[$i], 0);
+                    $results[] = new RankingResult($this->titles[$i], $this->anilistIds[$i], 0);
                 }
                 return $results;
             }
@@ -239,11 +250,11 @@ final class MinimaxRankHelper
                     $winner = current($winners);
                     $key = array_search($winner, $this->candidates, true);
                     array_splice($this->candidates, $key, 1);
-                    $results[] = new RankingResult($this->titles[$winner], $winnerRank);
+                    $results[] = new RankingResult($this->titles[$winner], $this->anilistIds[$winner], $winnerRank);
                 } elseif (count($winners) > 1) {
                     foreach ($winners as $winner) {
                         $key = array_search($winner, $this->candidates, true);
-                        $results[] = new RankingResult($this->titles[$winner], $winnerRank);
+                        $results[] = new RankingResult($this->titles[$winner], $this->anilistIds[$winner], $winnerRank);
                         array_splice($this->candidates, $key, 1);
                     }
                 }

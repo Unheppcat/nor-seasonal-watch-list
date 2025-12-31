@@ -32,6 +32,7 @@ final class SimpleVoteTallyHelper
             $voteTally->setShowJapaneseTitle((string)$voteInfo['japanese_title']);
             $voteTally->setShowFullJapaneseTitle((string)$voteInfo['full_japanese_title']);
             $voteTally->setShowEnglishTitle((string)$voteInfo['english_title']);
+            $voteTally->setAnilistId((string)$voteInfo['anilist_id']);
             $voteTally->setVoteCount((int)$voteInfo['vote_count']);
             $voteTally->setBuffedVoteCount((int)$voteInfo['buffed_vote_count']);
             $voteTally->setBuffRule($voteInfo['buff_rule'] ?? '');

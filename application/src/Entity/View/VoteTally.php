@@ -76,6 +76,8 @@ class VoteTally
      */
     private float $buffedVotePercentOfVoterTotal = 0.0;
 
+    private string $anilistId = '';
+
     /**
      * @return int
      */
@@ -317,6 +319,7 @@ class VoteTally
             'showEnglishTitle' => $this->getShowEnglishTitle(),
             'showFullJapaneseTitle' => $this->getShowFullJapaneseTitle(),
             'showCombinedTitle' => $this->getShowCombinedTitle(),
+            'anilistId' => $this->getAnilistId(),
             'relatedShowNames' => $this->getRelatedShowNames(),
             'voteCount' => $this->getVoteCount(),
             'buffRule' => $this->getBuffRule(),
@@ -326,6 +329,16 @@ class VoteTally
             'votePercentOfVoterTotal' => $this->getVotePercentOfVoterTotal(),
             'buffedVotePercentOfVoterTotal' => $this->getBuffedVotePercentOfVoterTotal(),
         ];
+    }
+
+    public function getAnilistId(): string
+    {
+        return $this->anilistId;
+    }
+
+    public function setAnilistId(string $anilistId): void
+    {
+        $this->anilistId = $anilistId;
     }
 
 }

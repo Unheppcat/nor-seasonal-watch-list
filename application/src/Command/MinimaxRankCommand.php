@@ -4,6 +4,7 @@
 
 namespace App\Command;
 
+use App\Repository\ShowRepository;
 use App\Service\MinimaxRankHelper;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -21,16 +22,19 @@ class MinimaxRankCommand extends Command
 {
 
     private MinimaxRankHelper $helper;
+    private ShowRepository $showRepository;
 
     /**
      * MinmaxRankCommand constructor.
      *
      */
     public function __construct(
-        MinimaxRankHelper $helper
+        MinimaxRankHelper $helper,
+        ShowRepository $showRepository
     ) {
         parent::__construct();
         $this->helper = $helper;
+        $this->showRepository = $showRepository;
     }
 
     protected function configure(): void
@@ -54,6 +58,7 @@ class MinimaxRankCommand extends Command
             $fp = fopen($input->getArgument('ballot_file'), 'rb');
             $headerLine = fgetcsv($fp, 1000);
             $this->helper->setTitles($headerLine);
+            $this->helper->setAnilistIds($this->getAnilistIdsFromTitles($headerLine));
 
             while ($ballot = fgetcsv($fp, 1000)) {
                 $this->helper->addBallot($ballot);
@@ -72,5 +77,26 @@ class MinimaxRankCommand extends Command
             $io->error($e->getMessage());
             return 1;
         }
+    }
+
+    private function getAnilistIdsFromTitles(false|array $headerLine): array
+    {
+        if ($headerLine === false) {
+            return [];
+        }
+        $ids = [];
+        foreach ($headerLine as $title) {
+            try {
+                $show = $this->showRepository->findOneBy(['englishTitle' => $title]);
+                if ($show === null) {
+                    $ids[] = '(unknown)';
+                } else {
+                    $ids[] = $show->getAnilistId();
+                }
+            } catch (Exception) {
+                $ids[] = '(unknown)';
+            }
+        }
+        return $ids;
     }
 }

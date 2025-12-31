@@ -30,6 +30,13 @@ final class RankedChoiceVoteTallyHelper
         ksort($showsById);
         $this->helper->setTitles($showsById);
 
+        $showAnilistIdsById = [];
+        foreach ($shows as $show) {
+            $showAnilistIdsById[$show->getId()] = $show->getAnilistId();
+        }
+        ksort($showAnilistIdsById);
+        $this->helper->setAnilistIds($showAnilistIdsById);
+
         $rankingsByUser = [];
         foreach ($votesInfo as $voteInfo) {
             $userId = (int)$voteInfo['user_id'];
