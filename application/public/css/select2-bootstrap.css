@@ -57,6 +57,7 @@ ul.select2-selection__rendered {
 }
 
 /* Dark mode styles for Select2 dropdown */
+/* Support both browser dark mode preference and Bootstrap's data-bs-theme */
 @media (prefers-color-scheme: dark) {
     .select2-container--bootstrap-5 .select2-dropdown {
         background-color: #343a40;
@@ -79,4 +80,27 @@ ul.select2-selection__rendered {
     .select2-results__message {
         background-color: #495057;
     }
+}
+
+/* Bootstrap dark theme support (when data-bs-theme="dark" is set) */
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-dropdown {
+    background-color: #343a40;
+    border-color: #495057;
+}
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-results__option {
+    background-color: #343a40;
+    color: #dee2e6;
+}
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-results__option--highlighted {
+    background-color: #495057;
+    color: #fff;
+}
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-search--dropdown .select2-search__field {
+    background-color: #495057;
+    border-color: #6c757d;
+    color: #dee2e6;
+}
+[data-bs-theme="dark"] .select2-results__option,
+[data-bs-theme="dark"] .select2-results__message {
+    background-color: #495057;
 }
