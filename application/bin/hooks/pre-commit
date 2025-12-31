@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Pre-commit hook to automatically bump asset_version when asset files change
+# This hook checks if any files in public/css, public/img, or public/js are being committed
+# If so, it increments the asset_version in config/packages/version.yaml
+
+# Check if any asset files are being committed
+if git diff --cached --name-only | grep -qE '^application/public/(css|img|js)/'; then
+    VERSION_FILE="application/config/packages/version.yaml"
+
+    # Get current version
+    CURRENT_VERSION=$(grep 'asset_version:' "$VERSION_FILE" | sed 's/.*"\([0-9]*\)".*/\1/')
+
+    if [ -z "$CURRENT_VERSION" ]; then
+        echo "Error: Could not read current asset_version from $VERSION_FILE"
+        exit 1
+    fi
+
+    # Increment version
+    NEW_VERSION=$((CURRENT_VERSION + 1))
+
+    # Update version.yaml (works on both Linux and macOS)
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS
+        sed -i '' "s/asset_version: \"$CURRENT_VERSION\"/asset_version: \"$NEW_VERSION\"/" "$VERSION_FILE"
+    else
+        # Linux
+        sed -i "s/asset_version: \"$CURRENT_VERSION\"/asset_version: \"$NEW_VERSION\"/" "$VERSION_FILE"
+    fi
+
+    # Add the updated file to the commit
+    git add "$VERSION_FILE"
+
+    echo "✓ Asset version bumped: $CURRENT_VERSION → $NEW_VERSION"
+    echo "  (Files in public/css, public/img, or public/js were modified)"
+fi
+
+exit 0
