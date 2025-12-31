@@ -63,6 +63,27 @@
             bottom: 0.5rem;
             z-index: 10;
         }
+
+        /* Dark mode styles for Select2 dropdown */
+        @media (prefers-color-scheme: dark) {
+            .select2-container--bootstrap-5 .select2-dropdown {
+                background-color: #343a40;
+                border-color: #495057;
+            }
+            .select2-container--bootstrap-5 .select2-results__option {
+                background-color: #343a40;
+                color: #dee2e6;
+            }
+            .select2-container--bootstrap-5 .select2-results__option--highlighted {
+                background-color: #495057;
+                color: #fff;
+            }
+            .select2-container--bootstrap-5 .select2-search--dropdown .select2-search__field {
+                background-color: #495057;
+                border-color: #6c757d;
+                color: #dee2e6;
+            }
+        }
     </style>
 {% endblock %}
 
