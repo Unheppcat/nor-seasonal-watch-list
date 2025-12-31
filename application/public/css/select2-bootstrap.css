@@ -75,4 +75,8 @@ ul.select2-selection__rendered {
         border-color: #6c757d;
         color: #dee2e6;
     }
+    .select2-results__option,
+    .select2-results__message {
+        background-color: #495057;
+    }
 }
