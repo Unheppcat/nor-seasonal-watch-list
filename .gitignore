@@ -54,3 +54,8 @@ Thumbs.db
 /application/.docker.env
 /application/.docker.env.example
 /application/.dockerignore
+/application/error_log
+/application/bin/error_log
+/application/public/error_log
+/application/public/.htaccess*
+/application/public/.well-known
