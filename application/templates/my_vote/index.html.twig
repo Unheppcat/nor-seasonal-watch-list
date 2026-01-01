@@ -3,6 +3,11 @@
 {% block title %}Vote{% endblock %}
 
 {% block body %}
+    {% if hasMultipleElections is defined and hasMultipleElections %}
+        <div class="float-end">
+            <a href="{{ path('my_vote') }}" class="btn btn-secondary btn-sm">All elections</a>
+        </div>
+    {% endif %}
     <div class="row mb">
         <div class="col-lg-12">
             <h1 class="text-nor-red">

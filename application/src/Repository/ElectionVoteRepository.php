@@ -231,4 +231,54 @@ EOF,
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Check if user has voted in a specific election
+     *
+     * For simple elections: User has voted if at least one vote has chosen = true
+     * For ranked-choice elections: User has voted if ranks vary (not all the same default rank)
+     *
+     * @param User $user
+     * @param Election $election
+     * @return bool
+     */
+    public function hasUserVotedInElection(User $user, Election $election): bool
+    {
+        if ($election->getElectionType() === Election::SIMPLE_ELECTION) {
+            // For simple elections: Check if any vote is chosen
+            $result = $this->createQueryBuilder('ev')
+                ->select('COUNT(ev.id)')
+                ->where('ev.user = :user')
+                ->andWhere('ev.election = :election')
+                ->andWhere('ev.chosen = true')
+                ->setParameter('user', $user)
+                ->setParameter('election', $election)
+                ->getQuery()
+                ->getSingleScalarResult();
+
+            return $result > 0;
+        }
+
+        if ($election->getElectionType() === Election::RANKED_CHOICE_ELECTION) {
+            // For ranked-choice elections: Check if ranks vary (user made selections)
+            // If MIN(rank) != MAX(rank), the user has assigned different ranks
+            $result = $this->createQueryBuilder('ev')
+                ->select('MIN(ev.rank) as minRank, MAX(ev.rank) as maxRank')
+                ->where('ev.user = :user')
+                ->andWhere('ev.election = :election')
+                ->setParameter('user', $user)
+                ->setParameter('election', $election)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            // If no votes exist, or if all ranks are the same, user hasn't voted
+            if ($result === null || $result['minRank'] === null) {
+                return false;
+            }
+
+            return $result['minRank'] !== $result['maxRank'];
+        }
+
+        return false;
+    }
 }

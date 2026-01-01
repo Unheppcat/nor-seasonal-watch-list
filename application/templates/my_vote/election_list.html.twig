@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Active Elections{% endblock %}
+
+{% block body %}
+    <h1 class="text-nor-red">Active Elections</h1>
+
+    <p>There are currently {{ elections|length }} active elections. Select one to vote:</p>
+
+    <div class="list-group mt-3">
+        {% for data in elections %}
+            {% set election = data.election %}
+            {% set hasVoted = data.hasVoted %}
+
+            <a href="{{ path('my_vote_ballot', {'id': election.id}) }}"
+               class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">
+                        {% if election.title %}
+                            {{ election.title }}
+                        {% else %}
+                            {{ election.season.name }} Season Election
+                        {% endif %}
+                    </h5>
+                    {% if hasVoted %}
+                        <span class="badge bg-success">Voted</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Not Voted</span>
+                    {% endif %}
+                </div>
+                <p class="mb-1">
+                    {% if election.description %}
+                        {{ election.description }}
+                    {% endif %}
+                </p>
+                <small>
+                    Ends: {{ election.endDate|date('l, F j, Y \\a\\t g:i A') }} UTC
+                </small>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

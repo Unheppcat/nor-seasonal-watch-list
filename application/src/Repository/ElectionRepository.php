@@ -60,6 +60,23 @@ class ElectionRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * Get all currently active elections
+     *
+     * @return Election[]
+     */
+    public function getAllActiveElections(): array
+    {
+        $now = new DateTime();
+        return $this->createQueryBuilder('e')
+            ->where('e.startDate <= :now')
+            ->andWhere('e.endDate >= :now')
+            ->orderBy('e.startDate', 'ASC')
+            ->setParameter('now', $now)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function electionIsActive(): bool
     {
         try {

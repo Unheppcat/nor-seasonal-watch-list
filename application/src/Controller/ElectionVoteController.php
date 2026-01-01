@@ -54,6 +54,16 @@ class ElectionVoteController extends AbstractController
                 return new JsonResponse(['data' => ['status' => 'election_not_found']], Response::HTTP_NOT_FOUND);
             }
 
+            // CRITICAL: Validate election is active before accepting vote
+            if (!$election->isActive()) {
+                return new JsonResponse([
+                    'data' => [
+                        'status' => 'failure',
+                        'message' => 'This election is no longer active.'
+                    ]
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             $maxVotes = $election->getMaxVotes();
             $currentVoteCount = $electionVoteRepository->getCountForUserAndElection($user, $election);
             if ($maxVotes < 1 || $maxVotes === null) {

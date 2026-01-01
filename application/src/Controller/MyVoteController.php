@@ -20,39 +20,85 @@ use Symfony\Component\Routing\Attribute\Route;
 class MyVoteController extends AbstractController
 {
     /**
+     * Display election list or route to appropriate page based on active election count
+     *
+     * @param ElectionRepository $electionRepository
+     * @param ElectionVoteRepository $electionVoteRepository
+     * @return Response
+     */
+    #[Route('/vote', name: 'my_vote')]
+    public function index(
+        ElectionRepository $electionRepository,
+        ElectionVoteRepository $electionVoteRepository
+    ): Response {
+        $activeElections = $electionRepository->getAllActiveElections();
+
+        if (count($activeElections) === 0) {
+            // No active election - show "no election" message
+            $nextElection = $electionRepository->getNextAvailableElection();
+            return $this->render('my_vote/no_election.html.twig', [
+                'user' => $this->getUser(),
+                'election' => $nextElection,
+                'electionIsActive' => false,
+            ]);
+        }
+
+        if (count($activeElections) === 1) {
+            // Single active election - redirect to ballot
+            return $this->redirectToRoute('my_vote_ballot', [
+                'id' => $activeElections[0]->getId()
+            ]);
+        }
+
+        // Multiple active elections - show election list
+        /** @var User $user */
+        $user = $this->getUser();
+        $electionData = [];
+
+        foreach ($activeElections as $election) {
+            $electionData[] = [
+                'election' => $election,
+                'hasVoted' => $electionVoteRepository->hasUserVotedInElection($user, $election)
+            ];
+        }
+
+        return $this->render('my_vote/election_list.html.twig', [
+            'user' => $user,
+            'elections' => $electionData,
+        ]);
+    }
+
+    /**
+     * Display ballot for a specific election
+     *
+     * @param int $id
      * @param Request $request
      * @param EntityManagerInterface $em
      * @param ShowRepository $showRepository
      * @param ElectionRepository $electionRepository
      * @param ElectionVoteRepository $electionVoteRepository
      * @return Response
-     * @throws NonUniqueResultException
      */
-    #[Route('/vote', name: 'my_vote')]
-    public function index(
+    #[Route('/vote/{id}', name: 'my_vote_ballot', requirements: ['id' => '\d+'])]
+    public function ballot(
+        int $id,
         Request $request,
         EntityManagerInterface $em,
         ShowRepository $showRepository,
         ElectionRepository $electionRepository,
         ElectionVoteRepository $electionVoteRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $election = $electionRepository->find($id);
 
-        $electionId = $request->query->get('election');
-        $election = null;
-        if ($electionId !== null) {
-            $election = $electionRepository->find($electionId);
+        // Validate election exists
+        if (!$election) {
+            throw $this->createNotFoundException('Election not found');
         }
-        if ($election === null) {
-            $election = $electionRepository->getFirstActiveElection();
-        }
-        if ($election === null) {
-            $election = $electionRepository->getNextAvailableElection();
-            return $this->render('my_vote/no_election.html.twig', [
-                'user' => $this->getUser(),
-                'election' => $election,
-                'electionIsActive' => $electionIsActive,
-            ]);
+
+        // CRITICAL: Validate election is active
+        if (!$election->isActive()) {
+            $this->addFlash('error', 'This election is not currently active.');
+            return $this->redirectToRoute('my_vote');
         }
 
         /** @var User $user */
@@ -99,11 +145,16 @@ class MyVoteController extends AbstractController
         // Make the order of shows random
         shuffle($data);
 
+        // Check if there are multiple active elections (for showing election list link)
+        $activeElections = $electionRepository->getAllActiveElections();
+        $hasMultipleElections = count($activeElections) > 1;
+
         return $this->render('my_vote/index.html.twig', [
             'user' => $this->getUser(),
             'controller_name' => 'MyVoteController',
             'election' => $election,
-            'electionIsActive' => $electionIsActive,
+            'electionIsActive' => true, // Election is always active in ballot() due to validation above
+            'hasMultipleElections' => $hasMultipleElections,
             'data' => $data
         ]);
     }
