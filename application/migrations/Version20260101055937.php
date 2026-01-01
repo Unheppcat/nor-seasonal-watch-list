@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20260101055937 extends AbstractMigration
 {
+    /** @noinspection SenselessMethodDuplicationInspection */
     public function getDescription(): string
     {
         return '';
