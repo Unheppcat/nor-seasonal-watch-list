@@ -16,6 +16,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Max votes</th>
+                <th>Restricted</th>
                 <th>Open now</th>
                 <th class="col-sm-3"><span class="float-end">Actions</span></th>
             </tr>
@@ -34,6 +35,7 @@
                         {{ election.maxVotes }}
                     {% endif %}
                 </td>
+                <td>{{ election.restrictedAccess ? 'Yes' : 'No' }}</td>
                 <td>{{ election.isActive ? 'Yes' : 'No' }}</td>
                 <td class="col-sm-3">
                     <span class="float-end">
@@ -45,7 +47,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">No elections found</td>
+                <td colspan="8">No elections found</td>
             </tr>
         {% endfor %}
         </tbody>

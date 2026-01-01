@@ -76,6 +76,12 @@ class Election
     private string $electionType = '';
 
     /**
+     * @var bool|null
+     */
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $restrictedAccess = null;
+
+    /**
      * Election constructor.
      */
     public function __construct()
@@ -316,6 +322,24 @@ class Election
             throw new RuntimeException($electionType . " is not a valid election type.");
         }
         $this->electionType = $electionType;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getRestrictedAccess(): ?bool
+    {
+        return $this->restrictedAccess;
+    }
+
+    /**
+     * @param bool|null $restrictedAccess
+     * @return $this
+     */
+    public function setRestrictedAccess(?bool $restrictedAccess): self
+    {
+        $this->restrictedAccess = $restrictedAccess;
+        return $this;
     }
 
     public function jsonSerialize(): array
