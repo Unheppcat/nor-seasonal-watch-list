@@ -227,6 +227,16 @@ class AppDiscordAuthenticator extends OAuth2Authenticator
         } else {
             $rolesToRemove[] = 'ROLE_SWL_USER';
         }
+
+        if (
+            isset($userDiscordRoles['1456162429657682115'])   // Unheppcat Special Election Voter
+            // || isset($userDiscordRoles['1456162429657682115']) // NOR Special Election Voter
+        ) {
+            $rolesToAdd[] = 'ROLE_SWL_SPECIAL_ELECTION_VOTER';
+        } else {
+            $rolesToRemove[] = 'ROLE_SWL_SPECIAL_ELECTION_VOTER';
+        }
+
         $newRoles = array_unique(array_merge($existingRoles, $rolesToAdd));
         return array_diff($newRoles, $rolesToRemove);
     }
