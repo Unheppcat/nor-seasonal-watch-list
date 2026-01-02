@@ -64,6 +64,16 @@ class ElectionVoteController extends AbstractController
                 ], Response::HTTP_BAD_REQUEST);
             }
 
+            // CRITICAL: Validate user has access to restricted elections
+            if ($election->getRestrictedAccess() && !$this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER')) {
+                return new JsonResponse([
+                    'data' => [
+                        'status' => 'failure',
+                        'message' => 'You do not have permission to vote in this election.'
+                    ]
+                ], Response::HTTP_FORBIDDEN);
+            }
+
             $maxVotes = $election->getMaxVotes();
             $currentVoteCount = $electionVoteRepository->getCountForUserAndElection($user, $election);
             if ($maxVotes < 1 || $maxVotes === null) {

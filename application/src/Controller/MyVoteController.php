@@ -33,8 +33,18 @@ class MyVoteController extends AbstractController
     ): Response {
         $activeElections = $electionRepository->getAllActiveElections();
 
-        if (count($activeElections) === 0) {
-            // No active election - show "no election" message
+        // Filter out restricted elections if user doesn't have special role
+        $hasSpecialRole = $this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER');
+        $accessibleElections = array_filter($activeElections, function($election) use ($hasSpecialRole) {
+            // If election is restricted and user doesn't have special role, exclude it
+            if ($election->getRestrictedAccess() && !$hasSpecialRole) {
+                return false;
+            }
+            return true;
+        });
+
+        if (count($accessibleElections) === 0) {
+            // No accessible election - show "no election" message
             $nextElection = $electionRepository->getNextAvailableElection();
             return $this->render('my_vote/no_election.html.twig', [
                 'user' => $this->getUser(),
@@ -43,19 +53,19 @@ class MyVoteController extends AbstractController
             ]);
         }
 
-        if (count($activeElections) === 1) {
-            // Single active election - redirect to ballot
+        if (count($accessibleElections) === 1) {
+            // Single accessible election - redirect to ballot
             return $this->redirectToRoute('my_vote_ballot', [
-                'id' => $activeElections[0]->getId()
+                'id' => array_values($accessibleElections)[0]->getId()
             ]);
         }
 
-        // Multiple active elections - show election list
+        // Multiple accessible elections - show election list
         /** @var User $user */
         $user = $this->getUser();
         $electionData = [];
 
-        foreach ($activeElections as $election) {
+        foreach ($accessibleElections as $election) {
             $electionData[] = [
                 'election' => $election,
                 'hasVoted' => $electionVoteRepository->hasUserVotedInElection($user, $election)
@@ -98,6 +108,12 @@ class MyVoteController extends AbstractController
         // CRITICAL: Validate election is active
         if (!$election->isActive()) {
             $this->addFlash('error', 'This election is not currently active.');
+            return $this->redirectToRoute('my_vote');
+        }
+
+        // CRITICAL: Validate user has access to restricted elections
+        if ($election->getRestrictedAccess() && !$this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER')) {
+            $this->addFlash('error', 'You do not have permission to access this election.');
             return $this->redirectToRoute('my_vote');
         }
 
