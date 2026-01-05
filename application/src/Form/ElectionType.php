@@ -66,7 +66,7 @@ class ElectionType extends AbstractType
             ->add('restrictedAccess', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Restricted access',
-                'help' => 'Check this to restrict voting to specific users only',
+                'help' => "Check this to restrict voting to users with the NOR role 'Special Election Access'",
             ])
         ;
     }
