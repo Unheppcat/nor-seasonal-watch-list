@@ -143,6 +143,7 @@ class AppDiscordAuthenticator extends OAuth2Authenticator
                         // Leave username unchanged for now
                     }
                 }
+                $existingUser->setRolesLastRefreshed(new \DateTime());
                 $this->em->persist($existingUser);
                 $this->em->flush();
             } /** @noinspection PhpUnusedLocalVariableInspection */ catch (GuzzleException|Exception $e) {
@@ -173,6 +174,7 @@ class AppDiscordAuthenticator extends OAuth2Authenticator
             $user->setDisplayName(null);
         }
 
+        $user->setRolesLastRefreshed(new \DateTime());
         $this->em->persist($user);
         $this->em->flush();
         return $user;

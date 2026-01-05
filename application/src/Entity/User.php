@@ -124,6 +124,12 @@ class User implements UserInterface
     private ?string $apiKey = null;
 
     /**
+     * @var \DateTimeInterface|null
+     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $rolesLastRefreshed = null;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -507,5 +513,21 @@ class User implements UserInterface
     public function __call($name, $arguments)
     {
         // TODO: Implement @method string getUserIdentifier()
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getRolesLastRefreshed(): ?\DateTimeInterface
+    {
+        return $this->rolesLastRefreshed;
+    }
+
+    /**
+     * @param \DateTimeInterface|null $rolesLastRefreshed
+     */
+    public function setRolesLastRefreshed(?\DateTimeInterface $rolesLastRefreshed): void
+    {
+        $this->rolesLastRefreshed = $rolesLastRefreshed;
     }
 }
