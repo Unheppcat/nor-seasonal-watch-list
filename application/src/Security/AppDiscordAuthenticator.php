@@ -230,7 +230,7 @@ class AppDiscordAuthenticator extends OAuth2Authenticator
 
         if (
             isset($userDiscordRoles['1456162429657682115'])   // Unheppcat Special Election Voter
-            // || isset($userDiscordRoles['1456162429657682115']) // NOR Special Election Voter
+            || isset($userDiscordRoles['1457549326233375005']) // NOR Special Election Access
         ) {
             $rolesToAdd[] = 'ROLE_SWL_SPECIAL_ELECTION_VOTER';
         } else {
