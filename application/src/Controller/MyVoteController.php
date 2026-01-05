@@ -22,9 +22,10 @@ class MyVoteController extends AbstractController
     /**
      * Display election list or route to appropriate page based on active election count
      *
-     * @param ElectionRepository $electionRepository
+     * @param ElectionRepository     $electionRepository
      * @param ElectionVoteRepository $electionVoteRepository
      * @return Response
+     * @throws NonUniqueResultException
      */
     #[Route('/vote', name: 'my_vote')]
     public function index(
@@ -35,12 +36,10 @@ class MyVoteController extends AbstractController
 
         // Filter out restricted elections if user doesn't have special role
         $hasSpecialRole = $this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER');
-        $accessibleElections = array_filter($activeElections, function($election) use ($hasSpecialRole) {
+
+        $accessibleElections = array_filter($activeElections, static function($election) use ($hasSpecialRole) {
             // If election is restricted and user doesn't have special role, exclude it
-            if ($election->getRestrictedAccess() && !$hasSpecialRole) {
-                return false;
-            }
-            return true;
+            return !($election->getRestrictedAccess() && !$hasSpecialRole);
         });
 
         if (count($accessibleElections) === 0) {
@@ -81,13 +80,15 @@ class MyVoteController extends AbstractController
     /**
      * Display ballot for a specific election
      *
-     * @param int $id
-     * @param Request $request
+     * @param int                    $id
+     * @param Request                $request
      * @param EntityManagerInterface $em
-     * @param ShowRepository $showRepository
-     * @param ElectionRepository $electionRepository
+     * @param ShowRepository         $showRepository
+     * @param ElectionRepository     $electionRepository
      * @param ElectionVoteRepository $electionVoteRepository
      * @return Response
+     * @throws NonUniqueResultException
+     * @noinspection PhpUnusedParameterInspection
      */
     #[Route('/vote/{id}', name: 'my_vote_ballot', requirements: ['id' => '\d+'])]
     public function ballot(
