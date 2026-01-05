@@ -25,7 +25,7 @@ class AdminActivityController extends AbstractController
         ActivityRepository $activityRepository,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->->electionIsAvailable()();
+        $electionIsActive = $electionRepository->electionIsAvailable()();
         return $this->render('activity/index.html.twig', [
             'user' => $this->getUser(),
             'activities' => $activityRepository->findAll(),
@@ -45,7 +45,7 @@ class AdminActivityController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->->electionIsAvailable()();
+        $electionIsActive = $electionRepository->electionIsAvailable()();
         $activity = new Activity();
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
@@ -76,7 +76,7 @@ class AdminActivityController extends AbstractController
         Activity $activity,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->->electionIsAvailable()();
+        $electionIsActive = $electionRepository->electionIsAvailable()();
         return $this->render('activity/show.html.twig', [
             'user' => $this->getUser(),
             'activity' => $activity,
@@ -98,7 +98,7 @@ class AdminActivityController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->->electionIsAvailable()();
+        $electionIsActive = $electionRepository->electionIsAvailable()();
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
 
