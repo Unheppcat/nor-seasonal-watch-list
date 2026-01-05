@@ -97,7 +97,7 @@ class AdminElectionVoteController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable();
+        $electionIsActive = $electionRepository->electionIsActive($this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER'));
         $form = $this->createForm(ElectionVoteType::class, $electionVote);
         $form->handleRequest($request);
 

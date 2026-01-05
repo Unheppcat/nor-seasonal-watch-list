@@ -74,6 +74,7 @@ class MyVoteController extends AbstractController
         return $this->render('my_vote/election_list.html.twig', [
             'user' => $user,
             'elections' => $electionData,
+            'electionIsActive' => true,
         ]);
     }
 

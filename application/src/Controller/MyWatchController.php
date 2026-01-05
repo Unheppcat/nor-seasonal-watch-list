@@ -54,7 +54,7 @@ class MyWatchController extends AbstractController
         FormFactoryInterface $formFactory,
         SelectedSortHelper $selectedSortHelper
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable();
+        $electionIsActive = $electionRepository->electionIsActive($this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER'));
         $seasons = $seasonRepository->getAllInRankOrder();
 
         /** @var User $user */

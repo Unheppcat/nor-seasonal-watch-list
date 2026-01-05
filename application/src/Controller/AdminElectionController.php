@@ -34,7 +34,7 @@ class AdminElectionController extends AbstractController
     public function index(
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionisAvailable();
+        $electionIsActive = $electionRepository->electionIsActive(true);
         return $this->render('election/index.html.twig', [
             'user' => $this->getUser(),
             'elections' => $electionRepository->findBy([], ['startDate' => 'desc']),
@@ -54,7 +54,7 @@ class AdminElectionController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $entityManager
     ): Response {
-        $electionIsActive = $electionRepository->electionisAvailable();
+        $electionIsActive = $electionRepository->electionIsActive(true);
         $election = new Election();
         $form = $this->createForm(ElectionType::class, $election);
         $form->handleRequest($request);
@@ -75,11 +75,10 @@ class AdminElectionController extends AbstractController
     }
 
     /**
-     * @param Election $election
+     * @param Election        $election
      * @param VoterInfoHelper $voterInfoHelper
      * @return Response
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     #[Route('/{id}', name: 'admin_election_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(
@@ -101,10 +100,9 @@ class AdminElectionController extends AbstractController
      * Export election data as a CSV file
      *
      * @param VoterInfoHelper $voterInfoHelper
-     * @param Election $election
+     * @param Election        $election
      * @return Response
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     #[Route('/export/{id}', name: 'admin_election_export', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function export(
@@ -234,7 +232,7 @@ class AdminElectionController extends AbstractController
             $percent = round($voteTally->getVotePercentOfVoterTotal(), 1);
 
             // Escape and quote the show title if it contains commas or quotes
-            if (strpos($showTitle, ',') !== false || strpos($showTitle, '"') !== false) {
+            if (str_contains($showTitle, ',') || str_contains($showTitle, '"')) {
                 $showTitle = '"' . str_replace('"', '""', $showTitle) . '"';
             }
 
@@ -280,7 +278,7 @@ class AdminElectionController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionisAvailable();
+        $electionIsActive = $electionRepository->electionIsActive(true);
         $form = $this->createForm(ElectionType::class, $election);
         $form->handleRequest($request);
 
@@ -299,15 +297,14 @@ class AdminElectionController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param Election $election
-     * @param ShowRepository $showRepository
+     * @param Request                    $request
+     * @param Election                   $election
+     * @param ShowRepository             $showRepository
      * @param ElectionShowBuffRepository $electionShowBuffRepository
-     * @param VoterInfoHelper $voterInfoHelper
-     * @param EntityManagerInterface $em
+     * @param VoterInfoHelper            $voterInfoHelper
+     * @param EntityManagerInterface     $em
      * @return Response
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     #[Route('/{id}/buff', name: 'admin_election_buff', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function buff(

@@ -22,23 +22,28 @@ class ElectionRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param bool $includeRestricted
      * @return Election|null
      * @throws NonUniqueResultException
      */
-    public function getFirstActiveElection(): ?Election
+    public function getFirstActiveElection(bool $includeRestricted = false): ?Election
     {
         static $firstActivityElection = null;
+        static $storedIncludeRestricted = null;
 
-        if ($firstActivityElection === null) {
+        if ($firstActivityElection === null || $includeRestricted !== $storedIncludeRestricted) {
             $now = (new DateTime());
-            $firstActivityElection = $this->createQueryBuilder('e')
+            $firstActivityElectionQ = $this->createQueryBuilder('e')
                 ->where('e.startDate <= :now')
                 ->andWhere('e.endDate >= :now')
                 ->orderBy('e.startDate', 'ASC')
                 ->setParameter('now', $now)
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult();
+                ->setMaxResults(1);
+            if (!$includeRestricted) {
+                $firstActivityElectionQ->andWhere('e.restrictedAccess = FALSE OR e.restrictedAccess IS NULL');
+            }
+            $firstActivityElection = $firstActivityElectionQ->getQuery()->getOneOrNullResult();
+            $storedIncludeRestricted = $includeRestricted;
         }
 
         return $firstActivityElection;
@@ -77,19 +82,20 @@ class ElectionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function electionIsActive(): bool
+    public function electionIsActive(bool $includeRestricted = false): bool
     {
         try {
-            return ($this->getFirstActiveElection() !== null);
+            return ($this->getFirstActiveElection($includeRestricted) !== null);
         } /** @noinspection PhpUnusedLocalVariableInspection */ catch (NonUniqueResultException $e) {
             return true;
         }
     }
 
+    /** @noinspection PhpUnused */
     public function electionIsAvailable(): bool
     {
         try {
-            return ($this->getFirstActiveElection() !== null);
+            return ($this->getNextAvailableElection() !== null);
         } /** @noinspection PhpUnusedLocalVariableInspection */ catch (NonUniqueResultException $e) {
             return true;
         }

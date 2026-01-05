@@ -26,7 +26,7 @@ class AdminShowSeasonScoreController extends AbstractController
         ShowSeasonScoreRepository $showSeasonScoreRepository,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable();
+        $electionIsActive = $electionRepository->electionIsActive($this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER'));
         return $this->render('show_season_score/index.html.twig', [
             'user' => $this->getUser(),
             'show_season_scores' => $showSeasonScoreRepository->findAll(),
@@ -46,7 +46,7 @@ class AdminShowSeasonScoreController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable();
+        $electionIsActive = $electionRepository->electionIsActive($this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER'));
         $showSeasonScore = new ShowSeasonScore();
         $form = $this->createForm(ShowSeasonScoreType::class, $showSeasonScore);
         $form->handleRequest($request);
@@ -76,7 +76,7 @@ class AdminShowSeasonScoreController extends AbstractController
         ShowSeasonScore $showSeasonScore,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable();
+        $electionIsActive = $electionRepository->electionIsActive($this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER'));
         return $this->render('show_season_score/show.html.twig', [
             'user' => $this->getUser(),
             'show_season_score' => $showSeasonScore,
@@ -98,7 +98,7 @@ class AdminShowSeasonScoreController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable();
+        $electionIsActive = $electionRepository->electionIsActive($this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER'));
         $form = $this->createForm(
             ShowSeasonScoreType::class,
             $showSeasonScore,

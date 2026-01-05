@@ -12,7 +12,7 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'default', schemes: ['HTTP'])]
     public function index(ElectionRepository $electionRepository): Response
     {
-        $electionIsActive = $electionRepository->electionIsAvailable();
+        $electionIsActive = $electionRepository->electionIsActive($this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER'));
         $user = $this->getUser();
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController',

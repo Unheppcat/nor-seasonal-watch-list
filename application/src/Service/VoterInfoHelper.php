@@ -59,7 +59,7 @@ final class VoterInfoHelper
         Election $election
     ): array {
         $info = [];
-        $info['electionIsActive'] = $this->electionRepository->electionIsActive();
+        $info['electionIsActive'] = $this->electionRepository->electionIsActive(true);
         $info['shows'] = $this->showRepository->getShowsForSeason($election->getSeason());
         $info['totalVoterCount'] = $this->electionVoteRepository->getVoterCountForElection($election);
 

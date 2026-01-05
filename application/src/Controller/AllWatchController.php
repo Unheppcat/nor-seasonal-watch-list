@@ -61,7 +61,7 @@ class AllWatchController extends AbstractController
         SelectedSortHelper $selectedSortHelper,
         SelectedAllWatchModeHelper $selectedAllWatchModeHelper
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable();
+        $electionIsActive = $electionRepository->electionIsActive($this->isGranted('ROLE_SWL_SPECIAL_ELECTION_VOTER'));
 
         $userKeys = $this->loadUserKeys($userRepository);
         $userCount = count($userKeys);
