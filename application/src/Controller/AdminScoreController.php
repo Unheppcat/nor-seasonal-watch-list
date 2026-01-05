@@ -25,7 +25,7 @@ class AdminScoreController extends AbstractController
         ScoreRepository $scoreRepository,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->->electionIsAvailable()();
         return $this->render('score/index.html.twig', [
             'user' => $this->getUser(),
             'scores' => $scoreRepository->findAllInRankOrder(),
@@ -45,7 +45,7 @@ class AdminScoreController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->->electionIsAvailable()();
         $score = new Score();
         $form = $this->createForm(ScoreType::class, $score);
         $form->handleRequest($request);
@@ -76,7 +76,7 @@ class AdminScoreController extends AbstractController
         Score $score,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->->electionIsAvailable()();
         return $this->render('score/show.html.twig', [
             'user' => $this->getUser(),
             'score' => $score,
@@ -98,7 +98,7 @@ class AdminScoreController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->->electionIsAvailable()();
         $form = $this->createForm(ScoreType::class, $score);
         $form->handleRequest($request);
 

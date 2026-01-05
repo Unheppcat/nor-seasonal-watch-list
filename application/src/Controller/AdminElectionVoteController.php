@@ -25,7 +25,7 @@ class AdminElectionVoteController extends AbstractController
         ElectionVoteRepository $electionVoteRepository,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->->electionIsAvailable()();
         return $this->render('election_vote/index.html.twig', [
             'user' => $this->getUser(),
             'election_votes' => $electionVoteRepository->findAll(),
@@ -45,7 +45,7 @@ class AdminElectionVoteController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->->electionIsAvailable()();
         $electionVote = new ElectionVote();
         $form = $this->createForm(ElectionVoteType::class, $electionVote);
         $form->handleRequest($request);
@@ -75,7 +75,7 @@ class AdminElectionVoteController extends AbstractController
         ElectionVote $electionVote,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->->electionIsAvailable()();
         return $this->render('election_vote/show.html.twig', [
             'user' => $this->getUser(),
             'election_vote' => $electionVote,
@@ -97,7 +97,7 @@ class AdminElectionVoteController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->electionIsAvailable();
         $form = $this->createForm(ElectionVoteType::class, $electionVote);
         $form->handleRequest($request);
 

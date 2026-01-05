@@ -36,7 +36,7 @@ class AdminShowController extends AbstractController
         SeasonRepository $seasonRepository,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->electionIsAvailable();
         $session = $request->getSession();
         $currentPage = $session->get('page', 1);
         $currentPerPage = $session->get('perPage', 10);
@@ -116,7 +116,7 @@ class AdminShowController extends AbstractController
         SeasonRepository $seasonRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->electionIsAvailable();
         $show = new Show();
 
         // Pre-populate seasons from session if available
@@ -227,7 +227,7 @@ class AdminShowController extends AbstractController
         Show $show,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->electionIsAvailable();
         return $this->render('show/show.html.twig', [
             'user' => $this->getUser(),
             'show' => $show,
@@ -263,7 +263,7 @@ class AdminShowController extends AbstractController
             $originalSeasons[$season->getId()] = $season;
         }
 
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->electionIsAvailable();
         $form = $this->createForm(ShowType::class, $show);
         $form->handleRequest($request);
 

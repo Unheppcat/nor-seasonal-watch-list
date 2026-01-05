@@ -85,4 +85,13 @@ class ElectionRepository extends ServiceEntityRepository
             return true;
         }
     }
+
+    public function electionIsAvailable(): bool
+    {
+        try {
+            return ($this->getFirstActiveElection() !== null);
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (NonUniqueResultException $e) {
+            return true;
+        }
+    }
 }

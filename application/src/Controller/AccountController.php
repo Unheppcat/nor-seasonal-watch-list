@@ -27,7 +27,7 @@ class AccountController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->->electionIsAvailable()();
         /** @var User $user */
         $user = $this->getUser();
         $preferences = $user->getPreferences();

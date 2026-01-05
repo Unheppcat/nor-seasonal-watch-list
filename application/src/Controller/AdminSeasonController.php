@@ -25,7 +25,7 @@ class AdminSeasonController extends AbstractController
         SeasonRepository $seasonRepository,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->electionIsAvailable();
         return $this->render('season/index.html.twig', [
             'user' => $this->getUser(),
             'seasons' => $seasonRepository->getAllInRankOrder(true),
@@ -45,7 +45,7 @@ class AdminSeasonController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->electionIsAvailable();
         $season = new Season();
         $form = $this->createForm(SeasonType::class, $season);
         $form->handleRequest($request);
@@ -75,7 +75,7 @@ class AdminSeasonController extends AbstractController
         Season $season,
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->electionIsAvailable();
         return $this->render('season/show.html.twig', [
             'user' => $this->getUser(),
             'season' => $season,
@@ -97,7 +97,7 @@ class AdminSeasonController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsActive();
+        $electionIsActive = $electionRepository->electionIsAvailable();
         $form = $this->createForm(SeasonType::class, $season);
         $form->handleRequest($request);
 
