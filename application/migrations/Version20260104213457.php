@@ -12,7 +12,6 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20260104213457 extends AbstractMigration
 {
-    /** @noinspection SenselessMethodDuplicationInspection */
     public function getDescription(): string
     {
         return 'Add roles_last_refreshed timestamp to user table';
