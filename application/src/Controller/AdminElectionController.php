@@ -34,7 +34,7 @@ class AdminElectionController extends AbstractController
     public function index(
         ElectionRepository $electionRepository
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable->
+        $electionIsActive = $electionRepository->electionisAvailable();
         return $this->render('election/index.html.twig', [
             'user' => $this->getUser(),
             'elections' => $electionRepository->findBy([], ['startDate' => 'desc']),
@@ -54,7 +54,7 @@ class AdminElectionController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $entityManager
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable->
+        $electionIsActive = $electionRepository->electionisAvailable();
         $election = new Election();
         $form = $this->createForm(ElectionType::class, $election);
         $form->handleRequest($request);
@@ -280,7 +280,7 @@ class AdminElectionController extends AbstractController
         ElectionRepository $electionRepository,
         EntityManagerInterface $em
     ): Response {
-        $electionIsActive = $electionRepository->electionIsAvailable->
+        $electionIsActive = $electionRepository->electionisAvailable();
         $form = $this->createForm(ElectionType::class, $election);
         $form->handleRequest($request);
 
