@@ -45,11 +45,6 @@ class VotingRoleRefreshSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // Only refresh roles when accessing voting or default controllers
-        if (!($controller[0] instanceof MyVoteController) && !($controller[0] instanceof DefaultController)) {
-            return;
-        }
-
         // Get the current user
         $token = $this->tokenStorage->getToken();
         if (!$token) {
